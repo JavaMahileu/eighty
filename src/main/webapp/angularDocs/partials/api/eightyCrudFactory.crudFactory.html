@@ -1,0 +1,71 @@
+<h1><code ng:non-bindable="">crudFactory</code>
+<div><span class="hint">service in module <code ng:non-bindable="">eightyCrudFactory</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="eightycrudfactory-crudfactory-page"><p>A factory which creates a resource objects that lets you interact with RESTful server-side data sources.</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_customers">customers()</h3>
+<div class="customers"><div class="customers-page"><p>Get a resource object for requesting customers.</p>
+</div><h5 id="methods_customers_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="customers-page"><p>A resource &quot;class&quot; object with the following set of resource actions:</p>
+<ul>
+<li><code>{object}</code> <code>get()</code> — Request for customers.</li>
+<li><code>{object}</code> <code>getSortedSetOfCustomersByName({String} customerName)</code> — Request for getting sorted customers by part of customer name.</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_question">question()</h3>
+<div class="question"><div class="question-page"><p>Creates a resource object for <code>question</code>.</p>
+</div><h5 id="methods_question_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="question-page"><p>A resource &quot;class&quot; object with the following set of resource actions:</p>
+<ul>
+<li><code>{object}</code> <code>get({Number} id)</code> — Request for question with given id.</li>
+<li><code>{object}</code> <code>update({object} question)</code> — Request for update the given question.</li>
+<li><code>{object}</code> <code>create({Number} topicId, {object} question)</code> — Request for create the question.</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_questions">questions()</h3>
+<div class="questions"><div class="questions-page"><p>Creates a resource object for requesting questions of current topic and it subtopics.</p>
+</div><h5 id="methods_questions_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="questions-page"><p>A resource &quot;class&quot; object with the following set of resource actions:</p>
+<ul>
+<li><code>{object}</code> <code>query()</code> — Request for questions.</li>
+<li><code>{object}</code> <code>allQuestions({Number} id, {Number} page, {Number} size, {String} sort)</code> — Request for questions of topic with given id.
+<code>page</code> - page number, <code>size</code> - number questions per page, <code>sort</code> - question field for sorting</li>
+<li><code>{object}</code> <code>allQuestionsInTopicWithTag({Number} id, {String} title)</code> — Request for questions in selected topic (with id) and questions has tag (with title).</li>
+<li><code>{object}</code> <code>allQuestionsWithTag({String} title)</code> — Request for questions has tag (with title).</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_tag">tag()</h3>
+<div class="tag"><div class="tag-page"><p>Get a resource object for requesting tag by title of the tag.</p>
+</div><h5 id="methods_tag_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="tag-page"><p>A resource &quot;class&quot; object with the following set of resource actions:</p>
+<ul>
+<li><code>{object}</code> <code>get({String} title)</code> — Request for tag with given tag.</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_tags">tags()</h3>
+<div class="tags"><div class="tags-page"><p>Get a resource object for requesting tags.</p>
+</div><h5 id="methods_tags_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="tags-page"><p>A resource &quot;class&quot; object with the following set of resource actions:</p>
+<ul>
+<li><code>{object}</code> <code>get()</code> — Request for tags.</li>
+<li><code>{object}</code> <code>getSortedSetOfTagsByName({String} tagName)</code> — Request for getting sorted tags by part of tag name.</li>
+<li><code>{object}</code> <code>topNTags({Number} limit)</code> — Request for top tags (due to limit).</li>
+<li><code>{object}</code> <code>tagsByTopicId({Number} id)</code> — Request for top tags in selected topic.</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_topic">topic()</h3>
+<div class="topic"><div class="topic-page"><p>Creates a resource object for <code>topic</code>.</p>
+</div><h5 id="methods_topic_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="topic-page"><p>A resource &quot;class&quot; object with the following set of resource actions:</p>
+<ul>
+<li><code>{object}</code> <code>get({Number} id)</code> — Request for topic with given id.</li>
+<li><code>{object}</code> <code>update({object} topic)</code> — Request for update the given topic.</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+</div>

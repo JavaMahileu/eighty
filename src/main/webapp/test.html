@@ -1,0 +1,75 @@
+<html>
+<head>
+    <title>SOAP JavaScript Client Test</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.js"></script>
+    
+    <script type="text/javascript">
+        var token;
+        $(".login").hide();
+        function getResource(token) {
+            var headers = {};
+            if (token) {
+              headers.Authorization = 'Bearer ' + token;
+            };
+            $.ajax({
+              
+              type: 'POST',
+              crossDomain: true,
+              headers: headers,
+
+              url: 'http://rkonovalov-test.apigee.net/test/forecastrss',
+              //data: 'formValue=someValue',
+              success: function(data){
+                if (data.success == false) {
+                  getToken();
+                }
+                  
+              }
+            });
+        }
+        function getToken() {
+            $.ajax({
+              type: 'POST',
+              crossDomain: true,
+              headers: {
+                  'Access-Control-Allow-Origin': '*'
+              },
+              url: 'http://rkonovalov-test.apigee.net/test/accesstoken',
+              success: function(data){
+                var win = window.open();
+                win.document.open();
+                win.document.write(data);
+                var form = jQuery(win.document.forms[0]);
+                form.submit(function(e) {
+                  win.close();
+                  //e.preventDefault();             
+                  $.ajax({ 
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(tokenData) {
+                      token = tokenData.access_token;
+                      getResource(token);
+                      console.log(token);
+                      
+                    }
+                  });
+                });
+              }
+            });
+        }
+    </script>
+
+</head>
+<body>
+  
+    <form name="Demo" action="" method="post">
+        <div>
+            <input type="button" value="getResource" onclick="getResource();" />
+        </div>
+    </form>
+    <div class='main'>
+    
+    </div>
+</body>
+<html>

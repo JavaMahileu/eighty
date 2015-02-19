@@ -1,0 +1,84 @@
+<div class="content">
+
+    <div class="questions-header" >
+        <nav class="navbar navbar-default" style="margin-bottom: 0; background-color: #DBDBDB;" role="navigation">
+            <div class="div-inline-width pull-left">
+                <div style="padding: 6px 6px;">
+                    <h4 class="topic-title">{{ questionsCtrl.topic.title }}</h4>
+                </div>
+            </div>
+            <div class="div-inline-width pull-right">
+                <div class="collapse navbar-collapse navbar-bootsnipp-collapse">
+                    <form id="search-form" class="navbar-form pull-right col-sm-4" role="search">
+                        <div class="input-group" style="position: relative; width: 100%;">
+                            <span class="input-group-addon">Filter</span>
+                            <input id="searchField" class="form-control" type="text" style="padding: 6px 6px;" size="100px" placeholder="Filter by question or answer" ng-model="questionsCtrl.criteria"/>
+                            <span class="input-group-addon" data-ng-click="questionsCtrl.clearFilter()" tooltip-popup-delay="1000" tooltip="Clear Filter">
+                                <b style="color: gray;">
+                                    X
+                                </b>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <div class="tags-cloud-block" id="div-tags-main" ng-show="questionsCtrl.tagsAndCustomers.length">
+            <span data-ng-repeat="tagOrCustomer in questionsCtrl.tagsAndCustomers | orderBy: '-countInTopic'" tooltip-popup-delay="1000" tooltip='Only questions from "{{questionsCtrl.topic.title}}" with tag "{{tagOrCustomer.tag}}{{tagOrCustomer.name}}" have been counted'>
+                <a class="badge alert-info" data-ng-class="{selected: questionsCtrl.isTagSelected(tagOrCustomer), notSelected: !questionsCtrl.isTagSelected(tagOrCustomer)}" id="tag_{{ tagOrCustomer.tag }}{{ tagOrCustomer.name }}" data-ng-click="questionsCtrl.onTagClick(tagOrCustomer)">
+                    {{tagOrCustomer.tag}}{{tagOrCustomer.name}} ({{tagOrCustomer.countInTopic}})
+                </a>
+            </span>
+            <span ng-show="questionsCtrl.selectedTags.length > 0"><a class="badge alert-info clear-btn" id="clear-tags" data-ng-click="questionsCtrl.clearTags()">x</a></span>
+        </div>
+    </div>
+    <div class="questions-content" when-scrolled="loadMore()">
+        <div class="scrollable" id="scroll-q" ng-show="questionsCtrl.questions.length">
+            <ol class="list-group" ui-scroll-viewport>
+                <li class="list-group-item question-list" data-ng-repeat="quest in questionsCtrl.questions| questionFilter : questionsCtrl.criteria | tagFilter : questionsCtrl.selectedTags track by $index" style="overflow: auto !important;">
+                    <span class="span-padding-right pre-form-text">{{ $index + 1}}. {{ quest.question}}</span>
+                    <div class="pull-right action-buttons">
+                        <div class="actionList" data-ng-show="quest.answer.length > 0">
+                            <span class="glyphicon glyphicon-question-sign" data-ng-click="questionsCtrl.checkCollapsed(quest)" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Find out answer"></span>
+                        </div>
+                        <div data-ng-class="{ratedList: questionsCtrl.checkInSet('ratedSet', quest), actionList: !questionsCtrl.checkInSet('ratedSet', quest)}">
+                            <span class="glyphicon glyphicon-thumbs-up rate-up-question" data-ng-class="{notVisible: questionsCtrl.checkInSet('ratedSet', quest)}" data-ng-click="questionsCtrl.rateUp(quest)" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Rate question"></span>
+                            <span class="badge question-rating alert-success" data-ng-class="{alertSuccess: questionsCtrl.checkInSet('ratedSet', quest)}" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Question rating" data-ng-show="quest.like > 0">{{ quest.like}}</span>
+                        </div>
+                        <div class="actionList">
+                            <span class="glyphicon glyphicon-pencil edit-question" data-ng-click="questionsCtrl.editQuestion(quest)" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Edit question"></span>
+                        </div>
+                        <div data-ng-class="{exportList: questionsCtrl.checkInSet('exportSet', quest), actionList: !questionsCtrl.checkInSet('exportSet', quest)}">
+                            <span class="glyphicon glyphicon-ok export-question" data-ng-click="questionsCtrl.exportQuestion(quest)" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Add/remove to export list"></span>
+                        </div>
+                    </div>
+                    <div data-ng-show="quest.answer.length > 0" data-ng-class="questionsCtrl.isCollapsedAnswer(quest) ? 'collaps collapse in' : 'collaps collapse'">
+                        <div class="well well-lg pre-form-text">{{ quest.answer}}</div>
+                    </div>
+                </li>
+                <li data-ng-show="questionsCtrl.loading" class="list-group-item question-list"><img alt="activity indicator" src="img/ajax-loader.gif"></li>
+            </ol>
+        </div>
+        <div class="div-error" id="message" ng-show="!questionsCtrl.questions.length">
+            <h4>{{questionsCtrl.message}}</h4>
+        </div>
+    </div>
+
+    <div class="questions-footer">
+        <hr/>
+        <div class="pull-left all-questions-tags" data-ng-if="questionsCtrl.selectedTags.length">
+            <label>All questions for tag<label data-ng-if="questionsCtrl.selectedTags.length > 1">s</label>: </label>
+            <span data-ng-repeat="selTag in questionsCtrl.selectedTags">
+              <span tooltip-popup-delay="1000" tooltip="{{selTag.questDiff > 1 ? selTag.questDiff + ' more questions' : selTag.questDiff == 1 ? '1 more question' : 'There are no more questions for this tag'}}">
+                  <a id="tagSelected_{{selTag.tag}}" ng-class="{disabled: selTag.questDiff == 0}" ng-if="selTag.tag" data-ng-href="{{selTag.questDiff > 0 ? '#/questionsWithTag/' + selTag.tag : ''}}" data-ng-click="">{{ selTag.tag }}({{ selTag.count}})</a>
+                  <a id="tagSelected_{{selTag.name}}" ng-class="{disabled: selTag.questDiff == 0}" ng-if="selTag.name" data-ng-href="{{selTag.questDiff > 0 ? '#/questionsFromCustomer/' + selTag.name : ''}}" data-ng-click="">{{ selTag.name }}({{ selTag.count}})</a>
+              </span>
+            </span>
+        </div>
+        <div class="pull-right add-new-question">
+            <button id="button" class="btn btn-default" data-ng-click="questionsCtrl.addQuestion()" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Add new question">
+                Add
+            </button>
+        </div>
+    </div>
+</div>

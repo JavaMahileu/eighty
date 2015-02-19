@@ -1,0 +1,27 @@
+<form role="form" novalidate name="form">
+    <div class="modal-header">
+        <h3 class="modal-title">Add new question</h3>
+    </div>
+    <div class="modal-body">
+        <h3>New question: {{ topic.title}}</h3>
+        <div class="form-group">
+            <label for="question">Question</label>
+            <textarea class="form-control text-size" id="question" name="question" required placeholder="Question" data-ng-model="addQuestion.question.question" focus-field="addQuestion.shouldBeOpen"></textarea>
+            <p><span class="note-class" ng-show="!addQuestion.question.question.length">Please enter question! Required field.</span></p>
+            <label for="answer">Answer (optional)</label>
+            <textarea class="form-control text-size" id="answer" placeholder="Answer" data-ng-model="addQuestion.question.answer"></textarea>
+            <label>Customers</label><br/>
+            <tags-input min-length="2" type="text" id="customers" display-property="name" ng-model="addQuestion.question.customers">
+                <auto-complete min-length="2" source="addQuestion.loadCustomers($query)"></auto-complete>
+            </tags-input>
+            <label>Tags</label><br/>
+            <tags-input min-length="2" type="text" id="tags" display-property="tag" ng-model="addQuestion.question.tags">
+                <auto-complete min-length="2" source="addQuestion.loadTags($query)"></auto-complete>
+            </tags-input>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary add-question" data-ng-click="addQuestion.createQuestion()">Add</button>
+        <button class="btn btn-warning cancel-add-question" data-ng-click="addQuestion.cancelAddQuestion()">Cancel</button>
+    </div>
+</form>

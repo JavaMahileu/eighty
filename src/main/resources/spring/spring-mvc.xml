@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="**/cache-context.xml" />
+    <import resource="**/aspect.xml" />
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <beans:property name="objectMapper">
+                    <beans:bean class="com.knappsack.swagger4springweb.util.ScalaObjectMapper" />
+                </beans:property>
+            </beans:bean>
+        </mvc:message-converters>
+        <mvc:argument-resolvers>
+            <beans:bean class="org.springframework.data.web.PageableHandlerMethodArgumentResolver"/>
+            <beans:bean class="org.springframework.data.web.SortHandlerMethodArgumentResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+    <mvc:default-servlet-handler />
+
+    <mvc:resources mapping="/documentation/**" location="/documentation/" />
+
+    <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <beans:property name="prefix" value="/documentation/" />
+        <beans:property name="suffix" value=".jsp" />
+    </beans:bean>
+
+    <context:component-scan base-package="com.epam.eighty.web" />
+
+</beans:beans>

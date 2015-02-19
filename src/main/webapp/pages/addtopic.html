@@ -1,0 +1,15 @@
+<form role="form">
+    <div class="modal-header">
+        <h3 class="modal-title">Add new topic</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="topic">Topic title</label>
+            <input type="text" class="form-control" id="topic" placeholder="Text input" data-ng-model="addTopicInstance.topic.title" focus-field="addTopicInstance.shouldBeOpen">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary add-topic" data-ng-click="addTopicInstance.createTopic()">Add</button>
+        <button class="btn btn-warning cancel-add-topic" data-ng-click="addTopicInstance.cancelTopicCreation()">Cancel</button>
+    </div>
+</form>

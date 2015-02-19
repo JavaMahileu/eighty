@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/data/neo4j
+        http://www.springframework.org/schema/data/neo4j/spring-neo4j.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+<!--    <bean id="graphDatabaseService" class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase" scope="singleton" >
+        <constructor-arg value="http://evbymogsd0030.minsk.epam.com:7474/db/data/" index="0"/>
+        <constructor-arg value="http://localhost:7474/db/data/" index="0"/>
+        <constructor-arg value="" index="1"/>
+        <constructor-arg value="" index="2"/>
+    </bean>-->
+    <bean id="graphDatabaseService" class="org.neo4j.kernel.EmbeddedGraphDatabase" destroy-method="shutdown">
+        <constructor-arg index="0" value="data/graph.db"/>
+        <constructor-arg index="1" value=""/>
+        <constructor-arg index="2" value=""/>
+    </bean>
+
+    <neo4j:repositories base-package="com.epam.eighty.repository" />
+    <!--<neo4j:config graphDatabaseService="graphDatabaseService" base-package="com.epam.eighty.domain"/>-->
+    <neo4j:config storeDirectory="data/graph.db" base-package="com.epam.eighty.domain" />
+    <tx:annotation-driven mode="proxy" />
+
+</beans>

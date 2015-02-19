@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="130 seconds">
+
+   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>logs/eighty.log</file>
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+          <Pattern>%d{dd MMM yyyy;HH:mm:ss.SSS} [%thread] %-5level %logger{36} %ex{full} - %msg%n</Pattern>
+      </encoder>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+          <fileNamePattern>logs/eighty.%d{yyyy-MM-dd}.log</fileNamePattern>
+      </rollingPolicy>
+      <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+          <MaxFileSize>5MB</MaxFileSize>
+      </triggeringPolicy>
+   </appender>
+
+   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+         <Pattern>%d{dd MMM yyyy;HH:mm:ss.SSS} [%thread] %-5level %logger{36} %ex{full} - %msg%n</Pattern>
+      </encoder>
+   </appender>
+
+   <logger name="com.epam.eighty" level="debug" additivity="false">
+      <appender-ref ref="STDOUT" />
+   </logger>
+
+   <logger name="com.epam.eighty" level="trace">
+      <appender-ref ref="STDOUT" />
+      <appender-ref ref="FILE" />
+   </logger>
+
+   <logger
+      name="org.springframework.data.neo4j.repository.query.DerivedCypherRepositoryQuery">
+      <appender-ref ref="STDOUT" />
+      <appender-ref ref="FILE" />
+      <level value="error" />
+   </logger>
+
+   <root level="warn">
+      <level value="off" />
+   </root>
+
+</configuration>

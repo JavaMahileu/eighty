@@ -1,0 +1,17 @@
+<div class="tags-cloud-block" id="div-tags-tags" style="border: none;">
+        <div style="padding: 6px 6px;">
+            <span class="glyphicon glyphicon-tags"></span>&nbsp; Popular Tags:
+        </div>
+        <span data-ng-repeat="tag in tags.tagsTop | orderBy: '-count'">
+            <a class="badge alert-info"
+               id="tagTop_{{tag.tag}}"
+               switch-off-branch
+               data-ng-href="#/questionsWithTag/{{tag.tag}}"
+               tooltip-popup-delay="1000"
+               tooltip="Total quantity of questions with tag “{{tag.tag}}”">
+                <div>
+                    {{ tag.tag }} ({{ tag.count }})
+                </div>
+            </a>
+        </span>
+</div>

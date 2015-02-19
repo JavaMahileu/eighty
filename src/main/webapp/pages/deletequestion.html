@@ -1,0 +1,11 @@
+<form role="form">
+
+    <div class="modal-body">
+        <h3 class="modal-title">Delete '{{question.question}}' question?</h3>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary confirm-delete-question" id="ok" data-ng-click="deleteQuestion.confirmDeleteQuestion()">Ok</button>
+        <button class="btn btn-warning cancel-delete-question" id="cancel" data-ng-click="deleteQuestion.cancelDeleteQuestion()">Cancel</button>
+    </div>
+</form>

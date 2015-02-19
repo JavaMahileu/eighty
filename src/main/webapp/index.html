@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="expires" content="0">
+        <meta http-equiv="pragma" content="no-cache">
+        <meta name="description" content="">
+
+        <title>Eighty</title>
+
+        <link rel="icon" type="image/x-icon"
+              href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUjgdACknJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIiIiIiIiIiIiIiIiIiIiIiIAAAAAAAAiIgERERERECIiAAAAAAAQIiIBEREREBAiIgAAAAAQECIiAREREBAQIiIAAAAQEBAiIgEREBAQECIiAREQEBAQIiIBERAQEBAiIgEREBAQECIiAAAAAAAAIiIiIiIiIiIiIiIiIiIiIiIAAAAAAAAAAD/8AAAgBAAAP/QAACAUAAA/1AAAIFQAAD9UAAAhVAAAIVQAACFUAAAhVAAAP/wAAAAAAAAAAAAA">
+
+        <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+        <link href="bower_components/ng-tags-input/ng-tags-input.css" rel="stylesheet">
+
+        <link href="css/app.css" rel="stylesheet"/>
+        <link href="css/abn_tree.css" rel="stylesheet"/>
+
+
+    </head>
+    <body data-ng-app="eightyApp">
+    <div class="cont">
+        <header>
+            <nav class="navbar navbar-inverse" role="navigation">
+                <div class="container-fluid" data-ng-controller="exportCtrl as export">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="pull-left divInline">
+                        <a class="navbar-brand" href="#">Eighty</a>
+                    </div>
+                    <div class="pull-right" ng-class="{notVisible: !export.checkExport('exportSet'), divInline: export.checkExport('exportSet')}" id="export">
+                        <a class="navbar-brand" switch-off-branch href="#/export" id="export-link">selected for export: {{ export.exportLen }}</a>
+                        <span id="clear-export-list" class="glyphicon glyphicon-trash navbar-brand" data-ng-click="export.clearList()"
+                              tooltip-placement="bottom" tooltip-popup-delay="1000" tooltip="Clear export list"></span>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="sidebar-nav" data-ng-controller="treeNavigationCtrl as tree">
+                            <div>
+                                <span data-ng-class="{editable: tree.getEditable()}" class="pull-right" id="editspan">
+                                    <a class="glyphicon glyphicon-plus add-root-icon" data-ng-click="tree.addTopic()"
+                                       tooltip-placement="top" tooltip-popup-delay="1000"
+                                       tooltip="Add new topic"></a>
+                                    <a class="glyphicon glyphicon-pencil edit-toggle" data-ng-click="tree.setEditable()"
+                                       tooltip-placement="top" tooltip-popup-delay="1000" tooltip="Edit mode"></a>
+                                </span>
+                                <h4>Competencies</h4>
+                            </div>
+                            <!-- directive: abn-tree -->
+                            <abn-tree tree-control="tree.treeControl"
+                                      tree-data="tree.treedata"
+                                      edit-folder="tree.editTopic(branch)"
+                                      add-folder="tree.addTopic(branch)"
+                                      delete-folder="tree.deleteTopic(branch)"
+                                      on-select="tree.onTopicClick(branch)"
+                                      children="topics"
+                                      refresh-branch="tree.onFolderHeadClick(branch)"
+                                      editable="tree.getEditable()">
+                            </abn-tree>
+                            <!-- end of directive: abn-tree -->
+                        </div>
+
+                        <div data-ui-view='tag'></div>
+
+                        <div data-ui-view='customer'></div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div data-ui-view='main'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; Epam 2014
+                | <a href="documentation/">Api-Docs REST</a>
+                | <a href="angularDocs/index.html">Angular-Docs</a>
+                | <a href="e2etestresults/reporter.html">e2e test results</a>
+            </p>
+        </footer>
+    </div>
+
+        <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+
+        <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+        <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+
+        <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+
+        <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+
+        <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+        <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+
+        <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+        <script type="text/javascript" src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/questions/questions.factory.js"></script>
+        <script type="text/javascript" src="js/utility/modalData.factory.js"></script>
+        <script type="text/javascript" src="js/utility/eightyStore.factory.js"></script>
+        <script type="text/javascript" src="js/dataService/crud.factory.js"></script>
+        <script type="text/javascript" src="js/utility/utility.factory.js"></script>
+        <script type="text/javascript" src="js/customers/customers.controller.js"></script>
+        <script type="text/javascript" src="js/customers/customers.factory.js"></script>
+        <script type="text/javascript" src="js/questions/exportQuestions.controller.js"></script>
+        <script type="text/javascript" src="js/questions/filteredQuestions.controller.js"></script>
+        <script type="text/javascript" src="js/questions/questions.controller.js"></script>
+        <script type="text/javascript" src="js/tags/tags.controller.js"></script>
+        <script type="text/javascript" src="js/tags/tags.factory.js"></script>
+        <script type="text/javascript" src="js/topicTree/topicInstance/addTopic.controller.js"></script>
+        <script type="text/javascript" src="js/topicTree/topicInstance/deleteTopic.controller.js"></script>
+        <script type="text/javascript" src="js/topicTree/topicInstance/editTopic.controller.js"></script>
+        <script type="text/javascript" src="js/topicTree/treeNavigation.controller.js"></script>
+        <script type="text/javascript" src="js/questions/questionInstance/editQuestion.controller.js"></script>
+        <script type="text/javascript" src="js/questions/questionInstance/addQuestion.controller.js"></script>
+        <script type="text/javascript" src="js/questions/questionInstance/deleteQuestion.controller.js"></script>
+        <script type="text/javascript" src="js/utility/focusField.directive.js"></script>
+        <script type="text/javascript" src="js/utility/switchOffBranch.directive.js"></script>
+        <script type="text/javascript" src="js/utility/wrapper.directive.js"></script>
+        <script type="text/javascript" src="js/questions/questionsContent.directive.js"></script>
+        <script type="text/javascript" src="js/topicTree/abnTree.directive.js"></script>
+        <script type="text/javascript" src="js/topicTree/treeNavigation.factory.js"></script>
+        <script type="text/javascript" src="js/filter.js"></script>
+        <script type="text/javascript" src="js/config.js"></script>
+        <script type="text/javascript" src="js/utility.js"></script>
+
+
+
+    </div>
+
+    </body>
+</html>

@@ -1,0 +1,80 @@
+/*
+   abn-tree.css
+
+   style for the angular-bootstrap-nav-tree
+   for both Bootstrap 2 and Bootstrap 3
+
+*/
+
+/* ------------------------------------------
+AngularJS Animations...
+
+The first selector is for Angular 1.1.5
+The second selector is for Angular 1.2.0
+
+
+   begin normal css stuff
+*/
+ul.abn-tree {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+ul.abn-tree .tree-icon {
+    margin-right: 5px;
+}
+
+ul.abn-tree li.abn-tree-row {
+    padding: 0px;
+    margin: 0px;
+    display: inline-block;
+    min-width: 100%;
+}
+
+ul.abn-tree li.abn-tree-row a {
+    padding: 3px 10px;
+}
+
+ul.abn-tree li.indented {
+    padding: 2px;
+}
+
+.abn-tree {
+    cursor: pointer;
+}
+
+ul.nav.abn-tree .level-1 .indented {
+    margin-left: 0px;
+}
+
+ul.nav.abn-tree .level-2 .indented {
+    margin-left: 20px;
+}
+
+ul.nav.abn-tree .level-3 .indented {
+    margin-left: 40px;
+}
+
+ul.nav.abn-tree .level-4 .indented {
+    margin-left: 60px;
+}
+
+ul.nav.abn-tree .level-5 .indented {
+    margin-left: 80px;
+}
+
+ul.nav.abn-tree .level-6 .indented {
+    margin-left: 100px;
+}
+
+ul.nav.nav-list.abn-tree .level-7 .indented {
+    margin-left: 120px;
+}
+
+ul.nav.nav-list.abn-tree .level-8 .indented {
+    margin-left: 140px;
+}
+
+ul.nav.nav-list.abn-tree .level-9 .indented {
+    margin-left: 160px;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "eighty",
+  "version": "0.9.9",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-mocks": "~1.2.x",
+    "jquery": "1.10.2",
+    "bootstrap": "~3.1.1",
+    "angular-ui-router": "0.2.9",
+    "angular-resource": "~1.2.x",
+    "angular-animate": "~1.2.x",
+    "angular-bootstrap": "~0.11.0",
+    "ng-tags-input" : "2.0.1"
+  }
+}

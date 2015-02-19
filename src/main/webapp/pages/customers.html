@@ -1,0 +1,17 @@
+<div class="tags-cloud-block" id="div-customers" style="border: none;">
+        <div style="padding: 6px 6px;">
+            <span class="glyphicon glyphicon-user"></span>&nbsp; Customers:
+        </div>
+        <span data-ng-repeat="customer in customers.customers | orderBy: 'name'">
+            <a class="badge alert-info"
+               id="customer_{{customer.name}}"
+               switch-off-branch
+               data-ng-href="#/questionsFromCustomer/{{customer.name}}"
+               tooltip-popup-delay="1000"
+               tooltip="Total quantity of questions by customer “{{customer.name}}”">
+                <div>
+                    {{customer.name}} ({{customer.count}})
+                </div>
+            </a>
+        </span>
+</div>

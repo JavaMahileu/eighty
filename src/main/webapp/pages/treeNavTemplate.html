@@ -1,0 +1,19 @@
+<ul class="nav nav-list nav-pills nav-stacked abn-tree" data-ng-class="editable ? 'editable' : ''">
+    <li ng-repeat="row in tree_rows | filter:{visible:true} track by row.branch.uid"
+        data-ng-class="{'level-{{ row.level }}': true, 'active': row.branch.selected}"
+        ng-animate="'abn-tree-animate'"
+        class="abn-tree-row">
+        <a>
+        <div class="indented">
+            <span ng-class="row.tree_icon" ng-click="onTreeIconClick(row.branch)" class="pull-left tree-icon"></span>
+
+            <span class="pull-right edit-icon" style="position: absolute !important; right: 0px;">
+                <i ng-class="editIcons.editFolder" data-ng-click="editFolder(row)" class="editFolder" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Edit topic title"></i>
+                <i ng-class="editIcons.addFolder" data-ng-click="addFolder(row)" class="addFolder" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Add subtopic"></i>
+                <i ng-class="editIcons.deleteFolder" data-ng-click="deleteFolder(row)" class="deleteFolder" tooltip-placement="left" tooltip-popup-delay="1000" tooltip="Delete topic"></i>
+            </span>
+            <div class="tree-label " ng-click="user_clicks_branch(row.branch)">{{ row.title }}</div>
+        </div>
+        </a>
+    </li>
+</ul>

@@ -1,0 +1,27 @@
+<form role="form" novalidate>
+    <div class="modal-header">
+        <h3 class="modal-title">Edit question</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="question">Question</label>
+            <textarea type="text" class="form-control text-size" id="question" name="question" required placeholder="Question" data-ng-model="editQuestion.question.question" focus-field="editQuestion.shouldBeOpen"></textarea>
+            <p><span class="note-class" ng-show="!editQuestion.question.question.length">Please enter question! Required field.</span></p>
+            <label for="answer">Answer (optional)</label>
+            <textarea type="text" class="form-control text-size" id="answer" placeholder="Answer" data-ng-model="editQuestion.question.answer" ></textarea>
+            <label>Customers</label><br/>
+            <tags-input min-length="2" type="text" id="customers" display-property="name" ng-model="editQuestion.question.customers">
+                <auto-complete min-length="2" source="editQuestion.loadCustomers($query)"></auto-complete>
+            </tags-input>
+            <label>Tags</label><br/>
+            <tags-input min-length="2" type="text" id="tags" display-property="tag" ng-model="editQuestion.question.tags">
+                <auto-complete min-length="2" source="editQuestion.loadTags($query)"></auto-complete>
+            </tags-input>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="ok" class="btn btn-primary save-question" data-ng-click="editQuestion.saveQuestion()">Save</button>
+        <button id="cancel" class="btn btn-warning cancel-save-question" data-ng-click="editQuestion.cancelEdit()">Cancel</button>
+        <button id="del" class="btn btn-danger delete-question pull-left" data-ng-click="editQuestion.deleteQuestion()">Delete</button>
+    </div>
+</form>

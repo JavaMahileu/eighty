@@ -1,0 +1,15 @@
+<form role="form">
+    <div class="modal-header">
+        <h3 class="modal-title">Enter new topic title</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="topic">Topic title</label>
+            <input type="text" class="form-control" id="topic" data-ng-model="editTopicInstance.topic.title" focus-field="editTopicInstance.shouldBeOpen">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary edit-topic" data-ng-click="editTopicInstance.saveTopicChanges()">Ok</button>
+        <button class="btn btn-warning cancel-edit-topic" data-ng-click="editTopicInstance.cancelEditTopic()">Cancel</button>
+    </div>
+</form>
