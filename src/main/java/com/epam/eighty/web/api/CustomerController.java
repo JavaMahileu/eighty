@@ -1,5 +1,6 @@
 package com.epam.eighty.web.api;
 
+import com.codahale.metrics.annotation.Timed;
 import com.epam.eighty.domain.Customer;
 import com.epam.eighty.service.CustomerService;
 import com.wordnik.swagger.annotations.Api;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +36,7 @@ public class CustomerController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json customer"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(value = "/{customerName}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "customer", key = "#customerName")
@@ -45,6 +48,7 @@ public class CustomerController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json customer"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "customer", key = "'all'")
@@ -56,6 +60,7 @@ public class CustomerController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(value = "/topic/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "customer", key = "'topic.' + #id")
