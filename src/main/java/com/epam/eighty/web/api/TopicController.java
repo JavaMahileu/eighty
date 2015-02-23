@@ -1,5 +1,6 @@
 package com.epam.eighty.web.api;
 
+import com.codahale.metrics.annotation.Timed;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.service.DBPopulatorService;
 import com.epam.eighty.service.TopicService;
@@ -44,6 +45,7 @@ public class TopicController {
             @ApiResponse(code = 200, message = "application/json topic"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found") })
+    @Timed
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "topic", key = "#id")
@@ -56,6 +58,7 @@ public class TopicController {
             @ApiResponse(code = 200, message = "application/json topic"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found") })
+    @Timed
     @RequestMapping(value = "/full/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "topic", key = "'full.' + #id")
@@ -67,6 +70,7 @@ public class TopicController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json topic with title 'root'"),
             @ApiResponse(code = 404, message = "Not found") })
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "topic", key = "'root.' + #id")
@@ -82,6 +86,7 @@ public class TopicController {
     @ApiOperation(value = "Delete topic by id", notes = "Delete topic by id", httpMethod = "DELETE")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Invalid ID"), })
+    @Timed
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @Caching(evict = {
             @CacheEvict(value = "topic", allEntries = true),
@@ -98,6 +103,7 @@ public class TopicController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     @CacheEvict(value = "topic", allEntries = true)
@@ -111,6 +117,7 @@ public class TopicController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     @CacheEvict(value = "topic", allEntries = true)
@@ -125,6 +132,7 @@ public class TopicController {
             @ApiResponse(code = 200, message = "application/json topic"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found") })
+    @Timed
     @RequestMapping(value = "/path/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "topic", key = "'path.' + #id")

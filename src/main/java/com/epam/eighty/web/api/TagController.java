@@ -1,5 +1,6 @@
 package com.epam.eighty.web.api;
 
+import com.codahale.metrics.annotation.Timed;
 import com.epam.eighty.domain.Tag;
 import com.epam.eighty.service.TagService;
 import com.wordnik.swagger.annotations.Api;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import scala.tools.nsc.typechecker.Tags;
+
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +37,7 @@ public class TagController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(value = "/topic/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "tag", key = "'topic.' + #id")
@@ -44,6 +47,7 @@ public class TagController {
 
     @ApiOperation(value = "Find tag by tag if exist or create and return tag if not exist", notes = "Get tag by tag if exist or create and return tag if not exist", httpMethod = "GET", response = Tags.class, produces = "application/json")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "application/json question") })
+    @Timed
     @RequestMapping(value = "/tag/{title}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "tag", key = "'tag.' + #title")
@@ -55,6 +59,7 @@ public class TagController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json tag"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "tag", key = "'all'")
@@ -66,6 +71,7 @@ public class TagController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json tag"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(value = "/{tagName}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "tag", key = "'topic.' + #tagName")
@@ -77,6 +83,7 @@ public class TagController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(value = "/top/{limit}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "tag", key = "'top'")
