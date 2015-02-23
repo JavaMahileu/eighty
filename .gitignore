@@ -1,10 +1,14 @@
-src/main/webapp/js/min/script.js
-src/main/webapp/js/min/script.min.js
-src/main/webapp/js/min/script.clean.js
+src/main/webapp/js/min/
+src/main/webapp/css/min/
+src/main/webapp/angularDocs/
+src/main/webapp/bower_components/
+src/main/webapp/documentation/
+src/main/webapp/e2etestresults/
 
 .classpath
 .project
 .settings/
+.sonar/
 data/
 logs/
 node/
