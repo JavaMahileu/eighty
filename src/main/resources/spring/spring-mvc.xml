@@ -13,6 +13,7 @@
 
     <import resource="**/cache-context.xml" />
     <import resource="**/aspect.xml" />
+    <import resource="**/metrics-context.xml" />
 
     <mvc:annotation-driven>
         <mvc:message-converters>

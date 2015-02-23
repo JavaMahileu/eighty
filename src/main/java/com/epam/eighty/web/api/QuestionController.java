@@ -1,8 +1,8 @@
 package com.epam.eighty.web.api;
 
+import com.codahale.metrics.annotation.Timed;
 import com.epam.eighty.domain.Question;
 import com.epam.eighty.service.QuestionService;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -46,6 +46,7 @@ public class QuestionController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     @Caching(evict = {
@@ -64,6 +65,7 @@ public class QuestionController {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found") })
+    @Timed
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "#id")
@@ -75,6 +77,7 @@ public class QuestionController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
             @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     @Caching(evict = {
@@ -92,6 +95,7 @@ public class QuestionController {
     @ApiOperation(value = "Delete question by id", notes = "Delete question by id", httpMethod = "DELETE")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Invalid ID"), })
+    @Timed
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @Caching(evict = {
             @CacheEvict(value = "question", allEntries = true),
@@ -105,6 +109,7 @@ public class QuestionController {
 
     @ApiOperation(value = "Find questions for topic and subtopics", notes = "Get all questions from topic and subtopics", httpMethod = "GET", produces = "application/json")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "application/json question") })
+    @Timed
     @RequestMapping(value = "/all/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "'all.' + #id")
@@ -116,6 +121,7 @@ public class QuestionController {
 
     @ApiOperation(value = "Find questions for topic and tag", notes = "Get all questions from topic and tag", httpMethod = "GET", produces = "application/json")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "application/json question") })
+    @Timed
     @RequestMapping(value = "/topic/{id}/tag/{tag}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "'topic.' + #id +'.tag.' + #tag")
@@ -126,6 +132,7 @@ public class QuestionController {
 
     @ApiOperation(value = "Find all questions", notes = "Get all questions", httpMethod = "GET", produces = "application/json")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "application/json question") })
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "'all'")
@@ -135,6 +142,7 @@ public class QuestionController {
 
     @ApiOperation(value = "Find questions with tag", notes = "Get all questions with tag", httpMethod = "GET", produces = "application/json")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "application/json question") })
+    @Timed
     @RequestMapping(value = "/all/tag/{tag}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "'all.tag.' + #tag")
@@ -144,6 +152,7 @@ public class QuestionController {
 
     @ApiOperation(value = "Find questions from customer", notes = "Get all questions from customer", httpMethod = "GET", produces = "application/json")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "application/json question") })
+    @Timed
     @RequestMapping(value = "/all/customer/{customer}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "'all.customer.' + #customer")
