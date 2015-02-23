@@ -26,6 +26,7 @@
         <sonar.exclusions>${basedir}/src/main/webapp/js/min/**/*</sonar.exclusions>
     </properties>
 
+
     <dependencies>
         <!-- Spring Dependencies -->
         <dependency>

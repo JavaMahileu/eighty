@@ -1,3 +1,12 @@
+/target/
+/logs/
+/.settings/
+/.sonar/
+/node/
+/node_modules/
+/.classpath
+/.hgignore
+/.project
 src/main/webapp/js/min/script.js
 src/main/webapp/js/min/script.min.js
 src/main/webapp/js/min/script.clean.js
