@@ -1,0 +1,9 @@
+/target/
+/logs/
+/.settings/
+/.sonar/
+/node/
+/node_modules/
+/.classpath
+/.hgignore
+/.project
