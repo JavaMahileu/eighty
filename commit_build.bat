@@ -1,1 +1,1 @@
-mvn -U clean install -Pprod
+mvn clean install -Pprod
