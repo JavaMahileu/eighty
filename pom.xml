@@ -11,10 +11,11 @@
     <packaging>war</packaging>
 
     <properties>
-        <maven.surefire.plugin>2.16</maven.surefire.plugin>
-        <maven.checkstyle.plugin>2.10</maven.checkstyle.plugin>
-        <maven.findbugs.plugin>2.5.2</maven.findbugs.plugin>
-        <maven.pmd.plugin>2.7.1</maven.pmd.plugin>
+        <maven.surefire.plugin>2.18.1</maven.surefire.plugin>
+        <maven.checkstyle.plugin>2.14</maven.checkstyle.plugin>
+        <maven.findbugs.plugin>3.0.0</maven.findbugs.plugin>
+        <maven.pmd.plugin>3.4</maven.pmd.plugin>
+        <jacoco.maven.plugin>0.7.3.201502191951</jacoco.maven.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.0.5.RELEASE</spring.version>
         <slf4j.version>1.7.7</slf4j.version>
@@ -307,7 +308,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.3.201502191951</version>
+                <version>${jacoco.maven.plugin}</version>
                 <executions>
                     <execution>
                         <id>unit-test-coverage-agent</id>
