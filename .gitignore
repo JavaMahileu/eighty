@@ -5,6 +5,7 @@ src/main/webapp/bower_components/
 src/main/webapp/documentation/
 src/main/webapp/e2etestresults/
 
+src/main/webapp/META-INF/context.xml
 .classpath
 .project
 .settings/
