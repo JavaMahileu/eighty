@@ -5,7 +5,8 @@ exports.config = {
     baseUrl : 'http://localhost:8282',
 
     capabilities: {
-        'browserName': 'firefox'
+        'browserName': 'firefox',
+        "firefox_binary": process.env.FF_PORTABLE
     },
 
     onPrepare: function() {
