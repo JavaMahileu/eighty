@@ -11,6 +11,11 @@
     <packaging>war</packaging>
 
     <properties>
+        <maven.surefire.plugin>2.18.1</maven.surefire.plugin>
+        <maven.checkstyle.plugin>2.14</maven.checkstyle.plugin>
+        <maven.findbugs.plugin>3.0.0</maven.findbugs.plugin>
+        <maven.pmd.plugin>3.4</maven.pmd.plugin>
+        <jacoco.maven.plugin>0.7.3.201502191951</jacoco.maven.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.0.5.RELEASE</spring.version>
         <slf4j.version>1.7.7</slf4j.version>
@@ -243,6 +248,51 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend.maven.plugin}</version>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v0.10.18</nodeVersion>
+                            <npmVersion>1.3.8</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>grunt build</id>
+                        <goals>
+                            <goal>grunt</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <arguments>--no-color</arguments>
+                            <arguments>prod-build</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>grunt ngdocs</id>
+                        <goals>
+                            <goal>grunt</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <arguments>--no-color</arguments>
+                            <arguments>ngdocs</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
@@ -305,7 +355,7 @@
 
     <profiles>
         <profile>
-            <id>production</id>
+            <id>prod</id>
             <build>
                 <plugins>
                     <plugin>
@@ -313,22 +363,6 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>${frontend.maven.plugin}</version>
                         <executions>
-                            <execution>
-                                <id>install node and npm</id>
-                                <goals>
-                                    <goal>install-node-and-npm</goal>
-                                </goals>
-                                <configuration>
-                                    <nodeVersion>v0.10.18</nodeVersion>
-                                    <npmVersion>1.3.8</npmVersion>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>npm install</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                            </execution>
                             <execution>
                                 <id>grunt minify</id>
                                 <goals>
@@ -341,80 +375,14 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>grunt ngdocs</id>
-                                <goals>
-                                    <goal>grunt</goal>
-                                </goals>
-                                <phase>prepare-package</phase>
-                                <configuration>
-                                    <arguments>--no-color</arguments>
-                                    <arguments>ngdocs</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>grunt build</id>
-                                <goals>
-                                    <goal>grunt</goal>
-                                </goals>
-                                <phase>compile</phase>
-                                <configuration>
-                                    <arguments>--no-color</arguments>
-                                    <arguments>prod-build</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
                                 <id>grunt protractor</id>
                                 <goals>
                                     <goal>grunt</goal>
                                 </goals>
-                                <phase>prepare-package</phase>
+                                <phase>test</phase>
                                 <configuration>
                                     <arguments>--no-color</arguments>
                                     <arguments>p:test</arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>development</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <version>${frontend.maven.plugin}</version>
-                        <executions>
-                            <execution>
-                                <id>install node and npm</id>
-                                <goals>
-                                    <goal>install-node-and-npm</goal>
-                                </goals>
-                                <configuration>
-                                    <nodeVersion>v0.10.18</nodeVersion>
-                                    <npmVersion>1.3.8</npmVersion>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>npm install</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>grunt ngdocs</id>
-                                <goals>
-                                    <goal>grunt</goal>
-                                </goals>
-                                <phase>compile</phase>
-                                <configuration>
-                                    <arguments>--no-color</arguments>
-                                    <arguments>ngdocs</arguments>
                                 </configuration>
                             </execution>
                             <execution>
@@ -422,22 +390,82 @@
                                 <goals>
                                     <goal>grunt</goal>
                                 </goals>
-                                <phase>process-test-classes</phase>
+                                <phase>test</phase>
                                 <configuration>
                                     <arguments>--no-color</arguments>
                                     <arguments>k:test</arguments>
+                                    <argLine>${surefireArgLine}</argLine>
                                 </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>${maven.checkstyle.plugin}</version>
+                        <executions>
                             <execution>
-                                <id>grunt build</id>
+                                <id>default-checkstyle-checks</id>
+                                <phase>verify</phase>
                                 <goals>
-                                    <goal>grunt</goal>
+                                    <goal>check</goal>
                                 </goals>
-                                <phase>compile</phase>
                                 <configuration>
-                                    <arguments>--no-color</arguments>
-                                    <arguments>dev-build</arguments>
+                                    <configLocation>${basedir}/code-quality/checkstyle_checks.xml</configLocation>
+                                    <suppressionsLocation>${basedir}/code-quality/checkstyle_suppressions.xml</suppressionsLocation>
+                                    <consoleOutput>true</consoleOutput>
+                                    <logViolationsToConsole>true</logViolationsToConsole>
+                                    <violationSeverity>warning</violationSeverity>
+                                    <failOnViolation>true</failOnViolation>
                                 </configuration>
+                            </execution>
+                        </executions>
+                        <!-- Use -Dcheckstyle.skipExec=true to bypass -->
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>${maven.findbugs.plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>default-findbugs-checks</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <configuration>
+                                    <includeFilterFile>${basedir}/code-quality/findbugs.xml</includeFilterFile>
+                                    <failOnError>true</failOnError>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <version>${maven.pmd.plugin}</version>
+                        <configuration>
+                            <failOnViolation>true</failOnViolation>
+                            <failurePriority>3</failurePriority>
+                            <aggregate>true</aggregate>
+                            <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                            <!-- The minimum tokens before a violation -->
+                            <minimumTokens>100</minimumTokens>
+                            <!-- Turn off if no xref report -->
+                            <linkXRef>true</linkXRef>
+                            <verbose>true</verbose>
+                            <targetJdk>${java.version}</targetJdk>
+                            <rulesets>
+                                <ruleset>${basedir}/code-quality/pmd.xml</ruleset>
+                            </rulesets>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                    <goal>pmd</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>

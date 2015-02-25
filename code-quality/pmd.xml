@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset>
+  <rule ref="rulesets/java/migrating.xml/AvoidAssertAsIdentifier">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/clone.xml/ProperCloneImplementation">
+    <priority>2</priority>
+  </rule>
+  <rule ref="rulesets/java/logging-java.xml/SystemPrintln">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/design.xml/TooFewBranchesForASwitchStatement">
+    <priority>4</priority>
+  </rule>
+  <rule ref="rulesets/java/design.xml/EmptyMethodInAbstractClassShouldBeAbstract">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/migrating.xml/IntegerInstantiation">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/migrating.xml/ByteInstantiation">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/design.xml/AbstractClassWithoutAnyMethod">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/strings.xml/StringInstantiation">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/design.xml/EqualsNull">
+    <priority>2</priority>
+  </rule>
+  <rule ref="rulesets/java/basic.xml/AvoidMultipleUnaryOperators">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/basic.xml/BooleanInstantiation">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/naming.xml/VariableNamingConventions">
+    <priority>4</priority>
+  </rule>
+  <rule ref="rulesets/java/logging-java.xml/MoreThanOneLogger">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/basic.xml/DoubleCheckedLocking">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/controversial.xml/DoNotCallGarbageCollectionExplicitly">
+    <priority>2</priority>
+  </rule>
+  <rule ref="rulesets/java/strictexception.xml/AvoidThrowingRawExceptionTypes">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/naming.xml/MethodNamingConventions">
+    <priority>4</priority>
+  </rule>
+  <rule ref="rulesets/java/migrating.xml/AvoidEnumAsIdentifier">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/naming.xml/ClassNamingConventions">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/migrating.xml/ShortInstantiation">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/design.xml/ConstructorCallsOverridableMethod">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/strictexception.xml/AvoidThrowingNullPointerException">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/logging-java.xml/LoggerIsNotStaticFinal">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/migrating.xml/LongInstantiation">
+    <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/java/basic.xml/BrokenNullCheck">
+    <priority>2</priority>
+  </rule>
+</ruleset>
+
