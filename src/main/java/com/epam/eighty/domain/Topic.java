@@ -106,10 +106,10 @@ public class Topic extends AbstractEntity {
         StringBuilder result = new StringBuilder();
 
         result.append("Topic:" + " ");
-        if(getId() != null) {
+        if (getId() != null) {
             result.append("id=" + getId().toString() + " ");
         }
-        result.append("title=" + title );
+        result.append("title=" + title);
 
         return result.toString();
     }

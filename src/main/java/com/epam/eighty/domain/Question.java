@@ -48,7 +48,7 @@ public class Question extends AbstractEntity {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("Question: ");
-        if(getId() != null) {
+        if (getId() != null) {
             result.append("id=" + getId().toString() + " ");
         }
         result.append("question=" + question + " ")

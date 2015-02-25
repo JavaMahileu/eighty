@@ -9,6 +9,7 @@ src/main/webapp/e2etestresults/
 .project
 .settings/
 .sonar/
+.checkstyle
 data/
 logs/
 node/
