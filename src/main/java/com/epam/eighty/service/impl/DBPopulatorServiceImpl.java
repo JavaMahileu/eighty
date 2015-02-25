@@ -18,7 +18,7 @@ public class DBPopulatorServiceImpl implements DBPopulatorService {
     private GraphDatabaseService graphDatabaseService;
 
     @Override
-    public void populate() throws IOException{
+    public void populate() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(new File(getClass().getClassLoader().getResource("scripts/data.cypher").getFile())));
         ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
 

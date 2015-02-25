@@ -10,26 +10,25 @@ import org.slf4j.LoggerFactory;
 public class TraceLogger {
 
     @Before("execution(public * com.epam.eighty.web.api.*.*(..))")
-    public void log(JoinPoint point) {
-        final Logger LOG = LoggerFactory.getLogger(point.getTarget().getClass());
+    public void log(final JoinPoint point) {
+        final Logger log = LoggerFactory.getLogger(point.getTarget().getClass());
         Object[] arguments = point.getArgs();
         StringBuilder message = new StringBuilder();
 
         message.append(point.getSignature().getName()).
         append(" called");
-        if(arguments.length > 1) {
+        if (arguments.length > 1) {
             message.append(" with arguments: ");
-        }
-        else if(arguments.length == 1) {
+        } else if (arguments.length == 1) {
             message.append(" with argument: ");
         }
         for (int i = 0; i < arguments.length; i++) {
             message.append(arguments[i].toString());
-            if(i != arguments.length - 1) {
+            if (i != arguments.length - 1) {
                 message.append(", ");
             }
         }
-        LOG.trace(message.toString());
+        log.trace(message.toString());
     }
 
 }
