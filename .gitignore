@@ -2,7 +2,6 @@ src/main/webapp/js/min/
 src/main/webapp/css/min/
 src/main/webapp/angularDocs/
 src/main/webapp/bower_components/
-src/main/webapp/documentation/
 src/main/webapp/e2etestresults/
 
 src/main/webapp/META-INF/context.xml
