@@ -9,6 +9,7 @@ src/main/webapp/META-INF/context.xml
 .project
 .settings/
 .sonar/
+.checkstyle
 data/
 logs/
 node/

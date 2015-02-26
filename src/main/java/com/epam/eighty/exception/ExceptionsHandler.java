@@ -11,19 +11,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionsHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(ExceptionsHandler.class);
 
     @ExceptionHandler(DataAccessException.class)
-    public void handleDataAccessException(DataAccessException ex) {
-        final Logger LOG = LoggerFactory.getLogger(ExceptionsHandler.class);
+    public void handleDataAccessException(final DataAccessException ex) {
         LOG.error("DataAccessException: " + ex.getMessage());
-
     }
 
     @ExceptionHandler(IOException.class)
-    public void handleIOException(IOException ex) {
-        final Logger LOG = LoggerFactory.getLogger(ExceptionsHandler.class);
+    public void handleIOException(final IOException ex) {
         LOG.error("IOException: " + ex.getMessage());
-
     }
 
 }
