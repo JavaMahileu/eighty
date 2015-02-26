@@ -31,7 +31,7 @@
 
     <mvc:default-servlet-handler />
 
-    <mvc:resources mapping="/documentation/**" location="/documentation/" />
+    <mvc:resources mapping="/bower_components/**" location="/bower_components/" />
 
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <beans:property name="prefix" value="/documentation/" />
