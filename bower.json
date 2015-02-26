@@ -11,6 +11,7 @@
     "angular-resource": "~1.2.x",
     "angular-animate": "~1.2.x",
     "angular-bootstrap": "~0.11.0",
-    "ng-tags-input" : "2.0.1"
+    "ng-tags-input" : "2.0.1",
+    "swagger-ui": "2.0.24"
   }
 }
