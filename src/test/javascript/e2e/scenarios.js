@@ -4,8 +4,7 @@
 
 describe('Eighty App', function() {
 
-    var ptor = protractor.getInstance();
-    var driver = ptor.driver;
+    var driver = browser.driver;
 
     var hasClass = function (element, cls) {
         return element.getAttribute('class').then(function (classes) {
@@ -14,7 +13,7 @@ describe('Eighty App', function() {
     };
 
     var hover = function (element) {
-        ptor.actions().mouseMove(element).perform();
+        browser.actions().mouseMove(element).perform();
     };
 
     it('should redirect \ to \#\home', function() {
@@ -48,7 +47,7 @@ describe('Eighty App', function() {
             $('.edit-toggle').click();
             expect($('.add-root-icon').isDisplayed()).toBeTruthy();
             var firstTopic = element.all(by.css('.abn-tree .tree-label')).first();
-            ptor.actions().mouseMove(firstTopic).perform();
+            browser.actions().mouseMove(firstTopic).perform();
             var editIcon = element.all(by.css('.abn-tree .icon-file')).first();
             expect(editIcon.isDisplayed()).toBeTruthy();
         });
@@ -76,7 +75,7 @@ describe('Eighty App', function() {
         it('User can create new sub-topic', function() {
             $('.edit-toggle').click();
             var firstTopic = element.all(by.css('.abn-tree .tree-label')).first();
-            ptor.actions().mouseMove(firstTopic).perform();
+            browser.actions().mouseMove(firstTopic).perform();
             element.all(by.css('.addFolder')).first().click();
             driver.switchTo().activeElement();
             element(by.model('addTopicInstance.topic.title')).sendKeys('fakeTopic');
@@ -88,7 +87,7 @@ describe('Eighty App', function() {
         it('User cancels creation new sub-topic', function() {
             $('.edit-toggle').click();
             var firstTopic = element.all(by.css('.abn-tree .tree-label')).first();
-            ptor.actions().mouseMove(firstTopic).perform();
+            browser.actions().mouseMove(firstTopic).perform();
             element.all(by.css('.addFolder')).first().click();
             driver.switchTo().activeElement();
             element(by.model('addTopicInstance.topic.title')).sendKeys('fakeTopic');
@@ -100,7 +99,7 @@ describe('Eighty App', function() {
         it('User can delete top level topic', function() {
             $('.edit-toggle').click();
             var firstTopic = element.all(by.css('.abn-tree .tree-label')).first();
-            ptor.actions().mouseMove(firstTopic).perform();
+            browser.actions().mouseMove(firstTopic).perform();
             element.all(by.css('.deleteFolder')).first().click();
             driver.switchTo().activeElement();
             element(by.css('.delete-topic')).click();
@@ -111,7 +110,7 @@ describe('Eighty App', function() {
         it('User cancels delete top level topic', function() {
             $('.edit-toggle').click();
             var firstTopic = element.all(by.css('.abn-tree .tree-label')).first();
-            ptor.actions().mouseMove(firstTopic).perform();
+            browser.actions().mouseMove(firstTopic).perform();
             element.all(by.css('.deleteFolder')).first().click();
             driver.switchTo().activeElement();
             element(by.css('.cancel-delete-topic')).click();
@@ -123,7 +122,7 @@ describe('Eighty App', function() {
             $('.edit-toggle').click();
             element.all(by.css('.abn-tree .tree-icon')).first().click();
             var subTopic = element.all(by.css('.abn-tree .tree-label')).get(1);
-            ptor.actions().mouseMove(subTopic).perform();
+            browser.actions().mouseMove(subTopic).perform();
             element.all(by.css('.deleteFolder')).get(1).click();
             driver.switchTo().activeElement();
             element(by.css('.delete-topic')).click();
@@ -134,12 +133,12 @@ describe('Eighty App', function() {
         it('User can edit topic', function() {
             $('.edit-toggle').click();
             var firstTopic = element.all(by.css('.abn-tree .tree-label')).first();
-            ptor.actions().mouseMove(firstTopic).perform();
+            browser.actions().mouseMove(firstTopic).perform();
             element.all(by.css('.editFolder')).first().click();
             driver.switchTo().activeElement();
             firstTopic.getText().then(function(text) {
                 var initialTopicTitle = text;
-                ptor.sleep(10);
+                browser.sleep(10);
                 element(by.model('editTopicInstance.topic.title')).sendKeys('fakeTopic');
                 element(by.css('.edit-topic')).click();
                 expect(firstTopic.getText()).toBe(initialTopicTitle + 'fakeTopic');
@@ -149,7 +148,7 @@ describe('Eighty App', function() {
         it('User cancels edit topic', function() {
             $('.edit-toggle').click();
             var firstTopic = element.all(by.css('.abn-tree .tree-label')).first();
-            ptor.actions().mouseMove(firstTopic).perform();
+            browser.actions().mouseMove(firstTopic).perform();
             element.all(by.css('.editFolder')).first().click();
             driver.switchTo().activeElement();
             firstTopic.getText().then(function(text) {
@@ -174,7 +173,7 @@ describe('Eighty App', function() {
 
         it('User can view question list for selected list-level topic', function() {
             element.all(by.css('.abn-tree .tree-label')).first().click();
-            ptor.sleep(10);
+            browser.sleep(10);
             var topicTitle = element(by.css('.topic-title')).getText();
             var setQ = element.all(by.repeater('quest in questionsCtrl.questions| questionFilter : questionsCtrl.criteria | tagFilter : questionsCtrl.selectedTags track by $index'));
             expect(topicTitle).toBe('Programming Languages');
@@ -183,7 +182,7 @@ describe('Eighty App', function() {
 
         it('User can view no question message', function() {
             element.all(by.css('.abn-tree .tree-label')).get(1).click();
-            ptor.sleep(10);
+            browser.sleep(10);
             var title = element(by.css('.div-error')).getText();
             var setQ = element.all(by.repeater('quest in questionsCtrl.questions| questionFilter : questionsCtrl.criteria | tagFilter : questionsCtrl.selectedTags track by $index'));
             expect(setQ.count()).toBe(0);
@@ -228,7 +227,7 @@ describe('Eighty App', function() {
                 element.all(by.css('.edit-question')).first().click();
                 element(by.model('editQuestion.question.question')).sendKeys('fakeQuestion');
                 element(by.css('.save-question')).click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 expect(setQ.first().getText()).toBe(initialQuestion + 'fakeQuestion');
             });
         });
@@ -241,7 +240,7 @@ describe('Eighty App', function() {
                 element.all(by.css('.edit-question')).first().click();
                 element(by.model('editQuestion.question.question')).sendKeys('fakeQuestion');
                 element(by.css('.cancel-save-question')).click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 expect(setQ.first().getText()).toBe(initialQuestion);
             });
         });
@@ -252,11 +251,11 @@ describe('Eighty App', function() {
             setQ.first().getText().then(function() {
                 hover(setQ.first());
                 element.all(by.css('.edit-question')).first().click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 element(by.css('.delete-question')).click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 element(by.css('.confirm-delete-question')).click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 expect(setQ.count()).toBe(2);
             });
         });
@@ -267,11 +266,11 @@ describe('Eighty App', function() {
             setQ.first().getText().then(function() {
                 hover(setQ.first());
                 element.all(by.css('.edit-question')).first().click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 element(by.css('.delete-question')).click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 element(by.css('.cancel-delete-question')).click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 expect(setQ.count()).toBe(3);
             });
         });
@@ -375,12 +374,12 @@ describe('Eighty App', function() {
         it('User clicks any tag and sees only questions from selected topic with this tag', function() {
             element.all(by.css('.abn-tree .tree-label')).first().click();
             var setTags = element.all(by.repeater('tagOrCustomer in questionsCtrl.tagsAndCustomers'));
-            ptor.sleep(5000);
+            browser.sleep(5000);
             expect(setTags.count()).toBe(5);
             var elem = element.all(by.css('.notSelected')).first();
             expect(elem.getAttribute('class')).toBe('badge alert-info ng-binding notSelected');
             elem.click();
-            ptor.sleep(1000);
+            browser.sleep(1000);
             elem = element.all(by.css('.selected')).first();
             expect(elem.getAttribute('class')).toBe('badge alert-info ng-binding selected');
         });
@@ -392,7 +391,7 @@ describe('Eighty App', function() {
             var elem = element.all(by.css('.notSelected')).first();
             expect(elem.getAttribute('class')).toBe('badge alert-info ng-binding notSelected');
             elem.click();
-            ptor.sleep(100);
+            browser.sleep(100);
             setQ = element.all(by.repeater('quest in questionsCtrl.questions| questionFilter : questionsCtrl.criteria | tagFilter : questionsCtrl.selectedTags track by $index'));
             expect(setQ.count()).toBe(2);
         });
@@ -406,7 +405,7 @@ describe('Eighty App', function() {
 
         it('When user clicks tag in popular tags, then questions with selected tag displayed', function() {
             element(by.id('tagTop_tag2')).click();
-            ptor.sleep(100);
+            browser.sleep(100);
             var topicTitle = element(by.css('.topic-title')).getText();
             expect(topicTitle).toBe('Questions with tag: tag2');
             var setQ = element.all(by.repeater('quest in filtered.questions | questionFilter : filtered.criteria track by $index'));
@@ -430,7 +429,7 @@ describe('Eighty App', function() {
             var elems = element.all(by.css('.disabled'));
             expect(elems.count()).toBe(0);
             element(by.id('tagSelected_tag2')).click();
-            ptor.sleep(100);
+            browser.sleep(100);
             var setQ = element.all(by.repeater('quest in filtered.questions | questionFilter : filtered.criteria track by $index'));
             expect(setQ.count()).toBe(2);
         });
@@ -438,7 +437,7 @@ describe('Eighty App', function() {
         it('When user clicks on customer in footer under questions and there are no more questions from this customer, then link to page questionsFromCustomer is disabled', function() {
             element.all(by.css('.abn-tree .tree-label')).first().click();
             element.all(by.css('.notSelected')).get(1).click();
-            ptor.sleep(1000);
+            browser.sleep(1000);
             var customer = element.all(by.repeater('selTag in questionsCtrl.selectedTags')).first();
             expect(customer.getAttribute('class')).toBe('ng-scope');
             var elems = element.all(by.css('.disabled'));
@@ -453,7 +452,7 @@ describe('Eighty App', function() {
             var elems = element.all(by.css('.disabled'));
             expect(elems.count()).toBe(0);
             element(by.id('tagSelected_customer2')).click();
-            ptor.sleep(1000);
+            browser.sleep(1000);
             var setQ = element.all(by.repeater('quest in filtered.questions | questionFilter : filtered.criteria track by $index'));
             expect(setQ.count()).toBe(2);
         });
@@ -467,7 +466,7 @@ describe('Eighty App', function() {
 
         it('When user clicks customer, then questions with selected customer displayed', function() {
             element(by.id('customer_customer1')).click();
-            ptor.sleep(100);
+            browser.sleep(100);
             var topicTitle = element(by.css('.topic-title')).getText();
             expect(topicTitle).toBe('Questions from customer: customer1');
             var setQ = element.all(by.repeater('quest in filtered.questions | questionFilter : filtered.criteria track by $index'));
@@ -481,12 +480,12 @@ describe('Eighty App', function() {
             var elem = element.all(by.css('.notSelected')).first();
             expect(elem.getAttribute('class')).toBe('badge alert-info ng-binding notSelected');
             elem.click();
-            ptor.sleep(100);
+            browser.sleep(100);
             setQ = element.all(by.repeater('quest in questionsCtrl.questions| questionFilter : questionsCtrl.criteria | tagFilter : questionsCtrl.selectedTags track by $index'));
             expect(setQ.count()).toBe(2);
             var clearElem = element(by.id('clear-tags'));
             clearElem.click();
-            ptor.sleep(100);
+            browser.sleep(100);
             setQ = element.all(by.repeater('quest in questionsCtrl.questions| questionFilter : questionsCtrl.criteria | tagFilter : questionsCtrl.selectedTags track by $index'));
             expect(setQ.count()).toBe(3);
         });
@@ -515,7 +514,7 @@ describe('Eighty App', function() {
                 var tags = element.all(by.repeater('tag in tagList.items track by track(tag)'));
                 expect(tags.count()).toBe(5);
                 element(by.css('.save-question')).click();
-                ptor.sleep(10);
+                browser.sleep(10);
                 expect(setQ.first().getText()).toBe(initialQuestion + 'fakeQuestion');
                 expect(setQ.count()).toBe(3);
             });

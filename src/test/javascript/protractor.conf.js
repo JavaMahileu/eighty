@@ -5,7 +5,8 @@ exports.config = {
     baseUrl : 'http://localhost:8282',
 
     capabilities: {
-        'browserName': 'firefox'
+        'browserName': 'firefox',
+        "firefox_binary": process.env.FF_PORTABLE
     },
 
     onPrepare: function() {
@@ -37,6 +38,6 @@ exports.config = {
         // If true, include stack traces in failures.
         includeStackTrace : true,
         // Default time to wait in ms before a test fails.
-        defaultTimeoutInterval : 30000
+        defaultTimeoutInterval : 60000
     }
 };
