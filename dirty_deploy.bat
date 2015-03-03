@@ -1,4 +1,4 @@
-rem test set: jUnit tests for java code
+rem test: no
 rem code quality checks: no
 rem deploy: deploy on local server tomcat 7
 rem intent of using: development
