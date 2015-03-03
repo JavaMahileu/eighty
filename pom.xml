@@ -26,9 +26,11 @@
         <frontend.maven.plugin>0.0.15</frontend.maven.plugin>
         <cobertura.version>2.6</cobertura.version>
         <equalsverifier.version>1.4.1</equalsverifier.version>
+        <!-- Sonar Parameters -->
         <sonar.sources>src/main/webapp/js,src/main/java</sonar.sources>
         <sonar.javascript.lcov.reportPath>target/lcov.info</sonar.javascript.lcov.reportPath>
         <sonar.exclusions>src/main/webapp/js/min/**/*</sonar.exclusions>
+        <sonar.cobertura.reportPath>target/site/cobertura/coverage.xml</sonar.cobertura.reportPath>
     </properties>
 
     <dependencies>
