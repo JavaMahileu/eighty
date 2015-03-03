@@ -3,4 +3,4 @@ rem code quality checks: yes (findbugs, pmd, checkstyle)
 rem deploy: no deploy
 rem intent of using: production
 rem minification: yes
-mvn clean install -Pprod
+mvn clean verify -Pprod
