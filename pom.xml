@@ -390,7 +390,7 @@
                                 <phase>test</phase>
                                 <configuration>
                                     <arguments>--no-color</arguments>
-                                    <arguments>p:test</arguments>
+                                    <arguments>p:test --p:port=${p:port}</arguments>
                                 </configuration>
                             </execution>
                             <execution>
