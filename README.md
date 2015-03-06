@@ -4,7 +4,7 @@
 
 Backgrounds of the project were to learn to use new technologies, to participate in development of real applications, to gain experience of work in team.
 
-Eighty is a web-application with one page, that works through REST-service with graph-oriented database. This is a base of knowledge with questions and answers on different topics that lets to use the application as self-knowledge, testing and as questions for interview.
+Eighty is a single page web-application, that works through REST-service with graph database. This is a base of knowledge with questions and answers on different topics that lets to use the application as self-knowledge, testing and as questions for interview.
  
 Goals at the beginning of the project:
 
@@ -15,7 +15,7 @@ Goals at the beginning of the project:
 
 ## Used technologies
   
-A lot of technologies from the widely used to highly specialized are used in project. Graph-oriented database Neo4j, Spring Framework (REST-service and Spring Data) are used as back-end. Bootstrap, jQuery, AngularJS are used as front-end. Application testing is based on JUnit, Karma, Protractor. Project building performs using Maven, NodeJS, Bower. Swagger is used for API project documentation. 
+A lot of technologies from the widely used to highly specialized are used in project. Graph-oriented database Neo4j, Spring Framework (REST-service and Spring Data) are used as back-end. Bootstrap, jQuery, AngularJS are used as front-end. Application testing is based on JUnit, Karma, Protractor. Project building performs using Maven and Grunt. Package management is performed by Npm and Bower. Swagger is used for API project documentation.  
 
 Client works with data saved in Neo4j, through the client part provided by AngularJS and the server part of Spring (REST-service and Spring Data). Pattern [MVC] (http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller), implemented in AngulrJS is used on the client side. Server-side caching for recoverable data in queries is implemented too.
 
@@ -48,7 +48,7 @@ To run integration tests you should download and install [Firefox Portable 34.0.
 
 ## Building Eighty
 
-There are the next .bat-files for project building:
+There are following .bat-files for project building:
 * dirty_build.bat - development version is built, unit-tests and integration tests, Code Quality checks using findbugs, pmd, checkstyle are not performed. 
 * commit_build.bat - production version is built, all the tests, jUnit and integration, Code Quality checks using findbugs, pmd, checkstyle are performed. 
 * dirty_deploy.bat - development version is built, unit-tests and integration tests, Code Quality checks using findbugs, pmd, checkstyle are not performed. Build is deployed on the local server tomcat 7.
