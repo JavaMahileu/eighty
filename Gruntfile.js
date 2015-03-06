@@ -35,6 +35,8 @@ var restMiddleware = function (req, res, next) {
 };
 
 module.exports = function (grunt) {
+    
+    var protractorBrowserPort = grunt.option('p:port') || '8282';
 
     grunt.initConfig({
 
@@ -103,7 +105,7 @@ module.exports = function (grunt) {
             livereload: {
                 options: {
                     //keepalive: true,
-                    port: 8282,
+                    port: protractorBrowserPort,
                     base: ['src/main/webapp', 'src/test/resources/json/root', 'src/test/resources/json'],
                     middleware: function (connect, options) {
                         return [
@@ -193,6 +195,7 @@ module.exports = function (grunt) {
         var protractorBinPath = path.resolve(protractorMainPath, '../../bin/protractor');
         var protractorRefConfPath = 'src/test/javascript/protractor.conf.js';
         var args = [protractorBinPath, protractorRefConfPath];
+        args.push('--baseUrl', 'http://localhost:' + protractorBrowserPort);
         var keepAlive = true;
         var done = this.async();
         grunt.util.spawn({
