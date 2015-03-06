@@ -1,8 +1,8 @@
 var HtmlReporter = require('protractor-html-screenshot-reporter');
+
 exports.config = {
     specs : [ 'e2e/*.js' ],
     rootElement : 'body',
-    baseUrl : 'http://localhost:8282',
 
     capabilities: {
         'browserName': 'firefox',

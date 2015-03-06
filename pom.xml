@@ -26,9 +26,12 @@
         <frontend.maven.plugin>0.0.15</frontend.maven.plugin>
         <cobertura.version>2.6</cobertura.version>
         <equalsverifier.version>1.4.1</equalsverifier.version>
+        <!-- Sonar Parameters -->
         <sonar.sources>src/main/webapp/js,src/main/java</sonar.sources>
         <sonar.javascript.lcov.reportPath>target/lcov.info</sonar.javascript.lcov.reportPath>
         <sonar.exclusions>src/main/webapp/js/min/**/*</sonar.exclusions>
+        <sonar.cobertura.reportPath>target/site/cobertura/coverage.xml</sonar.cobertura.reportPath>
+        <protractor.port>8282</protractor.port>
     </properties>
 
     <dependencies>
@@ -388,7 +391,7 @@
                                 <phase>test</phase>
                                 <configuration>
                                     <arguments>--no-color</arguments>
-                                    <arguments>p:test</arguments>
+                                    <arguments>p:test --p:port=${protractor.port}</arguments>
                                 </configuration>
                             </execution>
                             <execution>
