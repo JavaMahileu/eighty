@@ -46,7 +46,7 @@ Neo4j - это высокопроизводительная, NoSQL база да
 
 `git clone https://github.com/EPAMMogilev/eighty`
 
-Здесь [demo](http://evbymogsd0030.minsk.epam.com:7080/eighty/)-версия и [sonar](http://evbymogsd0030/sonar/dashboard/index/1908) проекта. 
+Здесь [demo](http://evbymogsd0030.minsk.epam.com:7080/eighty/)-версия и [sonar](http://evbymogsd0030/sonar/dashboard/index/1908) проекта. Сборка каждого pull request'a осуществляется автоматически на [CI сервере] (http://evbymogsd0030.minsk.epam.com/ci/view/eighty/) . 
 
 Для запуска интеграционных тестов нужно скачать и установить [Firefox Portable 34.0.5](http://mozilla-firefox-portable.en.uptodown.com/download/92825) и прописать переменную среды: 
 
