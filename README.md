@@ -40,7 +40,8 @@ Neo4j - это высокопроизводительная, NoSQL база да
 
 Для запуска проекта необходимо установить [Maven 3](http://maven.apache.org/download.cgi) и [msysgit](http://msysgit.github.io/). 
 
-Контроль версий осуществляется с помощью Github. Для работы с проектом с Github нужно установить [HubFlow](https://github.com/datasift/gitflow) и [cygwin](https://www.cygwin.com/). 
+Контроль версий осуществляется с помощью Github. Для работы с проектом с Github нужно установить [HubFlow](https://github.com/datasift/gitflow). Для работы с HubFlow следует либо установить [cygwin](https://www.cygwin.com/)
+либо использовать `Git Bash`. 
 Скачать исходники проекта можно, используя команду 
 
 `git clone https://github.com/EPAMMogilev/eighty`
@@ -58,4 +59,3 @@ Neo4j - это высокопроизводительная, NoSQL база да
 * commit_build.bat - собирается production версия, выполняются все тесты, jUnit и интеграционные, а также проверки Code Quality с помощью findbugs, pmd, checkstyle. 
 * dirty_deploy.bat - собирается development версия, unit-тесты и интеграционные тесты, проверки Code Quality с помощью findbugs, pmd, checkstyle не выполняются. Собранный билд 
 заливается на tomcat 7. 
-
