@@ -388,7 +388,7 @@
                                 <goals>
                                     <goal>grunt</goal>
                                 </goals>
-                                <phase>test</phase>
+                                <phase>integration-test</phase>
                                 <configuration>
                                     <arguments>--no-color</arguments>
                                     <arguments>p:test --p:port=${protractor.port}</arguments>
