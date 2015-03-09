@@ -165,6 +165,21 @@ module.exports = function (grunt) {
                 src: 'src/main/webapp/js/min/script.js',
                 dest: 'src/main/webapp/js/min/script.clean.js'
             }
+        },
+        protractor : {
+            options : {
+                keepAlive : true,
+                noColor : false,
+                nodeBin : 'node/node'
+            },
+            all : {
+                options : {
+                    configFile : 'src/test/javascript/protractor.conf.js',
+                    args : {
+                        baseUrl : 'http://localhost:' + protractorBrowserPort
+                    }
+                }
+            },
         }
     });
 
@@ -180,6 +195,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks('grunt-processhtml');
     grunt.loadNpmTasks('grunt-remove-logging');
+    grunt.loadNpmTasks('grunt-protractor-runner');
 
     grunt.registerTask('prod-build', ['jshint', 'clean:jsmin', 'ngAnnotate', 'removelogging', 'uglify', 'clean:cssmin', 'cssmin']);
     grunt.registerTask('dev-build', ['clean:jsmin', 'clean:cssmin', 'jshint']);
@@ -188,39 +204,5 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['clean:angular', 'ngdocs', 'karma']);
     grunt.registerTask('p:test', ['clean:e2etests','processhtml:e2eTests', 'connect', 'protractor', 'processhtml:development']);
     grunt.registerTask('k:test', ['karma', 'copy:lcov']);
-
-    grunt.registerTask('protractor', 'A grunt task to run protractor.', function () {
-        var path = require('path');
-        var protractorMainPath = require.resolve('protractor');
-        var protractorBinPath = path.resolve(protractorMainPath, '../../bin/protractor');
-        var protractorRefConfPath = 'src/test/javascript/protractor.conf.js';
-        var args = [protractorBinPath, protractorRefConfPath];
-        args.push('--baseUrl', 'http://localhost:' + protractorBrowserPort);
-        var keepAlive = true;
-        var done = this.async();
-        grunt.util.spawn({
-                cmd: 'node/node',
-                args: args,
-                opts: {
-                    stdio: 'inherit'
-                }
-            },
-            function (error, result, code) {
-                if (error) {
-                    grunt.log.error(String(result));
-                    if (code === 1 && keepAlive) {
-                        grunt.log.oklns('Test failed but keep the grunt process alive.');
-                        done();
-                        done = null;
-                    } else {
-                        grunt.fail.fatal('protractor exited with code: ' + code, 3);
-                    }
-                } else {
-                    done();
-                    done = null;
-                }
-            }
-        );
-    });
 
 };
