@@ -24,12 +24,7 @@ public final class Converter {
      */
     public static <T> Set<T> convertToHashSet(final Iterable<T> iters) {
         Set<T> set = new HashSet<T>();
-
-        for (T ob : iters) {
-            set.add(ob);
-        }
-
-        return set;
+        return getSetFromIterable(set, iters);
     }
 
     /**
@@ -39,11 +34,11 @@ public final class Converter {
      */
     public static <T> Set<T> convertToTreeSet(final Iterable<T> iters) {
         Set<T> set = new TreeSet<T>();
+        return getSetFromIterable(set, iters);
+    }
 
-        for (T ob : iters) {
-            set.add(ob);
-        }
-
+    private static <T> Set<T> getSetFromIterable(Set<T> set, final Iterable<T> iters) {
+        iters.forEach((ob) -> set.add(ob));
         return set;
     }
 }

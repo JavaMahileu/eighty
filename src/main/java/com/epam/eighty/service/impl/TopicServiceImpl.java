@@ -1,6 +1,5 @@
 package com.epam.eighty.service.impl;
 
-import com.epam.eighty.domain.Question;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.TopicService;
@@ -32,9 +31,8 @@ public class TopicServiceImpl implements TopicService {
     public Topic getRoot() {
         Topic root = topicRepo.findBySchemaPropertyValue("title", "root");
         if (root != null) {
-            for (Topic topic : root.getTopics()) {
-                template.fetch(topic);
-            }
+            root.getTopics()
+                .forEach(topic -> template.fetch(topic));
         }
         return root;
     }
@@ -43,12 +41,10 @@ public class TopicServiceImpl implements TopicService {
     public Topic getFullTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
         if (topic != null) {
-            for (Topic t : topic.getTopics()) {
-                template.fetch(t);
-            }
-            for (Question q : topic.getQuestions()) {
-                template.fetch(q);
-            }
+            topic.getTopics()
+                .forEach(t -> template.fetch(t));
+            topic.getQuestions()
+                .forEach(q -> template.fetch(q));
         }
         return topic;
     }
@@ -57,9 +53,8 @@ public class TopicServiceImpl implements TopicService {
     public Topic getTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
         if (topic != null) {
-            for (Topic t : topic.getTopics()) {
-                template.fetch(t);
-            }
+            topic.getTopics()
+                .forEach(t -> template.fetch(t));
         }
         return topic;
     }

@@ -31,11 +31,13 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getAllCustomers() {
         Result<Customer> results = customerRepository.findAll();
         List<Customer> list = new ArrayList<>();
-        for (Customer result : results) {
-            if (result.getCount() != null) {
-                list.add(result);
+        results
+            .forEach(result -> {
+                if (result.getCount() != null) {
+                    list.add(result);
+                }
             }
-        }
+        );
         return list;
     }
 
@@ -48,9 +50,9 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getCustomersByTopicId(final Long topicId) {
         List<Customer> customerList  = customerRepository.getCustomersByTopicId(topicId).getContent();
 
-        for (Customer customer : customerList) {
-            customer.setCountInTopic(customerRepository.getQuestionsInTopicByCustomer(customer.getName(), topicId));
-        }
+        customerList
+            .forEach(customer -> customer.setCountInTopic(customerRepository.getQuestionsInTopicByCustomer(customer.getName(),
+                topicId)));
         return customerList;
     }
 

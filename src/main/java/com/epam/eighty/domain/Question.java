@@ -2,6 +2,7 @@ package com.epam.eighty.domain;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -53,7 +54,7 @@ public class Question extends AbstractEntity {
         }
         result.append("question=" + question + " ")
             .append("answer=" + answer + " ")
-            .append("like=" + like.toString());
+            .append("like=" + (like != null ? like : 0));
         return result.toString();
     }
 
