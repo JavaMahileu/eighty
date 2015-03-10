@@ -412,7 +412,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>grunt processhtml development</id>
+                                <id>grunt processhtml production</id>
                                 <goals>
                                     <goal>grunt</goal>
                                 </goals>
