@@ -14,6 +14,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
+import org.springframework.data.neo4j.template.Neo4jOperations;
 
 import java.util.*;
 
@@ -37,6 +38,10 @@ public class TopicServiceTest {
 
     @Mock
     private TopicRepository topicRepo;
+
+    @Mock
+    private Neo4jOperations template;
+
     @InjectMocks
     private TopicServiceImpl topicService;
 

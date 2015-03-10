@@ -32,7 +32,7 @@ public class TopicServiceImpl implements TopicService {
         Topic root = topicRepo.findBySchemaPropertyValue("title", "root");
         if (root != null) {
             root.getTopics()
-                .forEach(topic -> template.fetch(topic));
+                .forEach(template::fetch);
         }
         return root;
     }
@@ -42,9 +42,9 @@ public class TopicServiceImpl implements TopicService {
         Topic topic = topicRepo.findOne(id);
         if (topic != null) {
             topic.getTopics()
-                .forEach(t -> template.fetch(t));
+                .forEach(template::fetch);
             topic.getQuestions()
-                .forEach(q -> template.fetch(q));
+                .forEach(template::fetch);
         }
         return topic;
     }
@@ -54,7 +54,7 @@ public class TopicServiceImpl implements TopicService {
         Topic topic = topicRepo.findOne(id);
         if (topic != null) {
             topic.getTopics()
-                .forEach(t -> template.fetch(t));
+                .forEach(template::fetch);
         }
         return topic;
     }

@@ -38,7 +38,7 @@ public final class Converter {
     }
 
     private static <T> Set<T> getSetFromIterable(Set<T> set, final Iterable<T> iters) {
-        iters.forEach((ob) -> set.add(ob));
+        iters.forEach(set::add);
         return set;
     }
 }
