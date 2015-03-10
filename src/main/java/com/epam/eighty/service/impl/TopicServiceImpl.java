@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -30,32 +31,32 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Topic getRoot() {
         Topic root = topicRepo.findBySchemaPropertyValue("title", "root");
-        if (root != null) {
-            root.getTopics()
-                .forEach(template::fetch);
-        }
+        Optional.ofNullable(root).ifPresent(someRoot ->
+            someRoot.getTopics()
+                .forEach(template::fetch)
+        );
         return root;
     }
 
     @Override
     public Topic getFullTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
-        if (topic != null) {
-            topic.getTopics()
+        Optional.ofNullable(topic).ifPresent(t -> {
+            t.getTopics()
                 .forEach(template::fetch);
-            topic.getQuestions()
+            t.getQuestions()
                 .forEach(template::fetch);
-        }
+        });
         return topic;
     }
 
     @Override
     public Topic getTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
-        if (topic != null) {
+        Optional.ofNullable(topic).ifPresent(t ->
             topic.getTopics()
-                .forEach(template::fetch);
-        }
+                .forEach(template::fetch)
+        );
         return topic;
     }
 

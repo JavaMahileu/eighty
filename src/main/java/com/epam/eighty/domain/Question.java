@@ -10,6 +10,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -49,24 +50,22 @@ public class Question extends AbstractEntity {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("Question: ");
-        if (getId() != null) {
-            result.append("id=" + getId().toString() + " ");
-        }
+        Optional.ofNullable(getId()).ifPresent(id -> result.append("id=" + id.toString() + " "));
         result.append("question=" + question + " ")
             .append("answer=" + answer + " ")
-            .append("like=" + (like != null ? like : 0));
+            .append("like=" + (Optional.ofNullable(like).orElse(0)));
         return result.toString();
     }
 
     @Override
     public final int hashCode() {
-        int result = (getId() != null ? getId().hashCode() : super.hashCode());
+        int result = getHashCodeOrDefaultValue(getId(), super.hashCode());
         final int i = 31;
-        result = i * result + (question != null ? question.hashCode() : 0);
-        result = i * result + (answer != null ? answer.hashCode() : 0);
-        result = i * result + (like != null ? like.hashCode() : 0);
-        result = i * result + (tags != null ? tags.hashCode() : 0);
-        result = i * result + (customers != null ? customers.hashCode() : 0);
+        result = i * result + getHashCodeOrDefaultValue(question, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(answer, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(like, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(tags, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(customers, super.hashCode());
         return result;
     }
 
@@ -89,36 +88,36 @@ public class Question extends AbstractEntity {
         } else if (!getId().equals(other.getId())) {
             return false;
         }
-        if (answer == null) {
-            if (other.answer != null) {
+        if (!Optional.ofNullable(answer).isPresent()) {
+            if (Optional.ofNullable(other.answer).isPresent()) {
                 return false;
             }
         } else if (!answer.equals(other.answer)) {
             return false;
         }
-        if (like == null) {
-            if (other.like != null) {
+        if (!Optional.ofNullable(like).isPresent()) {
+            if (Optional.ofNullable(other.like).isPresent()) {
                 return false;
             }
         } else if (!like.equals(other.like)) {
             return false;
         }
-        if (question == null) {
-            if (other.question != null) {
+        if (!Optional.ofNullable(question).isPresent()) {
+            if (Optional.ofNullable(other.question).isPresent()) {
                 return false;
             }
         } else if (!question.equals(other.question)) {
             return false;
         }
-        if (tags == null) {
-            if (other.tags != null) {
+        if (!Optional.ofNullable(tags).isPresent()) {
+            if (Optional.ofNullable(other.tags).isPresent()) {
                 return false;
             }
         } else if (!tags.equals(other.tags)) {
             return false;
         }
-        if (customers == null) {
-            if (other.customers != null) {
+        if (!Optional.ofNullable(customers).isPresent()) {
+            if (Optional.ofNullable(customers).isPresent()) {
                 return false;
             }
         } else if (!customers.equals(other.customers)) {

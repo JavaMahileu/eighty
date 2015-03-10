@@ -1,5 +1,7 @@
 package com.epam.eighty.domain;
 
+import java.util.Optional;
+
 import org.springframework.data.neo4j.annotation.GraphId;
 
 /**
@@ -16,5 +18,9 @@ public abstract class AbstractEntity {
 
     public void setId(final Long id) {
         this.id = id;
+    }
+
+    protected static <T> int getHashCodeOrDefaultValue(final T field, final int defaultValue) {
+        return Optional.ofNullable(field).map(Object::hashCode).orElse(defaultValue);
     }
 }
