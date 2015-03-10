@@ -138,17 +138,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        ngAnnotate: {
-            options: {
-                singleQuotes: true
-            },
-            target: {
-                files: {
-                    'src/main/webapp/js/min/script.js': ['src/main/webapp/js/app.js', 'src/main/webapp/js/config.js',
-                        'src/main/webapp/js/**/*.directive.js', 'src/main/webapp/js/**/*.factory.js', 'src/main/webapp/js/**/*.controller.js', 'src/main/webapp/js/filter.js', 'src/main/webapp/js/utility.js']
-                }
-            }
-        },
         cssmin: {
             add_banner: {
                 options: {
@@ -162,8 +151,10 @@ module.exports = function (grunt) {
         },
         removelogging: {
             dist: {
-                src: 'src/main/webapp/js/min/script.js',
-                dest: 'src/main/webapp/js/min/script.clean.js'
+                files: {
+                    'src/main/webapp/js/min/script.clean.js': ['src/main/webapp/js/app.js', 'src/main/webapp/js/config.js',
+                        'src/main/webapp/js/**/*.directive.js', 'src/main/webapp/js/**/*.factory.js', 'src/main/webapp/js/**/*.controller.js', 'src/main/webapp/js/filter.js', 'src/main/webapp/js/utility.js']
+                }
             }
         },
         protractor : {
@@ -197,12 +188,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-remove-logging');
     grunt.loadNpmTasks('grunt-protractor-runner');
 
-    grunt.registerTask('prod-build', ['jshint', 'clean:jsmin', 'ngAnnotate', 'removelogging', 'uglify', 'clean:cssmin', 'cssmin']);
-    grunt.registerTask('dev-build', ['clean:jsmin', 'clean:cssmin', 'jshint']);
-
-    grunt.registerTask('minify', ['processhtml:production']);
-    grunt.registerTask('default', ['clean:angular', 'ngdocs', 'karma']);
-    grunt.registerTask('p:test', ['clean:e2etests','processhtml:e2eTests', 'connect', 'protractor', 'processhtml:development']);
+    grunt.registerTask('minify', ['clean:jsmin', 'removelogging', 'uglify', 'clean:cssmin', 'cssmin']);
+    grunt.registerTask('p:test', ['clean:e2etests','processhtml:e2eTests', 'connect', 'protractor']);
     grunt.registerTask('k:test', ['karma', 'copy:lcov']);
 
 };
