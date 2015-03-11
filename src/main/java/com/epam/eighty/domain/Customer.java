@@ -1,5 +1,6 @@
 package com.epam.eighty.domain;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.wordnik.swagger.annotations.ApiModel;
@@ -73,10 +74,10 @@ public class Customer extends AbstractEntity implements Comparable<Customer> {
             return false;
         }
         Customer other = (Customer) obj;
-        if (!areFieldsEquals(getId(), other.getId())) {
+        if (!Objects.equals(getId(), other.getId())) {
             return false;
         }
-        if (!areFieldsEquals(name, other.name)) {
+        if (!Objects.equals(name, other.name)) {
             return false;
         }
         return true;

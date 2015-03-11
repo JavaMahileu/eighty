@@ -10,6 +10,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -81,22 +82,22 @@ public class Question extends AbstractEntity {
             return false;
         }
         Question other = (Question) obj;
-        if (!areFieldsEquals(getId(), other.getId())) {
+        if (!Objects.equals(getId(), other.getId())) {
             return false;
         }
-        if (!areFieldsEquals(answer, other.answer)) {
+        if (!Objects.equals(answer, other.answer)) {
             return false;
         }
-        if (!areFieldsEquals(like, other.like)) {
+        if (!Objects.equals(like, other.like)) {
             return false;
         }
-        if (!areFieldsEquals(question, other.question)) {
+        if (!Objects.equals(question, other.question)) {
             return false;
         }
-        if (!areFieldsEquals(tags, other.tags)) {
+        if (!Objects.equals(tags, other.tags)) {
             return false;
         }
-        if (!areFieldsEquals(customers, other.customers)) {
+        if (!Objects.equals(customers, other.customers)) {
             return false;
         }
         return true;

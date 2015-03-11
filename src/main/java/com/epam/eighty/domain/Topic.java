@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -72,16 +73,16 @@ public class Topic extends AbstractEntity {
             return false;
         }
         Topic other = (Topic) obj;
-        if (!areFieldsEquals(getId(), other.getId())) {
+        if (!Objects.equals(getId(), other.getId())) {
             return false;
         }
-        if (!areFieldsEquals(questions, other.questions)) {
+        if (!Objects.equals(questions, other.questions)) {
             return false;
         }
-        if (!areFieldsEquals(title, other.title)) {
+        if (!Objects.equals(title, other.title)) {
             return false;
         }
-        if (!areFieldsEquals(topics, other.topics)) {
+        if (!Objects.equals(topics, other.topics)) {
             return false;
         }
         return true;

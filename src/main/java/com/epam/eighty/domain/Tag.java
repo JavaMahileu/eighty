@@ -1,5 +1,6 @@
 package com.epam.eighty.domain;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.wordnik.swagger.annotations.ApiModel;
@@ -79,10 +80,10 @@ public class Tag extends AbstractEntity implements Comparable<Tag> {
             return false;
         }
         Tag other = (Tag) obj;
-        if (!areFieldsEquals(getId(), other.getId())) {
+        if (!Objects.equals(getId(), other.getId())) {
             return false;
         }
-        if (!areFieldsEquals(tag, other.tag)) {
+        if (!Objects.equals(tag, other.tag)) {
             return false;
         }
         return true;
