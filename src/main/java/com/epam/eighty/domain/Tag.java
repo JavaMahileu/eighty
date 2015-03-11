@@ -1,7 +1,11 @@
 package com.epam.eighty.domain;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
@@ -58,9 +62,9 @@ public class Tag extends AbstractEntity implements Comparable<Tag> {
 
     @Override
     public final int hashCode() {
-        int result = (getId() != null ? getId().hashCode() : super.hashCode());
+        int result = getHashCodeOrDefaultValue(getId(), super.hashCode());
         final int i = 31;
-        result = i * result + (tag != null ? tag.hashCode() : 0);
+        result = i * result + getHashCodeOrDefaultValue(tag, 0);
         return result;
     }
 
@@ -76,18 +80,10 @@ public class Tag extends AbstractEntity implements Comparable<Tag> {
             return false;
         }
         Tag other = (Tag) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!getId().equals(other.getId())) {
+        if (!Objects.equals(getId(), other.getId())) {
             return false;
         }
-        if (tag == null) {
-            if (other.tag != null) {
-                return false;
-            }
-        } else if (!tag.equals(other.tag)) {
+        if (!Objects.equals(tag, other.tag)) {
             return false;
         }
         return true;
@@ -95,10 +91,7 @@ public class Tag extends AbstractEntity implements Comparable<Tag> {
 
     @Override
     public int compareTo(final Tag o) {
-        if (o == null) {
-            return 1;
-        }
-        return this.tag.compareTo(o.tag);
+        return Optional.ofNullable(o).map(obj -> this.tag.compareTo(obj.tag)).orElse(1);
     }
 
 }

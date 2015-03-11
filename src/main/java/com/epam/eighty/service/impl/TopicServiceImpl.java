@@ -1,6 +1,5 @@
 package com.epam.eighty.service.impl;
 
-import com.epam.eighty.domain.Question;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.TopicService;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -31,36 +31,32 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Topic getRoot() {
         Topic root = topicRepo.findBySchemaPropertyValue("title", "root");
-        if (root != null) {
-            for (Topic topic : root.getTopics()) {
-                template.fetch(topic);
-            }
-        }
+        Optional.ofNullable(root).ifPresent(someRoot ->
+            someRoot.getTopics()
+                .forEach(template::fetch)
+        );
         return root;
     }
 
     @Override
     public Topic getFullTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
-        if (topic != null) {
-            for (Topic t : topic.getTopics()) {
-                template.fetch(t);
-            }
-            for (Question q : topic.getQuestions()) {
-                template.fetch(q);
-            }
-        }
+        Optional.ofNullable(topic).ifPresent(t -> {
+            t.getTopics()
+                .forEach(template::fetch);
+            t.getQuestions()
+                .forEach(template::fetch);
+        });
         return topic;
     }
 
     @Override
     public Topic getTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
-        if (topic != null) {
-            for (Topic t : topic.getTopics()) {
-                template.fetch(t);
-            }
-        }
+        Optional.ofNullable(topic).ifPresent(t ->
+            topic.getTopics()
+                .forEach(template::fetch)
+        );
         return topic;
     }
 

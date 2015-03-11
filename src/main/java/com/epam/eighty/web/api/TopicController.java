@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -76,7 +77,7 @@ public class TopicController {
     @Cacheable(value = "topic", key = "'root.' + #id")
     public Topic getRootTopic() throws IOException {
         Topic topic = topicService.getRoot();
-        if (topic == null) {
+        if (!Optional.ofNullable(topic).isPresent()) {
             dbService.populate();
             topic = topicService.getRoot();
         }

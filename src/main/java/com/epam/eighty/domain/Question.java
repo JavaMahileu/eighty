@@ -2,6 +2,7 @@ package com.epam.eighty.domain;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -9,6 +10,8 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -48,24 +51,22 @@ public class Question extends AbstractEntity {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("Question: ");
-        if (getId() != null) {
-            result.append("id=" + getId().toString() + " ");
-        }
+        Optional.ofNullable(getId()).ifPresent(id -> result.append("id=" + id.toString() + " "));
         result.append("question=" + question + " ")
             .append("answer=" + answer + " ")
-            .append("like=" + like.toString());
+            .append("like=" + (Optional.ofNullable(like).orElse(0)));
         return result.toString();
     }
 
     @Override
     public final int hashCode() {
-        int result = (getId() != null ? getId().hashCode() : super.hashCode());
+        int result = getHashCodeOrDefaultValue(getId(), super.hashCode());
         final int i = 31;
-        result = i * result + (question != null ? question.hashCode() : 0);
-        result = i * result + (answer != null ? answer.hashCode() : 0);
-        result = i * result + (like != null ? like.hashCode() : 0);
-        result = i * result + (tags != null ? tags.hashCode() : 0);
-        result = i * result + (customers != null ? customers.hashCode() : 0);
+        result = i * result + getHashCodeOrDefaultValue(question, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(answer, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(like, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(tags, super.hashCode());
+        result = i * result + getHashCodeOrDefaultValue(customers, super.hashCode());
         return result;
     }
 
@@ -81,46 +82,22 @@ public class Question extends AbstractEntity {
             return false;
         }
         Question other = (Question) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!getId().equals(other.getId())) {
+        if (!Objects.equals(getId(), other.getId())) {
             return false;
         }
-        if (answer == null) {
-            if (other.answer != null) {
-                return false;
-            }
-        } else if (!answer.equals(other.answer)) {
+        if (!Objects.equals(answer, other.answer)) {
             return false;
         }
-        if (like == null) {
-            if (other.like != null) {
-                return false;
-            }
-        } else if (!like.equals(other.like)) {
+        if (!Objects.equals(like, other.like)) {
             return false;
         }
-        if (question == null) {
-            if (other.question != null) {
-                return false;
-            }
-        } else if (!question.equals(other.question)) {
+        if (!Objects.equals(question, other.question)) {
             return false;
         }
-        if (tags == null) {
-            if (other.tags != null) {
-                return false;
-            }
-        } else if (!tags.equals(other.tags)) {
+        if (!Objects.equals(tags, other.tags)) {
             return false;
         }
-        if (customers == null) {
-            if (other.customers != null) {
-                return false;
-            }
-        } else if (!customers.equals(other.customers)) {
+        if (!Objects.equals(customers, other.customers)) {
             return false;
         }
         return true;

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -27,16 +28,15 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> getTagsByTopicId(final Long topicId) {
         List<Tag> tagsList  = tagRepo.getTagsByTopicId(topicId).getContent();
-        for (Tag tag : tagsList) {
-            tag.setCountInTopic(tagRepo.getQuestionsInTopicByTag(tag.getTag(), topicId));
-        }
+        tagsList
+            .forEach(tag -> tag.setCountInTopic(tagRepo.getQuestionsInTopicByTag(tag.getTag(), topicId)));
         return tagsList;
     }
 
     @Override
     public Tag getTagByTag(final String title) {
         Tag tag = tagRepo.findBySchemaPropertyValue("tag", title);
-        if (tag == null) {
+        if (!Optional.ofNullable(tag).isPresent()) {
             tag = new Tag();
             tagRepo.save(tag);
         }

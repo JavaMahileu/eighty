@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -31,11 +32,13 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getAllCustomers() {
         Result<Customer> results = customerRepository.findAll();
         List<Customer> list = new ArrayList<>();
-        for (Customer result : results) {
-            if (result.getCount() != null) {
-                list.add(result);
+        results
+            .forEach(result -> {
+                if (Optional.ofNullable(result.getCount()).isPresent()) {
+                    list.add(result);
+                }
             }
-        }
+        );
         return list;
     }
 
@@ -48,9 +51,9 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getCustomersByTopicId(final Long topicId) {
         List<Customer> customerList  = customerRepository.getCustomersByTopicId(topicId).getContent();
 
-        for (Customer customer : customerList) {
-            customer.setCountInTopic(customerRepository.getQuestionsInTopicByCustomer(customer.getName(), topicId));
-        }
+        customerList
+            .forEach(customer -> customer.setCountInTopic(customerRepository.getQuestionsInTopicByCustomer(customer.getName(),
+                topicId)));
         return customerList;
     }
 
