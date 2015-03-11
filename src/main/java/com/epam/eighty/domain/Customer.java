@@ -1,7 +1,10 @@
 package com.epam.eighty.domain;
 
+import java.util.Optional;
+
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
@@ -53,8 +56,8 @@ public class Customer extends AbstractEntity implements Comparable<Customer> {
 
     @Override
     public final int hashCode() {
-        int result = (getId() != null ? getId().hashCode() : super.hashCode());
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = getHashCodeOrDefaultValue(getId(), super.hashCode());
+        result = 31 * result + getHashCodeOrDefaultValue(name, 0);
         return result;
     }
 
@@ -70,18 +73,10 @@ public class Customer extends AbstractEntity implements Comparable<Customer> {
             return false;
         }
         Customer other = (Customer) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!getId().equals(other.getId())) {
+        if (!areFieldsEquals(getId(), other.getId())) {
             return false;
         }
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
+        if (!areFieldsEquals(name, other.name)) {
             return false;
         }
         return true;
@@ -89,10 +84,7 @@ public class Customer extends AbstractEntity implements Comparable<Customer> {
 
     @Override
     public int compareTo(final Customer o) {
-        if (o == null) {
-            return 1;
-        }
-        return this.name.compareTo(o.name);
+        return Optional.ofNullable(o).map(obj -> this.name.compareTo(obj.name)).orElse(1);
     }
 
 }

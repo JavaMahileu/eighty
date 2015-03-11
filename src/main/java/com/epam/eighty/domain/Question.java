@@ -81,46 +81,22 @@ public class Question extends AbstractEntity {
             return false;
         }
         Question other = (Question) obj;
-        if (getId() == null) {
-            if (other.getId() != null) {
-                return false;
-            }
-        } else if (!getId().equals(other.getId())) {
+        if (!areFieldsEquals(getId(), other.getId())) {
             return false;
         }
-        if (!Optional.ofNullable(answer).isPresent()) {
-            if (Optional.ofNullable(other.answer).isPresent()) {
-                return false;
-            }
-        } else if (!answer.equals(other.answer)) {
+        if (!areFieldsEquals(answer, other.answer)) {
             return false;
         }
-        if (!Optional.ofNullable(like).isPresent()) {
-            if (Optional.ofNullable(other.like).isPresent()) {
-                return false;
-            }
-        } else if (!like.equals(other.like)) {
+        if (!areFieldsEquals(like, other.like)) {
             return false;
         }
-        if (!Optional.ofNullable(question).isPresent()) {
-            if (Optional.ofNullable(other.question).isPresent()) {
-                return false;
-            }
-        } else if (!question.equals(other.question)) {
+        if (!areFieldsEquals(question, other.question)) {
             return false;
         }
-        if (!Optional.ofNullable(tags).isPresent()) {
-            if (Optional.ofNullable(other.tags).isPresent()) {
-                return false;
-            }
-        } else if (!tags.equals(other.tags)) {
+        if (!areFieldsEquals(tags, other.tags)) {
             return false;
         }
-        if (!Optional.ofNullable(customers).isPresent()) {
-            if (Optional.ofNullable(customers).isPresent()) {
-                return false;
-            }
-        } else if (!customers.equals(other.customers)) {
+        if (!areFieldsEquals(customers, other.customers)) {
             return false;
         }
         return true;

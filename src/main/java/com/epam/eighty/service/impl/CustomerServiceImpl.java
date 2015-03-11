@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -33,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> list = new ArrayList<>();
         results
             .forEach(result -> {
-                if (result.getCount() != null) {
+                if (Optional.ofNullable(result.getCount()).isPresent()) {
                     list.add(result);
                 }
             }
