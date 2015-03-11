@@ -278,17 +278,6 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>grunt build</id>
-                        <goals>
-                            <goal>grunt</goal>
-                        </goals>
-                        <phase>compile</phase>
-                        <configuration>
-                            <arguments>--no-color</arguments>
-                            <arguments>prod-build</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>grunt ngdocs</id>
                         <goals>
                             <goal>grunt</goal>
@@ -364,6 +353,33 @@
 
     <profiles>
         <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>${frontend.maven.plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>grunt processhtml development</id>
+                                <goals>
+                                    <goal>grunt</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <arguments>processhtml:development</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>prod</id>
             <build>
                 <plugins>
@@ -373,6 +389,18 @@
                         <version>${frontend.maven.plugin}</version>
                         <executions>
                             <execution>
+                                <id>grunt karma</id>
+                                <goals>
+                                    <goal>grunt</goal>
+                                </goals>
+                                <phase>test</phase>
+                                <configuration>
+                                    <arguments>--no-color</arguments>
+                                    <arguments>k:test</arguments>
+                                    <argLine>${surefireArgLine}</argLine>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>grunt minify</id>
                                 <goals>
                                     <goal>grunt</goal>
@@ -381,6 +409,16 @@
                                 <configuration>
                                     <arguments>--no-color</arguments>
                                     <arguments>minify</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>grunt processhtml production</id>
+                                <goals>
+                                    <goal>grunt</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <arguments>processhtml:production</arguments>
                                 </configuration>
                             </execution>
                             <execution>
@@ -395,15 +433,13 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>grunt karma</id>
+                                <id>grunt jshint</id>
                                 <goals>
                                     <goal>grunt</goal>
                                 </goals>
-                                <phase>test</phase>
+                                <phase>verify</phase>
                                 <configuration>
-                                    <arguments>--no-color</arguments>
-                                    <arguments>k:test</arguments>
-                                    <argLine>${surefireArgLine}</argLine>
+                                    <arguments>jshint</arguments>
                                 </configuration>
                             </execution>
                         </executions>
