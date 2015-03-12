@@ -4,4 +4,5 @@
 # "deploy: no deploy"
 # "intent of using: production"
 # "minification: yes"
+# "we can modify server port for protractor e2e tests by passing argument "-Dprotractor.port=_port_number_"
 mvn clean verify -Pprod $1
