@@ -2,6 +2,7 @@ package com.epam.eighty.service.impl;
 
 import com.epam.eighty.domain.Question;
 import com.epam.eighty.domain.Topic;
+import com.epam.eighty.exception.TopicNotFoundException;
 import com.epam.eighty.repository.QuestionRepository;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.QuestionService;
@@ -45,11 +46,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void addQuestion(final Question question, final Long id) {
         questionRepo.save(question);
-        Optional<Topic> topic = topicRepo.findOne(id); //TODO what behavior should we provide if topic is absent?
-        topic.ifPresent(t -> {
-            t.getQuestions().add(question);
-            topicRepo.save(t);
-        });
+        Topic topic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
+        topic.getQuestions().add(question);
+        topicRepo.save(topic);
     }
 
     @Override

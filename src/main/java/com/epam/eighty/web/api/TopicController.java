@@ -82,7 +82,7 @@ public class TopicController {
             dbService.populate();
             optionalTopic = topicService.getRoot();
         }
-        return optionalTopic.orElseThrow(() -> new TopicNotFoundException());
+        return optionalTopic.orElseThrow(TopicNotFoundException::new);
     }
 
     @ApiOperation(value = "Delete topic by id", notes = "Delete topic by id", httpMethod = "DELETE")
