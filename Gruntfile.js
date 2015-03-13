@@ -14,7 +14,7 @@ var fillTopics = function (data) {
     }
 };
 
-/*var restMiddleware = function (req, res, next) {
+var restMiddleware = function (req, res, next) {
     if (req.method === 'PUT') {
         var body = {};
         req.on('data', function (chunk) {
@@ -32,7 +32,7 @@ var fillTopics = function (data) {
         return next();
     }
 
-};*/
+};
 
 module.exports = function (grunt) {
     
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
                     base: ['src/main/webapp', 'src/test/resources/json/root', 'src/test/resources/json'],
                     middleware: function (connect, options) {
                         return [
-                            //restMiddleware,
+                            restMiddleware,
                             mountFolder(connect, options.base[0]),
                             mountFolder(connect, options.base[1]),
                             mountFolder(connect, options.base[2])
