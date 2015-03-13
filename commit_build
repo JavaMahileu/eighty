@@ -1,7 +1,9 @@
-#/usr/bin/bash
-echo "test: yes (jUnit tests for java and javascript, integration tests)"
-echo "code quality checks: yes (findbugs, pmd, checkstyle)"
-echo "deploy: no deploy"
-echo "intent of using: production"
-echo "minification: yes"
+#!/bin/bash
+# "test: yes (jUnit tests for java and javascript, integration tests)"
+# "code quality checks: yes (findbugs, pmd, checkstyle)"
+# "deploy: no deploy"
+# "intent of using: production"
+# "minification: yes"
+# "we can modify server port for protractor e2e tests by passing argument "-Dprotractor.port=_port_number_"
+# "this can be useful to suppress port conflict during executing 2 synchronous Jenkins jobs"
 mvn clean verify -Pprod $1
