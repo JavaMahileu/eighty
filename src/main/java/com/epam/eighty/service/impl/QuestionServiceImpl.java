@@ -45,8 +45,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void addQuestion(final Question question, final Long id) {
-        questionRepo.save(question);
         Topic topic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
+        questionRepo.save(question);
         topic.getQuestions().add(question);
         topicRepo.save(topic);
     }
