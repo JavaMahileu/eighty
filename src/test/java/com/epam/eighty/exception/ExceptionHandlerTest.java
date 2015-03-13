@@ -54,24 +54,24 @@ public class ExceptionHandlerTest {
     @Test
     public void test_handleQuestionNotFoundException() throws Exception {
         HttpServletResponse response = PowerMockito.mock(HttpServletResponse.class);
-        QuestionNotFoundException ex = new QuestionNotFoundException(1L, response);
-        exceptionsHandler.handleQuestionNotFoundException(ex);
+        QuestionNotFoundException ex = new QuestionNotFoundException(1L);
+        exceptionsHandler.handleQuestionNotFoundException(ex,response);
         verify(mockLogger).error("QuestionNotFoundException: Question with id=1 is not found");
     }
 
     @Test
     public void test_handleTopicNotFoundException_if_topic_is_not_root() {
         HttpServletResponse response = PowerMockito.mock(HttpServletResponse.class);
-        TopicNotFoundException ex = new TopicNotFoundException(1L, response);
-        exceptionsHandler.handleTopicNotFoundException(ex);
+        TopicNotFoundException ex = new TopicNotFoundException(1L);
+        exceptionsHandler.handleTopicNotFoundException(ex, response);
         verify(mockLogger).error("TopicNotFoundException: Topic with id=1 is not found");
     }
 
     @Test
     public void test_handleTopicNotFoundException_if_topic_is_root() {
         HttpServletResponse response = PowerMockito.mock(HttpServletResponse.class);
-        TopicNotFoundException ex = new TopicNotFoundException(response);
-        exceptionsHandler.handleTopicNotFoundException(ex);
+        TopicNotFoundException ex = new TopicNotFoundException();
+        exceptionsHandler.handleTopicNotFoundException(ex, response);
         verify(mockLogger).error("TopicNotFoundException: Root topic is not found");
     }
 

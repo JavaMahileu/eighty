@@ -103,14 +103,14 @@ public class QuestionControllerTest {
     public void test_getQuestion_successful_case_with_existing_questuion() {
         Optional <Question> optionalQuestion = Optional.ofNullable(question);
         when(questionService.getQuestionById(TEST_LONG)).thenReturn(optionalQuestion);
-        assertTrue(questionController.getQuestion(TEST_LONG, response).equals(question));
+        assertTrue(questionController.getQuestion(TEST_LONG).equals(question));
     }
 
     @Test(expected = QuestionNotFoundException.class)
     public void test_getQuestion_successful_case_with_not_existing_questuion() {
         Optional <Question> optionalQuestion = Optional.empty();
         when(questionService.getQuestionById(TEST_LONG)).thenReturn(optionalQuestion);
-        questionController.getQuestion(TEST_LONG, response);
+        questionController.getQuestion(TEST_LONG);
     }
 
     @Test

@@ -52,35 +52,35 @@ public class TopicControllerTest {
     public void test_getTopic_successful_case_with_existing_topic() {
         Optional <Topic> optionalTopic = Optional.ofNullable(topic);
         when(topicService.getTopicById(TEST_LONG)).thenReturn(optionalTopic);
-        assertTrue(topicController.getTopic(TEST_LONG, response).equals(topic));
+        assertTrue(topicController.getTopic(TEST_LONG).equals(topic));
 }
 
     @Test(expected = TopicNotFoundException.class)
     public void test_getTopic_successful_case_with_not_existing_topic() {
         Optional <Topic> optionalTopic = Optional.empty();
         when(topicService.getTopicById(TEST_LONG)).thenReturn(optionalTopic);
-        topicController.getTopic(TEST_LONG, response);
+        topicController.getTopic(TEST_LONG);
     }
 
     @Test
     public void test_getFullTopic_successful_case_with_existing_topic() {
         Optional <Topic> optionalTopic = Optional.ofNullable(topic);
         when(topicService.getFullTopicById(TEST_LONG)).thenReturn(optionalTopic);
-        assertTrue(topicController.getFullTopic(TEST_LONG, response).equals(topic));
+        assertTrue(topicController.getFullTopic(TEST_LONG).equals(topic));
     }
 
     @Test(expected = TopicNotFoundException.class)
     public void test_getFullTopic_successful_case_with_not_existing_topic() {
         Optional <Topic> optionalTopic = Optional.empty();
         when(topicService.getFullTopicById(TEST_LONG)).thenReturn(optionalTopic);
-        topicController.getFullTopic(TEST_LONG, response);
+        topicController.getFullTopic(TEST_LONG);
     }
 
     @Test
     public void test_getRootTopic_successful_case_with_existing_root() throws IOException {
         Optional <Topic> optionalTopic = Optional.ofNullable(topic);
         when(topicService.getRoot()).thenReturn(optionalTopic);
-        assertTrue(topicController.getRootTopic(response).equals(topic));
+        assertTrue(topicController.getRootTopic().equals(topic));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class TopicControllerTest {
         Optional <Topic> optionalTopic = Optional.ofNullable(topic);
         Optional <Topic> optionalEmpty = Optional.empty();
         when(topicService.getRoot()).thenReturn(optionalEmpty).thenReturn(optionalTopic);
-        assertTrue(topicController.getRootTopic(response).equals(topic));
+        assertTrue(topicController.getRootTopic().equals(topic));
         verify(dbService, Mockito.times(1)).populate();
     }
 
@@ -96,7 +96,7 @@ public class TopicControllerTest {
     public void test_getRootTopic_unsuccessful_case_with_not_existing_root() throws IOException {
         Optional <Topic> optionalEmpty = Optional.empty();
         when(topicService.getRoot()).thenReturn(optionalEmpty).thenReturn(optionalEmpty);
-        topicController.getRootTopic(response).equals(topic);
+        topicController.getRootTopic().equals(topic);
     }
 
     @Test
