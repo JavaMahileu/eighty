@@ -1,17 +1,17 @@
 package com.epam.eighty.repository;
 
-import com.epam.eighty.domain.Customer;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Repository;
+
+import com.epam.eighty.domain.Customer;
 
 /**
  * @author Yauheni_Razhkou
  *
  */
 @Repository("customerRepository")
-public interface CustomerRepository extends GraphRepository<Customer> {
+public interface CustomerRepository extends BaseRepository<Customer, Long> {
 
     @Query(value = "MATCH (customer:`Customer`) WHERE customer.name =~{0} RETURN customer", elementClass = Customer.class)
     Slice<Customer> getSortedSetOfCustomersByName(String customerName);

@@ -2,6 +2,8 @@ package com.epam.eighty.exception;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +23,18 @@ public class ExceptionsHandler {
     @ExceptionHandler(IOException.class)
     public void handleIOException(final IOException ex) {
         LOG.error("IOException: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(TopicNotFoundException.class)
+    public void handleTopicNotFoundException(final TopicNotFoundException ex, final HttpServletResponse response) {
+        LOG.error("TopicNotFoundException: " + ex.getMessage());
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public void handleQuestionNotFoundException(final QuestionNotFoundException ex, final HttpServletResponse response) {
+        LOG.error("QuestionNotFoundException: " + ex.getMessage());
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
 }

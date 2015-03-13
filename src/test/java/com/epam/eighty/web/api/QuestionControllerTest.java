@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
 
 import com.epam.eighty.domain.Question;
+import com.epam.eighty.exception.QuestionNotFoundException;
 import com.epam.eighty.service.QuestionService;
 
 /**
@@ -99,13 +101,16 @@ public class QuestionControllerTest {
 
     @Test
     public void test_getQuestion_successful_case_with_existing_questuion() {
-        when(questionService.getQuestionById(TEST_LONG)).thenReturn(question);
+        Optional <Question> optionalQuestion = Optional.ofNullable(question);
+        when(questionService.getQuestionById(TEST_LONG)).thenReturn(optionalQuestion);
         assertTrue(questionController.getQuestion(TEST_LONG).equals(question));
     }
 
-    @Test
+    @Test(expected = QuestionNotFoundException.class)
     public void test_getQuestion_successful_case_with_not_existing_questuion() {
-        assertTrue(questionController.getQuestion(TEST_LONG) == null);
+        Optional <Question> optionalQuestion = Optional.empty();
+        when(questionService.getQuestionById(TEST_LONG)).thenReturn(optionalQuestion);
+        questionController.getQuestion(TEST_LONG);
     }
 
     @Test

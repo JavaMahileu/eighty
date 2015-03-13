@@ -14,9 +14,11 @@ import org.mockito.MockitoAnnotations;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.service.DBPopulatorService;
 import com.epam.eighty.service.TopicService;
+import com.epam.eighty.exception.TopicNotFoundException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,37 +50,53 @@ public class TopicControllerTest {
 
     @Test
     public void test_getTopic_successful_case_with_existing_topic() {
-        when(topicService.getTopicById(TEST_LONG)).thenReturn(topic);
+        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
+        when(topicService.getTopicById(TEST_LONG)).thenReturn(optionalTopic);
         assertTrue(topicController.getTopic(TEST_LONG).equals(topic));
 }
 
-    @Test
+    @Test(expected = TopicNotFoundException.class)
     public void test_getTopic_successful_case_with_not_existing_topic() {
-        assertTrue(topicController.getTopic(TEST_LONG) == null);
+        Optional <Topic> optionalTopic = Optional.empty();
+        when(topicService.getTopicById(TEST_LONG)).thenReturn(optionalTopic);
+        topicController.getTopic(TEST_LONG);
     }
 
     @Test
     public void test_getFullTopic_successful_case_with_existing_topic() {
-        when(topicService.getFullTopicById(TEST_LONG)).thenReturn(topic);
-       assertTrue(topicController.getFullTopic(TEST_LONG).equals(topic));
+        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
+        when(topicService.getFullTopicById(TEST_LONG)).thenReturn(optionalTopic);
+        assertTrue(topicController.getFullTopic(TEST_LONG).equals(topic));
     }
 
-    @Test
+    @Test(expected = TopicNotFoundException.class)
     public void test_getFullTopic_successful_case_with_not_existing_topic() {
-        assertTrue(topicController.getFullTopic(TEST_LONG) == null);
+        Optional <Topic> optionalTopic = Optional.empty();
+        when(topicService.getFullTopicById(TEST_LONG)).thenReturn(optionalTopic);
+        topicController.getFullTopic(TEST_LONG);
     }
 
     @Test
     public void test_getRootTopic_successful_case_with_existing_root() throws IOException {
-        when(topicService.getRoot()).thenReturn(topic);
+        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
+        when(topicService.getRoot()).thenReturn(optionalTopic);
         assertTrue(topicController.getRootTopic().equals(topic));
     }
 
     @Test
     public void test_getRootTopic_successful_case_with_not_existing_root() throws IOException {
-        when(topicService.getRoot()).thenReturn(null).thenReturn(topic);
+        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
+        Optional <Topic> optionalEmpty = Optional.empty();
+        when(topicService.getRoot()).thenReturn(optionalEmpty).thenReturn(optionalTopic);
         assertTrue(topicController.getRootTopic().equals(topic));
         verify(dbService, Mockito.times(1)).populate();
+    }
+
+    @Test(expected = TopicNotFoundException.class)
+    public void test_getRootTopic_unsuccessful_case_with_not_existing_root() throws IOException {
+        Optional <Topic> optionalEmpty = Optional.empty();
+        when(topicService.getRoot()).thenReturn(optionalEmpty).thenReturn(optionalEmpty);
+        topicController.getRootTopic().equals(topic);
     }
 
     @Test

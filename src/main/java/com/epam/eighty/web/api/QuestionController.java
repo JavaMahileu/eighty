@@ -2,6 +2,7 @@ package com.epam.eighty.web.api;
 
 import com.codahale.metrics.annotation.Timed;
 import com.epam.eighty.domain.Question;
+import com.epam.eighty.exception.QuestionNotFoundException;
 import com.epam.eighty.service.QuestionService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -70,7 +71,7 @@ public class QuestionController {
     @ResponseBody
     @Cacheable(value = "question", key = "#id")
     public Question getQuestion(@ApiParam(name = "questionId", required = true, value = "question id") @PathVariable("id") final Long id) {
-        return questionService.getQuestionById(id);
+        return questionService.getQuestionById(id).orElseThrow(() -> new QuestionNotFoundException(id));
     }
 
     @ApiOperation(value = "Create new question", notes = "Create new question", httpMethod = "POST", response = Question.class, produces = "application/json")

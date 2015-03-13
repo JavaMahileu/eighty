@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Yauheni_Razhkou
@@ -40,7 +39,7 @@ public class CustomerController {
     @RequestMapping(value = "/{customerName}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "customer", key = "#customerName")
-    public Set<Customer> getSortedSetOfCustomersByName(@ApiParam(name = "customerName", required = true, value = "sorted set of customers by part of customer name") @PathVariable("customerName") final String customerName) {
+    public List<Customer> getSortedSetOfCustomersByName(@ApiParam(name = "customerName", required = true, value = "sorted set of customers by part of customer name") @PathVariable("customerName") final String customerName) {
         return customerService.getSortedSetOfCustomersByName(customerName);
     }
 

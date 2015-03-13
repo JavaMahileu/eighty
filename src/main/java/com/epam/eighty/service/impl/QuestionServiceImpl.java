@@ -2,12 +2,13 @@ package com.epam.eighty.service.impl;
 
 import com.epam.eighty.domain.Question;
 import com.epam.eighty.domain.Topic;
+import com.epam.eighty.exception.TopicNotFoundException;
 import com.epam.eighty.repository.QuestionRepository;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.QuestionService;
-import com.epam.eighty.utility.Converter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +33,20 @@ public class QuestionServiceImpl implements QuestionService {
     private Neo4jOperations template;
 
     @Override
-    public Question getQuestionById(final Long id) {
+    public Optional<Question> getQuestionById(final Long id) {
         return questionRepo.findOne(id);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Set<Question> getAllQuestions() {
-        return Converter.convertToHashSet(questionRepo.findAll());
+        return questionRepo.findAll().as(Set.class);
     }
 
     @Override
     public void addQuestion(final Question question, final Long id) {
+        Topic topic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
         questionRepo.save(question);
-        Topic topic = topicRepo.findOne(id);
         topic.getQuestions().add(question);
         topicRepo.save(topic);
     }

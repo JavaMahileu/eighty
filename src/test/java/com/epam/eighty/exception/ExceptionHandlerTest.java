@@ -5,6 +5,8 @@ import static org.mockito.Mockito.verify;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +49,30 @@ public class ExceptionHandlerTest {
         IOException ex = new IOException("some message");
         exceptionsHandler.handleIOException(ex);
         verify(mockLogger).error("IOException: some message");
+    }
+
+    @Test
+    public void test_handleQuestionNotFoundException() throws Exception {
+        HttpServletResponse response = PowerMockito.mock(HttpServletResponse.class);
+        QuestionNotFoundException ex = new QuestionNotFoundException(1L);
+        exceptionsHandler.handleQuestionNotFoundException(ex,response);
+        verify(mockLogger).error("QuestionNotFoundException: Question with id=1 is not found");
+    }
+
+    @Test
+    public void test_handleTopicNotFoundException_if_topic_is_not_root() {
+        HttpServletResponse response = PowerMockito.mock(HttpServletResponse.class);
+        TopicNotFoundException ex = new TopicNotFoundException(1L);
+        exceptionsHandler.handleTopicNotFoundException(ex, response);
+        verify(mockLogger).error("TopicNotFoundException: Topic with id=1 is not found");
+    }
+
+    @Test
+    public void test_handleTopicNotFoundException_if_topic_is_root() {
+        HttpServletResponse response = PowerMockito.mock(HttpServletResponse.class);
+        TopicNotFoundException ex = new TopicNotFoundException();
+        exceptionsHandler.handleTopicNotFoundException(ex, response);
+        verify(mockLogger).error("TopicNotFoundException: Root topic is not found");
     }
 
 }

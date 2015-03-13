@@ -2,6 +2,7 @@ package com.epam.eighty.web.api;
 
 import com.codahale.metrics.annotation.Timed;
 import com.epam.eighty.domain.Topic;
+import com.epam.eighty.exception.TopicNotFoundException;
 import com.epam.eighty.service.DBPopulatorService;
 import com.epam.eighty.service.TopicService;
 import com.wordnik.swagger.annotations.Api;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,7 +52,7 @@ public class TopicController {
     @ResponseBody
     @Cacheable(value = "topic", key = "#id")
     public Topic getTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getTopicById(id);
+        return topicService.getTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
     }
 
     @ApiOperation(value = "Find topic by id with questions", notes = "Get topic by id with questions", httpMethod = "GET", response = Topic.class, produces = "application/json")
@@ -63,7 +65,7 @@ public class TopicController {
     @ResponseBody
     @Cacheable(value = "topic", key = "'full.' + #id")
     public Topic getFullTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getFullTopicById(id);
+        return topicService.getFullTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
     }
 
     @ApiOperation(value = "Find root topic", notes = "Get root topic", httpMethod = "GET", response = Topic.class, produces = "application/json")
@@ -75,12 +77,12 @@ public class TopicController {
     @ResponseBody
     @Cacheable(value = "topic", key = "'root.' + #id")
     public Topic getRootTopic() throws IOException {
-        Topic topic = topicService.getRoot();
-        if (topic == null) {
+        Optional <Topic> optionalTopic = topicService.getRoot();
+        if (!optionalTopic.isPresent()) {
             dbService.populate();
-            topic = topicService.getRoot();
+            optionalTopic = topicService.getRoot();
         }
-        return topic;
+        return optionalTopic.orElseThrow(TopicNotFoundException::new);
     }
 
     @ApiOperation(value = "Delete topic by id", notes = "Delete topic by id", httpMethod = "DELETE")

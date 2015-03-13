@@ -1,10 +1,12 @@
 package com.epam.eighty.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Test;
@@ -21,7 +23,6 @@ import com.epam.eighty.domain.Question;
 import com.epam.eighty.domain.Tag;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.resources.TestNeo4jConfig;
-import com.epam.eighty.utility.Converter;
 
 /**
  * @author Aliaksandr_Padalka
@@ -42,12 +43,12 @@ public class QuestionRepositoryTest {
         fake.setQuestion("fake question");
         questionRepo.save(fake);
 
-        Question q = questionRepo.findOne(fake.getId());
+        Optional<Question> q = questionRepo.findOne(fake.getId());
 
-        assertNotNull(q);
-        assertEquals(q, fake);
+        assertTrue(q.isPresent());
+        assertEquals(q.get(), fake);
 
-        questionRepo.delete(q);
+        questionRepo.delete(q.get());
     }
 
     @Test
@@ -59,12 +60,12 @@ public class QuestionRepositoryTest {
         fake.setQuestion("new fake question");
         questionRepo.save(fake);
 
-        Question q = questionRepo.findOne(fake.getId());
+        Optional<Question> q = questionRepo.findOne(fake.getId());
 
-        assertNotNull(q);
-        assertEquals(q, fake);
+        assertTrue(q.isPresent());
+        assertEquals(q.get(), fake);
 
-        questionRepo.delete(q);
+        questionRepo.delete(q.get());
     }
 
     @Test
@@ -77,10 +78,10 @@ public class QuestionRepositoryTest {
 
         questionRepo.delete(id);
 
-        Question q = questionRepo.findBySchemaPropertyValue("question",
+        Optional<Question> q = questionRepo.findBySchemaPropertyValue("question",
                 fake.getQuestion());
 
-        assertNull(q);
+        assertFalse(q.isPresent());
     }
 
     @Test
@@ -95,17 +96,17 @@ public class QuestionRepositoryTest {
         questionRepo.save(fake2);
         questionRepo.save(fake3);
 
-        Question question;
+        Optional<Question> question;
 
         question = questionRepo.findOne(fake1.getId());
-        assertNotNull(question);
-        assertEquals(question, fake1);
+        assertTrue(question.isPresent());
+        assertEquals(question.get(), fake1);
         question = questionRepo.findOne(fake2.getId());
-        assertNotNull(question);
-        assertEquals(question, fake2);
+        assertTrue(question.isPresent());
+        assertEquals(question.get(), fake2);
         question = questionRepo.findOne(fake3.getId());
-        assertNotNull(question);
-        assertEquals(question, fake3);
+        assertTrue(question.isPresent());
+        assertEquals(question.get(), fake3);
 
         questionRepo.delete(fake1.getId());
         questionRepo.delete(fake2.getId());
@@ -126,7 +127,8 @@ public class QuestionRepositoryTest {
 
         Result<Question> questions = questionRepo.findAll();
         assertNotNull(questions);
-        Set<Question> set = Converter.convertToHashSet(questions);
+        @SuppressWarnings("unchecked")
+        Set<Question> set = questions.as(Set.class);
         assertNotNull(set);
 
         questionRepo.delete(fake1.getId());

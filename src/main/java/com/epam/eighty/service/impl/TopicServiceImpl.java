@@ -1,18 +1,16 @@
 package com.epam.eighty.service.impl;
 
-import com.epam.eighty.domain.Question;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.TopicService;
-import com.epam.eighty.utility.Converter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -29,45 +27,37 @@ public class TopicServiceImpl implements TopicService {
     private Neo4jOperations template;
 
     @Override
-    public Topic getRoot() {
-        Topic root = topicRepo.findBySchemaPropertyValue("title", "root");
-        if (root != null) {
-            for (Topic topic : root.getTopics()) {
-                template.fetch(topic);
-            }
-        }
+    public Optional<Topic> getRoot() {
+        Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
+        root.ifPresent(someRoot ->
+            someRoot.getTopics().forEach(template::fetch)
+        );
         return root;
     }
 
     @Override
-    public Topic getFullTopicById(final Long id) {
-        Topic topic = topicRepo.findOne(id);
-        if (topic != null) {
-            for (Topic t : topic.getTopics()) {
-                template.fetch(t);
-            }
-            for (Question q : topic.getQuestions()) {
-                template.fetch(q);
-            }
-        }
+    public Optional <Topic> getFullTopicById(final Long id) {
+        Optional<Topic> topic = topicRepo.findOne(id);
+        topic.ifPresent(t -> {
+            t.getTopics().forEach(template::fetch);
+            t.getQuestions().forEach(template::fetch);
+        });
         return topic;
     }
 
     @Override
-    public Topic getTopicById(final Long id) {
-        Topic topic = topicRepo.findOne(id);
-        if (topic != null) {
-            for (Topic t : topic.getTopics()) {
-                template.fetch(t);
-            }
-        }
+    public Optional <Topic> getTopicById(final Long id) {
+        Optional<Topic> topic = topicRepo.findOne(id);
+        topic.ifPresent(t ->
+            t.getTopics().forEach(template::fetch)
+        );
         return topic;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Set<Topic> getAllTopics() {
-        Result<Topic> topics = topicRepo.findAll();
-        return Converter.convertToHashSet(topics);
+        return topicRepo.findAll().as(Set.class);
     }
 
     @Override
@@ -82,9 +72,11 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Topic createTopic(final Topic topic, final Long id) {
-        Topic parentTopic = topicRepo.findOne(id);
-        parentTopic.getTopics().add(topic);
-        topicRepo.save(parentTopic);
+        Optional<Topic> parentTopic = topicRepo.findOne(id);
+        parentTopic.ifPresent(t -> {
+            t.getTopics().add(topic);
+            topicRepo.save(t);
+        });
 
         return topic;
     }
