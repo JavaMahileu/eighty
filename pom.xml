@@ -412,16 +412,6 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>grunt processhtml production</id>
-                                <goals>
-                                    <goal>grunt</goal>
-                                </goals>
-                                <phase>prepare-package</phase>
-                                <configuration>
-                                    <arguments>processhtml:production</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
                                 <id>grunt protractor</id>
                                 <goals>
                                     <goal>grunt</goal>
