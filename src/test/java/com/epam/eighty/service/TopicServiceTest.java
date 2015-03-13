@@ -119,7 +119,7 @@ public class TopicServiceTest {
     @Test
     public void test_getTopicById() {
         when(topicRepo.findOne(fake.getId())).thenReturn(fake);
-        Topic topic = topicService.getTopicById(fake.getId());
+        Topic topic = topicService.getTopicById(fake.getId()).get();
         assertNotNull(topic);
         assertEquals(topic, fake);
     }
@@ -127,7 +127,7 @@ public class TopicServiceTest {
    @Test
     public void test_getFullTopicById() {
         when(topicRepo.findOne(fake.getId())).thenReturn(fake);
-        Topic topic = topicService.getFullTopicById(fake.getId());
+        Topic topic = topicService.getFullTopicById(fake.getId()).get();
         assertNotNull(topic);
         assertEquals(topic, fake);
     }
@@ -135,7 +135,7 @@ public class TopicServiceTest {
     @Test
     public void test_getRoot() {
         when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(root);
-        Topic topic = topicService.getRoot();
+        Topic topic = topicService.getRoot().get();
         assertNotNull(topic);
         assertEquals(topic, root);
     }

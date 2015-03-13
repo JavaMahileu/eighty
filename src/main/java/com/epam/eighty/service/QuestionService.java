@@ -1,9 +1,11 @@
 package com.epam.eighty.service;
 
 import com.epam.eighty.domain.Question;
+
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -11,7 +13,7 @@ import java.util.Set;
  */
 public interface QuestionService {
 
-    Question getQuestionById(Long id);
+    Optional <Question> getQuestionById(Long id);
     Set<Question> getAllQuestions();
     void addQuestion(Question question, Long topicId);
     void updateQuestion(Question question);

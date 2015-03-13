@@ -8,6 +8,7 @@ import com.epam.eighty.service.QuestionService;
 import com.epam.eighty.utility.Converter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,9 @@ public class QuestionServiceImpl implements QuestionService {
     private Neo4jOperations template;
 
     @Override
-    public Question getQuestionById(final Long id) {
-        return questionRepo.findOne(id);
+    public Optional<Question> getQuestionById(final Long id) {
+        //Question q=null;
+        return Optional.ofNullable(questionRepo.findOne(id));
     }
 
     @Override

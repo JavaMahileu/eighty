@@ -29,35 +29,38 @@ public class TopicServiceImpl implements TopicService {
     private Neo4jOperations template;
 
     @Override
-    public Topic getRoot() {
+    public Optional <Topic> getRoot() {
         Topic root = topicRepo.findBySchemaPropertyValue("title", "root");
-        Optional.ofNullable(root).ifPresent(someRoot ->
+        Optional <Topic> optionalRoot = Optional.ofNullable(root);
+        optionalRoot.ifPresent(someRoot ->
             someRoot.getTopics()
                 .forEach(template::fetch)
         );
-        return root;
+        return optionalRoot;
     }
 
     @Override
-    public Topic getFullTopicById(final Long id) {
+    public Optional <Topic> getFullTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
-        Optional.ofNullable(topic).ifPresent(t -> {
+        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
+        optionalTopic.ifPresent(t -> {
             t.getTopics()
                 .forEach(template::fetch);
             t.getQuestions()
                 .forEach(template::fetch);
         });
-        return topic;
+        return optionalTopic;
     }
 
     @Override
-    public Topic getTopicById(final Long id) {
+    public Optional <Topic> getTopicById(final Long id) {
         Topic topic = topicRepo.findOne(id);
-        Optional.ofNullable(topic).ifPresent(t ->
+        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
+        optionalTopic.ifPresent(t ->
             topic.getTopics()
                 .forEach(template::fetch)
         );
-        return topic;
+        return optionalTopic;
     }
 
     @Override

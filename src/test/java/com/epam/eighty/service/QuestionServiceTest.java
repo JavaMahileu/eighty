@@ -130,7 +130,7 @@ public class QuestionServiceTest {
     public void test_getQuestionById() {
         when(questionRepo.findOne(fake.getId())).thenReturn(fake);
 
-        Question question = questionService.getQuestionById(1L);
+        Question question = questionService.getQuestionById(1L).get();
 
         assertNotNull(question);
         assertEquals(question, fake);
