@@ -189,7 +189,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-protractor-runner');
 
     grunt.registerTask('minify', ['clean:jsmin', 'removelogging', 'uglify', 'clean:cssmin', 'cssmin']);
-    grunt.registerTask('p:test', ['clean:e2etests','processhtml:e2eTests', 'connect', 'protractor']);
+    grunt.registerTask('p:test', ['clean:e2etests','processhtml:e2eTests', 'connect', 'protractor', 'processhtml:production']);
     grunt.registerTask('k:test', ['karma', 'copy:lcov']);
 
 };
