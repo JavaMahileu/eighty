@@ -51,8 +51,8 @@ public class TopicController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "topic", key = "#id")
-    public Topic getTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id, final HttpServletResponse response) {
-        return topicService.getTopicById(id).orElseThrow(() -> new TopicNotFoundException(id, response));
+    public Topic getTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
+        return topicService.getTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
     }
 
     @ApiOperation(value = "Find topic by id with questions", notes = "Get topic by id with questions", httpMethod = "GET", response = Topic.class, produces = "application/json")
@@ -64,8 +64,8 @@ public class TopicController {
     @RequestMapping(value = "/full/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "topic", key = "'full.' + #id")
-    public Topic getFullTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id, final HttpServletResponse response) {
-        return topicService.getFullTopicById(id).orElseThrow(() -> new TopicNotFoundException(id, response));
+    public Topic getFullTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
+        return topicService.getFullTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
     }
 
     @ApiOperation(value = "Find root topic", notes = "Get root topic", httpMethod = "GET", response = Topic.class, produces = "application/json")
@@ -76,13 +76,13 @@ public class TopicController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "topic", key = "'root.' + #id")
-    public Topic getRootTopic(final HttpServletResponse response) throws IOException {
+    public Topic getRootTopic() throws IOException {
         Optional <Topic> optionalTopic = topicService.getRoot();
         if (!optionalTopic.isPresent()) {
             dbService.populate();
             optionalTopic = topicService.getRoot();
         }
-        return optionalTopic.orElseThrow(() -> new TopicNotFoundException(response));
+        return optionalTopic.orElseThrow(() -> new TopicNotFoundException());
     }
 
     @ApiOperation(value = "Delete topic by id", notes = "Delete topic by id", httpMethod = "DELETE")

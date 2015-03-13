@@ -70,8 +70,8 @@ public class QuestionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "#id")
-    public Question getQuestion(@ApiParam(name = "questionId", required = true, value = "question id") @PathVariable("id") final Long id, final HttpServletResponse response) {
-        return questionService.getQuestionById(id).orElseThrow(() -> new QuestionNotFoundException(id, response));
+    public Question getQuestion(@ApiParam(name = "questionId", required = true, value = "question id") @PathVariable("id") final Long id) {
+        return questionService.getQuestionById(id).orElseThrow(() -> new QuestionNotFoundException(id));
     }
 
     @ApiOperation(value = "Create new question", notes = "Create new question", httpMethod = "POST", response = Question.class, produces = "application/json")

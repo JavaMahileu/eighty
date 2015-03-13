@@ -26,15 +26,15 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler(TopicNotFoundException.class)
-    public void handleTopicNotFoundException(final TopicNotFoundException ex) {
+    public void handleTopicNotFoundException(final TopicNotFoundException ex, final HttpServletResponse response) {
         LOG.error("TopicNotFoundException: " + ex.getMessage());
-        ex.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)
-    public void handleQuestionNotFoundException(final QuestionNotFoundException ex) {
+    public void handleQuestionNotFoundException(final QuestionNotFoundException ex, final HttpServletResponse response) {
         LOG.error("QuestionNotFoundException: " + ex.getMessage());
-        ex.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 
 }
