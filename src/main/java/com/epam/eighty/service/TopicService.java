@@ -11,12 +11,12 @@ import java.util.Set;
  */
 public interface TopicService {
 
-    Optional <Topic> getRoot();
-    Optional <Topic> getTopicById(Long id);
+    Optional<Topic> getRoot();
+    Optional<Topic> getTopicById(Long id);
     Set<Topic> getAllTopics();
     void updateTopic(Topic topic);
     void deleteTopic(Long id);
-    Optional <Topic> getFullTopicById(Long id);
+    Optional<Topic> getFullTopicById(Long id);
     Topic createTopic(Topic topic, Long id);
     List<Topic> getRootTopicsForTopic(Long id);
 }

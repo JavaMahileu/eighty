@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public interface QuestionService {
 
-    Optional <Question> getQuestionById(Long id);
+    Optional<Question> getQuestionById(Long id);
     Set<Question> getAllQuestions();
     void addQuestion(Question question, Long topicId);
     void updateQuestion(Question question);

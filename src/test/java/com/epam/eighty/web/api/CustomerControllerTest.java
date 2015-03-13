@@ -13,9 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CustomerControllerTest {
 
@@ -29,7 +27,7 @@ public class CustomerControllerTest {
     @InjectMocks
     private CustomerController customerController;
 
-    private Set<Customer> customerSet;
+    private List<Customer> customerSet;
     private List<Customer> customerList;
 
     @Before
@@ -43,7 +41,7 @@ public class CustomerControllerTest {
         customer2.setId(1002L);
         customer2.setName("customer2");
 
-        customerSet = new HashSet<>();
+        customerSet = new ArrayList<>();
         customerSet.add(customer1);
         customerSet.add(customer2);
 

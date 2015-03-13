@@ -29,8 +29,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TopicServiceTest {
 
-    private Topic fake;
-    private Topic root;
+    private Optional<Topic> fake;
+    private Optional<Topic> root;
     private Result<Topic> results;
     private Set<Topic> fakes;
     private Slice<Topic> path;
@@ -47,13 +47,13 @@ public class TopicServiceTest {
 
     @Before
     public void setUp() {
-        root = new Topic();
-        root.setTitle("root");
-        root.setId(0L);
+        root = Optional.of(new Topic());
+        root.get().setTitle("root");
+        root.get().setId(0L);
 
-        fake = new Topic();
-        fake.setTitle("fake title");
-        fake.setId(1000L);
+        fake = Optional.of(new Topic());
+        fake.get().setTitle("fake title");
+        fake.get().setId(1000L);
 
         Topic fake0 = new Topic();
         fake0.setTitle("fake title 0");
@@ -99,37 +99,37 @@ public class TopicServiceTest {
 
     @Test
     public void test_updateTopic() {
-        topicService.updateTopic(fake);
-        verify(topicRepo).save(fake);
+        topicService.updateTopic(fake.get());
+        verify(topicRepo).save(fake.get());
     }
 
     @Test
     public void test_deleteTopic() {
-        topicService.deleteTopic(fake.getId());
-        verify(topicRepo).delete(fake.getId());
+        topicService.deleteTopic(fake.get().getId());
+        verify(topicRepo).delete(fake.get().getId());
     }
 
     @Test
     public void test_createTopic() {
-        when(topicRepo.findOne(root.getId())).thenReturn(root);
-        topicService.createTopic(fake, root.getId());
-        verify(topicRepo).save(root);
+        when(topicRepo.findOne(root.get().getId())).thenReturn(root);
+        topicService.createTopic(fake.get(), root.get().getId());
+        verify(topicRepo).save(root.get());
     }
 
     @Test
     public void test_getTopicById() {
-        when(topicRepo.findOne(fake.getId())).thenReturn(fake);
-        Topic topic = topicService.getTopicById(fake.getId()).get();
+        when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
+        Topic topic = topicService.getTopicById(fake.get().getId()).get();
         assertNotNull(topic);
-        assertEquals(topic, fake);
+        assertEquals(topic, fake.get());
     }
 
    @Test
     public void test_getFullTopicById() {
-        when(topicRepo.findOne(fake.getId())).thenReturn(fake);
-        Topic topic = topicService.getFullTopicById(fake.getId()).get();
+        when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
+        Topic topic = topicService.getFullTopicById(fake.get().getId()).get();
         assertNotNull(topic);
-        assertEquals(topic, fake);
+        assertEquals(topic, fake.get());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class TopicServiceTest {
         when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(root);
         Topic topic = topicService.getRoot().get();
         assertNotNull(topic);
-        assertEquals(topic, root);
+        assertEquals(topic, root.get());
     }
 
     @Test

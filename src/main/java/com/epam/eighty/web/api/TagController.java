@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import scala.tools.nsc.typechecker.Tags;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Aliaksandr_Padalka on 22/07/2014.
@@ -63,7 +62,7 @@ public class TagController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "tag", key = "'all'")
-    public Set<Tag> getAllTags() {
+    public List<Tag> getAllTags() {
         return tagService.getAllTags();
     }
 
@@ -75,7 +74,7 @@ public class TagController {
     @RequestMapping(value = "/{tagName}", method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "tag", key = "'topic.' + #tagName")
-    public Set<Tag> getSortedSetOfTagsByName(@ApiParam(name = "tag", required = true, value = "sorted set of tags by part of tag name") @PathVariable("tagName") final String tagName) {
+    public List<Tag> getSortedSetOfTagsByName(@ApiParam(name = "tag", required = true, value = "sorted set of tags by part of tag name") @PathVariable("tagName") final String tagName) {
         return tagService.getSortedSetOfTagsByName(tagName);
     }
 

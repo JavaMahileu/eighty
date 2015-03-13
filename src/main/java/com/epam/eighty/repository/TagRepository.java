@@ -1,16 +1,16 @@
 package com.epam.eighty.repository;
 
 import com.epam.eighty.domain.Tag;
+
 import org.springframework.data.domain.Slice;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  * @author Aliaksandr_Padalka
  */
 @Repository("tagRepo")
-public interface TagRepository extends GraphRepository<Tag> {
+public interface TagRepository extends BaseRepository<Tag, Long> {
 
     @Query(value = "MATCH (tag:`Tag`)<-[:`has`*]-(question:`Question`)<-[:`contains`*]-(topic) WHERE ID(topic) = {0} RETURN DISTINCT tag", elementClass = Tag.class)
     Slice<Tag> getTagsByTopicId(Long id);

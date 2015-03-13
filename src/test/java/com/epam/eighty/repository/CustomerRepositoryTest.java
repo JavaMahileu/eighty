@@ -19,7 +19,6 @@ import com.epam.eighty.domain.Customer;
 import com.epam.eighty.domain.Question;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.resources.TestNeo4jConfig;
-import com.epam.eighty.utility.Converter;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -140,7 +139,8 @@ public class CustomerRepositoryTest {
 
         Result<Customer> customers = customerRepo.findAll();
         assertNotNull(customers);
-        Set<Customer> set = Converter.convertToHashSet(customers);
+        @SuppressWarnings("unchecked")
+        Set<Customer> set = customers.as(Set.class);
         assertNotNull(set);
 
         customerRepo.delete(fake1.getId());

@@ -5,7 +5,6 @@ import com.epam.eighty.domain.Topic;
 import com.epam.eighty.repository.QuestionRepository;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.QuestionService;
-import com.epam.eighty.utility.Converter;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,21 +33,23 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Optional<Question> getQuestionById(final Long id) {
-        //Question q=null;
-        return Optional.ofNullable(questionRepo.findOne(id));
+        return questionRepo.findOne(id);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Set<Question> getAllQuestions() {
-        return Converter.convertToHashSet(questionRepo.findAll());
+        return questionRepo.findAll().as(Set.class);
     }
 
     @Override
     public void addQuestion(final Question question, final Long id) {
         questionRepo.save(question);
-        Topic topic = topicRepo.findOne(id);
-        topic.getQuestions().add(question);
-        topicRepo.save(topic);
+        Optional<Topic> topic = topicRepo.findOne(id); //TODO what behavior should we provide if topic is absent?
+        topic.ifPresent(t -> {
+            t.getQuestions().add(question);
+            topicRepo.save(t);
+        });
     }
 
     @Override

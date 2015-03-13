@@ -1,11 +1,13 @@
 package com.epam.eighty.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Test;
@@ -18,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.resources.TestNeo4jConfig;
-import com.epam.eighty.utility.Converter;
 
 /**
  * @author Aliaksandr_Padalka
@@ -37,12 +38,12 @@ public class TopicRepositoryTest {
         fake.setTitle("fake title");
         topicRepo.save(fake);
 
-        Topic t = topicRepo.findOne(fake.getId());
+        Optional<Topic> t = topicRepo.findOne(fake.getId());
 
-        assertNotNull(t);
-        assertEquals(t, fake);
+        assertTrue(t.isPresent());
+        assertEquals(t.get(), fake);
 
-        topicRepo.delete(t);
+        topicRepo.delete(t.get());
     }
 
     @Test
@@ -54,12 +55,12 @@ public class TopicRepositoryTest {
         fake.setTitle("new fake title");
         topicRepo.save(fake);
 
-        Topic t = topicRepo.findOne(fake.getId());
+        Optional<Topic> t = topicRepo.findOne(fake.getId());
 
-        assertNotNull(t);
-        assertEquals(t, fake);
+        assertTrue(t.isPresent());
+        assertEquals(t.get(), fake);
 
-        topicRepo.delete(t);
+        topicRepo.delete(t.get());
     }
 
     @Test
@@ -72,9 +73,9 @@ public class TopicRepositoryTest {
 
         topicRepo.delete(id);
 
-        Topic t = topicRepo.findBySchemaPropertyValue("title", fake.getTitle());
+        Optional<Topic> t = topicRepo.findBySchemaPropertyValue("title", fake.getTitle());
 
-        assertNull(t);
+        assertFalse(t.isPresent());
     }
 
     @Test
@@ -83,12 +84,12 @@ public class TopicRepositoryTest {
         root.setTitle("root");
         topicRepo.save(root);
 
-        Topic t = topicRepo.findBySchemaPropertyValue("title", "root");
+        Optional<Topic> t = topicRepo.findBySchemaPropertyValue("title", "root");
 
-        assertNotNull(t);
-        assertEquals(t, root);
+        assertTrue(t.isPresent());
+        assertEquals(t.get(), root);
 
-        topicRepo.delete(t);
+        topicRepo.delete(t.get());
     }
 
     @Test
@@ -97,12 +98,12 @@ public class TopicRepositoryTest {
         fake.setTitle("fake title");
         topicRepo.save(fake);
 
-        Topic t = topicRepo.findOne(fake.getId());
+        Optional<Topic> t = topicRepo.findOne(fake.getId());
 
-        assertNotNull(t);
-        assertEquals(t, fake);
+        assertTrue(t.isPresent());
+        assertEquals(t.get(), fake);
 
-        topicRepo.delete(t);
+        topicRepo.delete(t.get());
     }
 
     @Test
@@ -119,7 +120,8 @@ public class TopicRepositoryTest {
 
         Result<Topic> topics = topicRepo.findAll();
         assertNotNull(topics);
-        Set<Topic> set = Converter.convertToHashSet(topics);
+        @SuppressWarnings("unchecked")
+        Set<Topic> set = topics.as(Set.class);
         assertNotNull(set);
 
         topicRepo.delete(fake1.getId());

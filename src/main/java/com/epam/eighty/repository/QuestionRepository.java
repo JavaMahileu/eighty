@@ -1,17 +1,17 @@
 package com.epam.eighty.repository;
 
-import com.epam.eighty.domain.Question;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.stereotype.Repository;
+
+import com.epam.eighty.domain.Question;
 
 /**
  * @author Aliaksandr_Padalka
  */
 @Repository("questionRepo")
-public interface QuestionRepository extends GraphRepository<Question> {
+public interface QuestionRepository extends BaseRepository<Question, Long> {
 
     @Query(value = "MATCH (a:`Question`)<-[:`contains`*]-(b:`Topic`) WHERE ID(b) = {0} RETURN a", elementClass = Question.class)
     Slice<Question> getQuestions(Long topicId, Pageable pageable);

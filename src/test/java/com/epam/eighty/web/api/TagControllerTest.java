@@ -12,9 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Aliaksandr_Padalka on 23/07/2014.
@@ -32,7 +30,7 @@ public class TagControllerTest {
     @InjectMocks
     private TagController tagController;
 
-    private Set<Tag> tagSet;
+    private List<Tag> tagSet;
     private List<Tag> tagList;
 
     @Before
@@ -49,7 +47,7 @@ public class TagControllerTest {
         fake3.setId(1003L);
         fake3.setTag("fake3");
 
-        tagSet = new HashSet<>();
+        tagSet = new ArrayList<>();
         tagSet.add(fake1);
         tagSet.add(fake2);
         tagSet.add(fake3);

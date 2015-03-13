@@ -1,6 +1,7 @@
 package com.epam.eighty.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
@@ -16,8 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -28,13 +27,10 @@ import com.epam.eighty.domain.Topic;
 import com.epam.eighty.domain.Customer;
 import com.epam.eighty.repository.CustomerRepository;
 import com.epam.eighty.service.impl.CustomerServiceImpl;
-import com.epam.eighty.utility.Converter;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Converter.class)
 public class CustomerServiceTest {
 
-    private static final String ANY_SYMBOL = ".*";
     private static final String EMPTY_STRING = "";
 
     private Customer fake;
@@ -49,10 +45,8 @@ public class CustomerServiceTest {
     @Mock
     private CustomerRepository customerRepository;
 
-    @Mock
     private Slice<Customer> slice;
 
-    @Mock
     private Set<Customer> customers;
 
     @Before
@@ -97,19 +91,13 @@ public class CustomerServiceTest {
     @Test
     public void test_getSortedSetOfCustomersByName() {
         Mockito.when(
-                customerRepository.getSortedSetOfCustomersByName(EMPTY_STRING))
+                customerRepository.getSortedSetOfCustomersByName(Mockito.anyString()))
                 .thenReturn(slice);
-        PowerMockito.mockStatic(Converter.class);
-        PowerMockito.when(Converter.convertToTreeSet(slice)).thenReturn(
-                customers);
 
-        customerService.getSortedSetOfCustomersByName(EMPTY_STRING);
-
-        Mockito.verify(customerRepository, Mockito.times(1))
-                .getSortedSetOfCustomersByName(
-                        ANY_SYMBOL + EMPTY_STRING + ANY_SYMBOL);
-
-        PowerMockito.verifyStatic();
+        List<Customer> customers = customerService.getSortedSetOfCustomersByName(EMPTY_STRING);
+        
+        assertNotNull(customers);
+        assertFalse(customers.isEmpty());
     }
 
     @Test

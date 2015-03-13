@@ -32,6 +32,9 @@ create (tag7:Tag:_Tag {tag:'float'})
 create (tag8:Tag:_Tag {tag:'double'})
 create (tag9:Tag:_Tag {tag:'static'})
 
+create (c1:Customer:_Customer {name:'Customer1'})
+create (c2:Customer:_Customer {name:'Customer2'})
+
 create (n0)-[:contains]->(n1)
 create (n0)-[:contains]->(n2)
 create (n2)-[:contains]->(n3)
@@ -67,3 +70,8 @@ create (q5)-[:has]->(tag7)
 create (q5)-[:has]->(tag8)
 create (q6)-[:has]->(tag9)
 create (q6)-[:has]->(tag2)
+
+create (q1)-[:has]->(c1)
+create (q2)-[:has]->(c1)
+create (q3)-[:has]->(c2)
+create (q3)-[:has]->(c2)

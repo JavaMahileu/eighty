@@ -3,10 +3,8 @@ package com.epam.eighty.service.impl;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.TopicService;
-import com.epam.eighty.utility.Converter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,44 +27,37 @@ public class TopicServiceImpl implements TopicService {
     private Neo4jOperations template;
 
     @Override
-    public Optional <Topic> getRoot() {
-        Topic root = topicRepo.findBySchemaPropertyValue("title", "root");
-        Optional <Topic> optionalRoot = Optional.ofNullable(root);
-        optionalRoot.ifPresent(someRoot ->
-            someRoot.getTopics()
-                .forEach(template::fetch)
+    public Optional<Topic> getRoot() {
+        Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
+        root.ifPresent(someRoot ->
+            someRoot.getTopics().forEach(template::fetch)
         );
-        return optionalRoot;
+        return root;
     }
 
     @Override
     public Optional <Topic> getFullTopicById(final Long id) {
-        Topic topic = topicRepo.findOne(id);
-        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
-        optionalTopic.ifPresent(t -> {
-            t.getTopics()
-                .forEach(template::fetch);
-            t.getQuestions()
-                .forEach(template::fetch);
+        Optional<Topic> topic = topicRepo.findOne(id);
+        topic.ifPresent(t -> {
+            t.getTopics().forEach(template::fetch);
+            t.getQuestions().forEach(template::fetch);
         });
-        return optionalTopic;
+        return topic;
     }
 
     @Override
     public Optional <Topic> getTopicById(final Long id) {
-        Topic topic = topicRepo.findOne(id);
-        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
-        optionalTopic.ifPresent(t ->
-            topic.getTopics()
-                .forEach(template::fetch)
+        Optional<Topic> topic = topicRepo.findOne(id);
+        topic.ifPresent(t ->
+            t.getTopics().forEach(template::fetch)
         );
-        return optionalTopic;
+        return topic;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Set<Topic> getAllTopics() {
-        Result<Topic> topics = topicRepo.findAll();
-        return Converter.convertToHashSet(topics);
+        return topicRepo.findAll().as(Set.class);
     }
 
     @Override
@@ -81,9 +72,11 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Topic createTopic(final Topic topic, final Long id) {
-        Topic parentTopic = topicRepo.findOne(id);
-        parentTopic.getTopics().add(topic);
-        topicRepo.save(parentTopic);
+        Optional<Topic> parentTopic = topicRepo.findOne(id);
+        parentTopic.ifPresent(t -> {
+            t.getTopics().add(topic);
+            topicRepo.save(t);
+        });
 
         return topic;
     }

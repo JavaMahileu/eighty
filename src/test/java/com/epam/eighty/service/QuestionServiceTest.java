@@ -11,6 +11,7 @@ import com.epam.eighty.service.impl.QuestionServiceImpl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -36,8 +37,8 @@ import org.springframework.data.neo4j.conversion.Result;
 @RunWith(MockitoJUnitRunner.class)
 public class QuestionServiceTest {
 
-    private Question fake;
-    private Topic root;
+    private Optional<Question> fake;
+    private Optional<Topic> root;
     private Tag tag;
     private Customer customer;
 
@@ -55,8 +56,8 @@ public class QuestionServiceTest {
 
     @Before
     public void setUp() {
-        root = new Topic();
-        root.setId(0L);
+        root = Optional.of(new Topic());
+        root.get().setId(0L);
 
         tag = new Tag();
         tag.setId(100L);
@@ -66,9 +67,9 @@ public class QuestionServiceTest {
         customer.setId(200L);
         customer.setName("customer");
 
-        fake = new Question();
-        fake.setId(1L);
-        fake.setQuestion("fake question");
+        fake = Optional.of(new Question());
+        fake.get().setId(1L);
+        fake.get().setQuestion("fake question");
 
         Question fake0 = new Question();
         fake0.setId(10L);
@@ -109,38 +110,38 @@ public class QuestionServiceTest {
 
     @Test
     public void test_addQuestion() {
-        when(topicRepo.findOne(root.getId())).thenReturn(root);
-        questionService.addQuestion(fake, root.getId());
-        verify(questionRepo).save(fake);
+        when(topicRepo.findOne(root.get().getId())).thenReturn(root);
+        questionService.addQuestion(fake.get(), root.get().getId());
+        verify(questionRepo).save(fake.get());
     }
 
     @Test
     public void test_updateQuestion() {
-        questionService.updateQuestion(fake);
-        verify(questionRepo).save(fake);
+        questionService.updateQuestion(fake.get());
+        verify(questionRepo).save(fake.get());
     }
 
     @Test
     public void test_deleteQuestion() {
-        questionService.deleteQuestion(fake.getId());
-        verify(questionRepo).delete(fake.getId());
+        questionService.deleteQuestion(fake.get().getId());
+        verify(questionRepo).delete(fake.get().getId());
     }
 
     @Test
     public void test_getQuestionById() {
-        when(questionRepo.findOne(fake.getId())).thenReturn(fake);
+        when(questionRepo.findOne(fake.get().getId())).thenReturn(fake);
 
         Question question = questionService.getQuestionById(1L).get();
 
         assertNotNull(question);
-        assertEquals(question, fake);
+        assertEquals(question, fake.get());
     }
 
     @Test
     public void test_getQuestionsPage() {
-        when(questionRepo.getQuestions(root.getId(), null)).thenReturn(slice);
+        when(questionRepo.getQuestions(root.get().getId(), null)).thenReturn(slice);
 
-        List<Question> questions = questionService.getQuestionsPage(root.getId(), null);
+        List<Question> questions = questionService.getQuestionsPage(root.get().getId(), null);
 
         assertNotNull(questions);
         assertEquals(questions, list);
@@ -149,9 +150,9 @@ public class QuestionServiceTest {
 
     @Test
     public void test_getQuestionsByTopicAndTag() {
-        when(questionRepo.getQuestionsByTopicAndTag(root.getId(), tag.getTag())).thenReturn(slice);
+        when(questionRepo.getQuestionsByTopicAndTag(root.get().getId(), tag.getTag())).thenReturn(slice);
 
-        List<Question> questions = questionService.getQuestionsByTopicAndTag(root.getId(), tag.getTag());
+        List<Question> questions = questionService.getQuestionsByTopicAndTag(root.get().getId(), tag.getTag());
 
         assertNotNull(questions);
         assertEquals(questions, list);

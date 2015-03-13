@@ -17,6 +17,13 @@ import org.springframework.data.neo4j.annotation.Query;
 @NodeEntity
 public class Tag extends AbstractEntity implements Comparable<Tag> {
 
+    public Tag() {
+    }
+
+    public Tag(String tag) {
+        this.tag = tag;
+    }
+
     @ApiModelProperty(value = "tag", notes = "This value indexed", required = true, dataType = "string")
     @Indexed(unique = true)
     private String tag;

@@ -14,11 +14,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Aliaksandr_Padalka on 23/07/2014.
@@ -57,12 +59,12 @@ public class TagRepossitoryTest {
 
         faketag = tagRepo.save(faketag);
 
-        Tag tag = tagRepo.findBySchemaPropertyValue("tag", faketag.getTag());
+        Optional<Tag> tag = tagRepo.findBySchemaPropertyValue("tag", faketag.getTag());
 
-        assertNotNull(tag);
-        assertEquals(tag, faketag);
+        assertTrue(tag.isPresent());
+        assertEquals(tag.get(), faketag);
 
-        tagRepo.delete(tag);
+        tagRepo.delete(tag.get());
     }
 
     @Test
@@ -166,7 +168,7 @@ public class TagRepossitoryTest {
         assertNotNull(tag);
         tagRepo.removeTagsWithoutQuestion();
 
-        assertNull(tagRepo.findBySchemaPropertyValue("tag", "fake tag"));
+        assertFalse(tagRepo.findBySchemaPropertyValue("tag", "fake tag").isPresent());
     }
 
     @Test
