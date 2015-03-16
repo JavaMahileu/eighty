@@ -34,15 +34,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getSortedSetOfCustomersByName(final String customerName) {
-        return customerRepository.getSortedSetOfCustomersByName(ANY_SYMBOL + customerName + ANY_SYMBOL).getContent();
+        return customerRepository.getSortedCustomersMatchingName(ANY_SYMBOL + customerName + ANY_SYMBOL);
     }
 
     @Override
     public List<Customer> getCustomersByTopicId(final Long topicId) {
-        List<Customer> customerList  = customerRepository.getCustomersByTopicId(topicId).getContent();
+        List<Customer> customerList  = customerRepository.getCustomersByTopicId(topicId);
 
         customerList
-            .forEach(customer -> customer.setCountInTopic(customerRepository.getQuestionsInTopicByCustomer(customer.getName(),
+            .forEach(customer -> customer.setCountInTopic(customerRepository.getQuestionsNumberInTopicByCustomer(customer.getName(),
                 topicId)));
         return customerList;
     }

@@ -10,8 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.data.neo4j.template.Neo4jOperations;
@@ -33,7 +31,6 @@ public class TopicServiceTest {
     private Optional<Topic> root;
     private Result<Topic> results;
     private Set<Topic> fakes;
-    private Slice<Topic> path;
     private List<Topic> list;
 
     @Mock
@@ -84,7 +81,6 @@ public class TopicServiceTest {
         list.add(fake0);
         list.add(fake1);
         list.add(fake2);
-        path = new SliceImpl<>(list);
     }
 
     @Test
@@ -142,7 +138,7 @@ public class TopicServiceTest {
 
     @Test
     public void test_getRootTopicsForTopic() {
-        when(topicRepo.getRootTopicsForTopic(5L)).thenReturn(path);
+        when(topicRepo.getRootTopicsForTopic(5L)).thenReturn(list);
         List<Topic> topics = topicService.getRootTopicsForTopic(5L);
         assertNotNull(topics);
         assertEquals(topics, list);

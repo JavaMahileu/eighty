@@ -1,11 +1,17 @@
 package com.epam.eighty.resources;
 
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.Ignore;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.test.TestGraphDatabaseFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.support.DelegatingGraphDatabase;
@@ -21,6 +27,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement(mode = AdviceMode.PROXY)
 @Ignore
 public class TestNeo4jConfig extends Neo4jConfiguration {
+    
+    @Value("classpath:scripts/data.cypher")
+    private Resource creatScriptResource;
 
     public TestNeo4jConfig() {
         setBasePackage("com.epam.eighty.domain");
@@ -45,4 +54,19 @@ public class TestNeo4jConfig extends Neo4jConfiguration {
     public TypeRepresentationStrategyFactory typeRepresentationStrategyFactory(DelegatingGraphDatabase delegatingGraphDatabase) {
         return new TypeRepresentationStrategyFactory(delegatingGraphDatabase, TypeRepresentationStrategyFactory.Strategy.Labeled);
     }
+    
+    @Bean
+    public ExecutionEngine executionEngine() {
+        return new ExecutionEngine(graphDatabaseService());
+    }
+    
+    @Bean
+    public String CreatCypherScript() {
+        try {
+            return FileUtils.readFileToString(creatScriptResource.getFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }  
+    
 }

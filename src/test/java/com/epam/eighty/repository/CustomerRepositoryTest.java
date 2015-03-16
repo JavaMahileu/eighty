@@ -1,23 +1,21 @@
 package com.epam.eighty.repository;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
+import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.epam.eighty.domain.Customer;
-import com.epam.eighty.domain.Question;
-import com.epam.eighty.domain.Topic;
 import com.epam.eighty.resources.TestNeo4jConfig;
 
 
@@ -30,121 +28,71 @@ public class CustomerRepositoryTest {
     private CustomerRepository customerRepo;
     @Autowired
     private TopicRepository topicRepo;
+    
     @Autowired
-    private QuestionRepository questionRepo;
+    private ExecutionEngine engine;
+    
+    @Autowired
+    private String creatCypherScript;
+    
+    private String deleteScript = "START n=node(*) OPTIONAL MATCH (n)-[r]-() delete n,r;";
+
+    @Before
+    public void prepareTestDatabase() throws IOException {
+        engine.execute(creatCypherScript);
+    }
+
+    @After
+    public void cleanTestDatabase() {
+        engine.execute(deleteScript);
+    }
     
     @Test
-    public void test_getCustomerByTopicId() {
-        Topic root = new Topic();
-        root.setTitle("root");
-
-        Question q1 = new Question();
-        q1.setQuestion("q1");
-        Question q2 = new Question();
-        q2.setQuestion("q2");
-
-        Customer customer1 = new Customer();
-        customer1.setName("c1");
-        Customer customer2 = new Customer();
-        customer2.setName("c2");
-
-        Set<Customer> customers1 = new HashSet<Customer>();
-        customers1.add(customer1);
-        Set<Customer> customers2 = new HashSet<Customer>();
-        customers2.add(customer2);
-
-        q1.setCustomers(customers1);
-        q2.setCustomers(customers2);
-
-        Set<Question> questions = new HashSet<>();
-        questions.add(q1);
-        questions.add(q2);
-
-        root.setQuestions(questions);
-        topicRepo.save(root);
-
-        Slice<Customer> customers = customerRepo.getCustomersByTopicId(root.getId());
-        assertNotNull(customers);
-        assertEquals(customers.getContent().size(), 2);
-
-        customerRepo.delete(customer1);
-        customerRepo.delete(customer2);
-        questionRepo.delete(q1);
-        questionRepo.delete(q2);
-        topicRepo.delete(root);
+    public void test_getCustomerByTopicId() throws IOException {
+        Long rootTopicId = topicRepo.findBySchemaPropertyValue("title", "root").get().getId();
+        List<Customer> customers = customerRepo.getCustomersByTopicId(rootTopicId);
+        assertEquals(4, customers.size());
+        
+        Long subTopicId = topicRepo.findBySchemaPropertyValue("title", "Annotations").get().getId();
+        customers = customerRepo.getCustomersByTopicId(subTopicId);
+        assertEquals(0, customers.size());
+        
+        customers = customerRepo.getCustomersByTopicId(9999L);
+        assertEquals(0, customers.size());
     }
 
     @Test
-    public void test_getSortedSetOfCustomersByName() {
-        Customer c1 = new Customer();
-        c1.setName("fake customer 1");
-        customerRepo.save(c1);
-        Customer c2 = new Customer();
-        c2.setName("fake customer 2");
-        customerRepo.save(c2);
-
-        Slice<Customer> customers = customerRepo.getSortedSetOfCustomersByName("fake customer.*");
-        assertNotNull(customers);
-        assertEquals(customers.getContent().size(), 2);
-        customerRepo.delete(c1);
-        customerRepo.delete(c2);
+    public void test_getSortedSliceOfCustomersByName() {
+        List<Customer> customers = customerRepo.getSortedCustomersMatchingName("stom");
+        assertEquals(4, customers.size());
+        
+        assertEquals("Customer1", customers.get(0).getName());
+        assertEquals("Customer2", customers.get(1).getName());
+        assertEquals("Customer3", customers.get(2).getName());
+        assertEquals("Customer4", customers.get(3).getName());
+        
+        customers = customerRepo.getSortedCustomersMatchingName("fake");
+        assertEquals(0, customers.size());
     }
 
     @Test
-    public void test_getQuestionsInTopicByCustomer() {
-        Topic root = new Topic();
-        root.setTitle("root");
-
-        Question q1 = new Question();
-        q1.setQuestion("q1");
-        Question q2 = new Question();
-        q2.setQuestion("q2");
-
-        Customer customer = new Customer();
-        customer.setName("customer");
-
-        Set<Customer> customers = new HashSet<>();
-        customers.add(customer);
-
-        q1.setCustomers(customers);
-        q2.setCustomers(customers);
-
-        Set<Question> questions = new HashSet<>();
-        questions.add(q1);
-        questions.add(q2);
-
-        root.setQuestions(questions);
-        topicRepo.save(root);
-
-        long questionCount = customerRepo.getQuestionsInTopicByCustomer(customer.getName(), root.getId());
-        assertEquals(questionCount, 2);
-
-        customerRepo.delete(customer);
-        questionRepo.delete(q1);
-        questionRepo.delete(q2);
-        topicRepo.delete(root);
+    public void test_getQuestionsNumberInTopicByCustomer() {
+        Long rootTopicId = topicRepo.findBySchemaPropertyValue("title", "root").get().getId();
+        long questionsNumber = customerRepo.getQuestionsNumberInTopicByCustomer("Customer1", rootTopicId);
+        assertEquals(3, questionsNumber);
+        
+        Long subTopicId = topicRepo.findBySchemaPropertyValue("title", "Annotations").get().getId();
+        questionsNumber = customerRepo.getQuestionsNumberInTopicByCustomer("Customer1", subTopicId);
+        assertEquals(0, questionsNumber);
+        
+        questionsNumber = customerRepo.getQuestionsNumberInTopicByCustomer("Customer1", 9999L);
+        assertEquals(0, questionsNumber);
     }
-
+    
     @Test
-    public void test_getAllCustomers() {
-        Customer fake1 = new Customer();
-        fake1.setName("fake customer 1");
-        Customer fake2 = new Customer();
-        fake2.setName("fake customer 2");
-        Customer fake3 = new Customer();
-        fake3.setName("fake customer 3");
-        customerRepo.save(fake1);
-        customerRepo.save(fake2);
-        customerRepo.save(fake3);
-
-        Result<Customer> customers = customerRepo.findAll();
-        assertNotNull(customers);
-        @SuppressWarnings("unchecked")
-        Set<Customer> set = customers.as(Set.class);
-        assertNotNull(set);
-
-        customerRepo.delete(fake1.getId());
-        customerRepo.delete(fake2.getId());
-        customerRepo.delete(fake3.getId());
+    public void test_checkCountField() {
+        Customer customer = customerRepo.findBySchemaPropertyValue("name", "Customer1").get();
+        assertEquals(3L, customer.getCount().longValue());
     }
+
 }

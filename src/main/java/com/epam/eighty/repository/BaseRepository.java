@@ -23,4 +23,5 @@ public interface BaseRepository<T, ID extends Serializable> extends Repository<T
 
     @Transactional
     Optional<T> findBySchemaPropertyValue(String property, Object value);
-  }
+
+}

@@ -139,7 +139,7 @@ public class QuestionServiceTest {
 
     @Test
     public void test_getQuestionsPage() {
-        when(questionRepo.getQuestions(root.get().getId(), null)).thenReturn(slice);
+        when(questionRepo.getQuestionsByTopicId(root.get().getId(), null)).thenReturn(slice);
 
         List<Question> questions = questionService.getQuestionsPage(root.get().getId(), null);
 
@@ -150,7 +150,7 @@ public class QuestionServiceTest {
 
     @Test
     public void test_getQuestionsByTopicAndTag() {
-        when(questionRepo.getQuestionsByTopicAndTag(root.get().getId(), tag.getTag())).thenReturn(slice);
+        when(questionRepo.getQuestionsByTopicIdAndTag(root.get().getId(), tag.getTag())).thenReturn(list);
 
         List<Question> questions = questionService.getQuestionsByTopicAndTag(root.get().getId(), tag.getTag());
 
@@ -160,7 +160,7 @@ public class QuestionServiceTest {
 
     @Test
     public void test_getQuestionsByTag() {
-        when(questionRepo.getQuestionsByTag(tag.getTag())).thenReturn(slice);
+        when(questionRepo.getQuestionsByTag(tag.getTag())).thenReturn(list);
 
         List<Question> questions = questionService.getQuestionsByTag(tag.getTag());
 
@@ -170,7 +170,7 @@ public class QuestionServiceTest {
 
     @Test
     public void test_getQuestionsByCustomer() {
-        when(questionRepo.getQuestionsByCustomer(customer.getName())).thenReturn(slice);
+        when(questionRepo.getQuestionsByCustomerName(customer.getName())).thenReturn(list);
 
         List<Question> questions = questionService.getQuestionsByCustomer(customer.getName());
 
