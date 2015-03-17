@@ -109,7 +109,7 @@ public class TagServiceTest {
     public void test_getSortedSetOfTagsByName() {
         when(tagRepo.getTagsMatchingName(ANY_SYMBOL + fake.get().getTag()+ ANY_SYMBOL)).thenReturn(list);
 
-        List<Tag> set = tagService.getSortedTagsMatchingName(fake.get().getTag());
+        List<Tag> set = tagService.getTagsMatchingName(fake.get().getTag());
 
         assertNotNull(set);
         assertEquals(set, tags);

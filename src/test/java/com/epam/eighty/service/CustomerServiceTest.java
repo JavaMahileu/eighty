@@ -17,16 +17,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
 
-import com.epam.eighty.domain.Topic;
 import com.epam.eighty.domain.Customer;
+import com.epam.eighty.domain.Topic;
 import com.epam.eighty.repository.CustomerRepository;
 import com.epam.eighty.service.impl.CustomerServiceImpl;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest {
 
     private static final String EMPTY_STRING = "";
@@ -85,12 +85,10 @@ public class CustomerServiceTest {
 
     @Test
     public void test_getSortedSetOfCustomersByName() {
-        Mockito.when(
-                customerRepository.getCustomersMatchingName(Mockito.anyString()))
-                .thenReturn(list);
+        Mockito.when(customerRepository.getCustomersMatchingName(Mockito.anyString())).thenReturn(list);
 
-        List<Customer> customers = customerService.getSortedCustomersMatchingName(EMPTY_STRING);
-        
+        List<Customer> customers = customerService.getCustomersMatchingName(EMPTY_STRING);
+
         assertNotNull(customers);
         assertFalse(customers.isEmpty());
     }

@@ -31,17 +31,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getSortedCustomersMatchingName(final String customerName) {
+    public List<Customer> getCustomersMatchingName(final String customerName) {
         return customerRepository.getCustomersMatchingName(customerName);
     }
 
     @Override
     public List<Customer> getCustomersByTopicId(final Long topicId) {
-        final List<Customer> customerList  = customerRepository.getCustomersByTopicId(topicId);
+        final List<Customer> customerList = customerRepository.getCustomersByTopicId(topicId);
 
         customerList
-            .forEach(customer -> customer.setCountInTopic(customerRepository.getQuestionsNumberInTopicByCustomer(customer.getName(),
-                topicId)));
+                .forEach(customer -> customer.setCountInTopic(customerRepository.getQuestionsNumberInTopicByCustomer(customer.getName(), topicId)));
         return customerList;
     }
 

@@ -29,9 +29,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Optional<Topic> getRoot() {
         final Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
-        root.ifPresent(someRoot ->
-            someRoot.getTopics().forEach(template::fetch)
-        );
+        root.ifPresent(someRoot -> someRoot.getTopics().forEach(template::fetch));
         return root;
     }
 

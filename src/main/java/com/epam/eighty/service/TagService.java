@@ -12,5 +12,5 @@ public interface TagService {
     List<Tag> getTagsByTopicId(Long topicId);
     List<Tag> getAllTags();
     List<Tag> getTopNFromAllTags(Long limit);
-    List<Tag> getSortedTagsMatchingName(String tagName);
+    List<Tag> getTagsMatchingName(String tagName);
 }

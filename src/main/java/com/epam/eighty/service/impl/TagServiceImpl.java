@@ -22,9 +22,8 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getTagsByTopicId(final Long topicId) {
-        final List<Tag> tagsList  = tagRepo.getTagsByTopicId(topicId);
-        tagsList
-            .forEach(tag -> tag.setCountInTopic(tagRepo.getQuestionsNumberInTopicByTag(tag.getTag(), topicId)));
+        final List<Tag> tagsList = tagRepo.getTagsByTopicId(topicId);
+        tagsList.forEach(tag -> tag.setCountInTopic(tagRepo.getQuestionsNumberInTopicByTag(tag.getTag(), topicId)));
         return tagsList;
     }
 
@@ -40,7 +39,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getSortedTagsMatchingName(final String tagName) {
+    public List<Tag> getTagsMatchingName(final String tagName) {
         return tagRepo.getTagsMatchingName(tagName);
     }
 

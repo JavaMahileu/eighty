@@ -17,7 +17,7 @@ public interface CustomerService {
      */
     List<Customer> getAllCustomers();
 
-    List<Customer> getSortedCustomersMatchingName(String customerName);
+    List<Customer> getCustomersMatchingName(String customerName);
 
     /**
      * Retrieves a list of customer {@link com.epam.eighty.domain.Customer} entities  whose questions present in topic with given id .
