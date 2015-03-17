@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getSortedCustomersMatchingName(final String customerName) {
-        return customerRepository.getSortedCustomersMatchingName(customerName);
+        return customerRepository.getCustomersMatchingName(customerName);
     }
 
     @Override

@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class TestNeo4jConfig extends Neo4jConfiguration {
     
     @Value("classpath:scripts/data.cypher")
-    private Resource creatScriptResource;
+    private Resource createScriptResource;
 
     public TestNeo4jConfig() {
         setBasePackage("com.epam.eighty.domain");
@@ -61,12 +61,12 @@ public class TestNeo4jConfig extends Neo4jConfiguration {
     }
     
     @Bean
-    public String CreatCypherScript() {
+    public String CreateCypherScript() {
         try {
-            return FileUtils.readFileToString(creatScriptResource.getFile());
+            return FileUtils.readFileToString(createScriptResource.getFile());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }  
-    
+
 }

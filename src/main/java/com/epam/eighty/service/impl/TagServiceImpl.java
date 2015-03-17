@@ -46,7 +46,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getSortedTagsMatchingName(final String tagName) {
-        return tagRepo.getSortedTagsMatchingName(tagName);
+        return tagRepo.getTagsMatchingName(tagName);
     }
 
 }

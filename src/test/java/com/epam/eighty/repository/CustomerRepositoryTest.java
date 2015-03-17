@@ -33,13 +33,13 @@ public class CustomerRepositoryTest {
     private ExecutionEngine engine;
     
     @Autowired
-    private String creatCypherScript;
+    private String createCypherScript;
     
     private String deleteScript = "START n=node(*) OPTIONAL MATCH (n)-[r]-() delete n,r;";
 
     @Before
     public void prepareTestDatabase() throws IOException {
-        engine.execute(creatCypherScript);
+        engine.execute(createCypherScript);
     }
 
     @After
@@ -63,7 +63,7 @@ public class CustomerRepositoryTest {
 
     @Test
     public void test_getSortedSliceOfCustomersByName() {
-        List<Customer> customers = customerRepo.getSortedCustomersMatchingName("stom");
+        List<Customer> customers = customerRepo.getCustomersMatchingName("stom");
         assertEquals(4, customers.size());
         
         assertEquals("Customer1", customers.get(0).getName());
@@ -71,7 +71,7 @@ public class CustomerRepositoryTest {
         assertEquals("Customer3", customers.get(2).getName());
         assertEquals("Customer4", customers.get(3).getName());
         
-        customers = customerRepo.getSortedCustomersMatchingName("fake");
+        customers = customerRepo.getCustomersMatchingName("fake");
         assertEquals(0, customers.size());
     }
 

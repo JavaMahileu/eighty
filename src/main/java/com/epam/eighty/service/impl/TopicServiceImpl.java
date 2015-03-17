@@ -79,6 +79,6 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> getRootTopicsForTopic(final Long id) {
-        return topicRepo.getRootTopicsForTopic(id);
+        return topicRepo.getParentTopics(id);
     }
 }

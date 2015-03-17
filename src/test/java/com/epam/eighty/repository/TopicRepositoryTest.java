@@ -33,13 +33,13 @@ public class TopicRepositoryTest {
     private ExecutionEngine engine;
     
     @Autowired
-    private String creatCypherScript;
+    private String createCypherScript;
     
     private String deleteScript = "START n=node(*) OPTIONAL MATCH (n)-[r]-() delete n,r;";
 
     @Before
     public void prepareTestDatabase() throws IOException {
-        engine.execute(creatCypherScript);
+        engine.execute(createCypherScript);
     }
 
     @After
@@ -50,14 +50,14 @@ public class TopicRepositoryTest {
     @Test
     public void test_getRootTopicsForTopic() {
         Long subTopicId = topicRepo.findBySchemaPropertyValue("title", "Annotations").get().getId();
-        List<Topic> topics = topicRepo.getRootTopicsForTopic(subTopicId);
+        List<Topic> topics = topicRepo.getParentTopics(subTopicId);
         assertEquals(4, topics.size());
         
         Long rootTopicId = topicRepo.findBySchemaPropertyValue("title", "root").get().getId();
-        topics = topicRepo.getRootTopicsForTopic(rootTopicId);
+        topics = topicRepo.getParentTopics(rootTopicId);
         assertEquals(0, topics.size());
         
-        topics = topicRepo.getRootTopicsForTopic(99999L);
+        topics = topicRepo.getParentTopics(99999L);
         assertEquals(0, topics.size());
     }
 }
