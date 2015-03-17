@@ -136,11 +136,4 @@ public class TopicServiceTest {
         assertEquals(topic, root.get());
     }
 
-    @Test
-    public void test_getRootTopicsForTopic() {
-        when(topicRepo.getParentTopics(5L)).thenReturn(list);
-        List<Topic> topics = topicService.getRootTopicsForTopic(5L);
-        assertNotNull(topics);
-        assertEquals(topics, list);
-    }
 }

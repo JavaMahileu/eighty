@@ -120,9 +120,4 @@ public class TopicControllerTest {
         verify(response, Mockito.times(1)).setStatus(HttpServletResponse.SC_OK);
     }
 
-    @Test
-    public void test_getPath() {
-        when(topicService.getRootTopicsForTopic(5L)).thenReturn(list);
-        assertTrue(topicController.getPath(5L).equals(list));
-    }
 }
