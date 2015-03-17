@@ -1,12 +1,14 @@
 package com.epam.eighty.service;
 
-import com.epam.eighty.domain.Tag;
-import com.epam.eighty.domain.Topic;
-import com.epam.eighty.repository.TagRepository;
-import com.epam.eighty.service.impl.TagServiceImpl;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -15,14 +17,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
+import com.epam.eighty.domain.Tag;
+import com.epam.eighty.domain.Topic;
+import com.epam.eighty.repository.TagRepository;
+import com.epam.eighty.service.impl.TagServiceImpl;
 
 /**
  * Created by Aliaksandr_Padalka on 23/07/2014.
@@ -75,25 +73,6 @@ public class TagServiceTest {
 
         results = new QueryResultBuilder<>(tags);
 
-    }
-
-    @Test
-    public void test_getTagByTag() {
-        when(tagRepo.findBySchemaPropertyValue("tag", fake.get().getTag())).thenReturn(fake);
-        Tag tag = tagService.getTagByTag(fake.get().getTag());
-
-        assertNotNull(tag);
-        assertEquals(tag, fake.get());
-    }
-
-    @Test
-    @Ignore
-    public void test_getTagByTagIfTagIsNull() {
-        when(tagRepo.findBySchemaPropertyValue("tag", fake.get().getTag())).thenReturn(Optional.empty());
-        Tag tag = tagService.getTagByTag(fake.get().getTag());
-
-        assertNotNull(tag);
-        assertNull(tag.getTag());
     }
 
     @Test

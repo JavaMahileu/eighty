@@ -59,12 +59,6 @@ public class TagControllerTest {
     }
 
     @Test
-    public void test_getTagByTag() {
-        when(tagService.getTagByTag(TEST_STRING)).thenReturn(tag);
-        assertTrue(tagController.getTagByTag(TEST_STRING).equals(tag));
-    }
-
-    @Test
     public void test_getAllTagsByTopicId() {
         when(tagService.getTagsByTopicId(TEST_LONG_ID)).thenReturn(tagList);
         assertTrue(tagController.getAllTagsByTopicId(TEST_LONG_ID).equals(tagList));

@@ -99,24 +99,6 @@
 
         /**
          * @ngdoc method
-         * @name tag
-         * @methodOf eightyCrudFactory.crudFactory
-         *
-         * @description
-         * Get a resource object for requesting tag by title of the tag.
-         *
-         * @returns {Object} A resource "class" object with the following set of resource actions:
-         *
-         * - `{object}` `get({String} title)` — Request for tag with given tag.
-         */
-        function tag() {
-            return $resource('tags/tag/:title', {}, {
-                get: {method: 'GET', params: {title: '@title'}}
-            });
-        }
-
-        /**
-         * @ngdoc method
          * @name tags
          * @methodOf eightyCrudFactory.crudFactory
          *

@@ -30,11 +30,6 @@ public class TagServiceImpl implements TagService {
         return tagsList;
     }
 
-    @Override
-    public Tag getTagByTag(final String title) {
-        return tagRepo.findBySchemaPropertyValue("tag", title).orElse(tagRepo.save(new Tag(title))); //TODO should we create new tag if it's absent?
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public List<Tag> getAllTags() {
