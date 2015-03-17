@@ -36,13 +36,13 @@ public class QuestionRepositoryTest {
     private ExecutionEngine engine;
     
     @Autowired
-    private String creatCypherScript;
+    private String createCypherScript;
     
     private String deleteScript = "START n=node(*) OPTIONAL MATCH (n)-[r]-() delete n,r;";
 
     @Before
     public void prepareTestDatabase() throws IOException {
-        engine.execute(creatCypherScript);
+        engine.execute(createCypherScript);
     }
 
     @After
