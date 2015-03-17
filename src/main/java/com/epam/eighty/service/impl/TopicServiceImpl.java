@@ -35,16 +35,6 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Optional <Topic> getFullTopicById(final Long id) {
-        Optional<Topic> topic = topicRepo.findOne(id);
-        topic.ifPresent(t -> {
-            t.getTopics().forEach(template::fetch);
-            t.getQuestions().forEach(template::fetch);
-        });
-        return topic;
-    }
-
-    @Override
     public Optional <Topic> getTopicById(final Long id) {
         Optional<Topic> topic = topicRepo.findOne(id);
         topic.ifPresent(t ->

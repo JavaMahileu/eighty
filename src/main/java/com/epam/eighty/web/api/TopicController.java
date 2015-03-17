@@ -54,19 +54,6 @@ public class TopicController {
         return topicService.getTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
     }
 
-    @ApiOperation(value = "Find topic by id with questions", notes = "Get topic by id with questions", httpMethod = "GET", response = Topic.class, produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "application/json topic"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 404, message = "Not found") })
-    @Timed
-    @RequestMapping(value = "/full/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    @Cacheable(value = "topic", key = "'full.' + #id")
-    public Topic getFullTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getFullTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
-    }
-
     @ApiOperation(value = "Find root topic", notes = "Get root topic", httpMethod = "GET", response = Topic.class, produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json topic with title 'root'"),
