@@ -19,7 +19,6 @@
             topic: topic,
             question: question,
             questions: questions,
-            tag: tag,
             tags: tags,
             customers: customers
         };
