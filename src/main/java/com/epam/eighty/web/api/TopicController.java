@@ -55,19 +55,6 @@ public class TopicController {
         return topicService.getTopicById(id);
     }
 
-    @ApiOperation(value = "Find topic by id with questions", notes = "Get topic by id with questions", httpMethod = "GET", response = Topic.class, produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "application/json topic"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 404, message = "Not found") })
-    @Timed
-    @RequestMapping(value = "/full/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    @Cacheable(value = "topic", key = "'full.' + #id")
-    public Topic getFullTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getFullTopicById(id);
-    }
-
     @ApiOperation(value = "Find root topic", notes = "Get root topic", httpMethod = "GET", response = Topic.class, produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json topic with title 'root'"),
@@ -129,16 +116,4 @@ public class TopicController {
         return topic;
     }
 
-    @ApiOperation(value = "Find path for topic by id", notes = "Get path for topic by id", httpMethod = "GET", response = Topic.class, produces = "application/json")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "application/json topic"),
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 404, message = "Not found") })
-    @Timed
-    @RequestMapping(value = "/path/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    @Cacheable(value = "topic", key = "'path.' + #id")
-    public List<Topic> getPath(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getRootTopicsForTopic(id);
-    }
 }

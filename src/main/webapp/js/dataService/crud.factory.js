@@ -19,7 +19,6 @@
             topic: topic,
             question: question,
             questions: questions,
-            tag: tag,
             tags: tags,
             customers: customers
         };
@@ -94,24 +93,6 @@
                 allQuestionsInTopicWithTag: {method: 'GET', params: {id: '@id', title: '@title'}, url: 'questions/topic/:id/tag/:title', isArray: true},
                 allQuestionsWithTag: {method: 'GET', url: 'questions/all/tag/:tagName', params: {tagName: '@tagName'}, isArray: true},
                 allQuestionsFromCustomer: {method: 'GET', url: 'questions/all/customer/:customerName', params: {customerName: '@customerName'}, isArray: true}
-            });
-        }
-
-        /**
-         * @ngdoc method
-         * @name tag
-         * @methodOf eightyCrudFactory.crudFactory
-         *
-         * @description
-         * Get a resource object for requesting tag by title of the tag.
-         *
-         * @returns {Object} A resource "class" object with the following set of resource actions:
-         *
-         * - `{object}` `get({String} title)` — Request for tag with given tag.
-         */
-        function tag() {
-            return $resource('tags/tag/:title', {}, {
-                get: {method: 'GET', params: {title: '@title'}}
             });
         }
 

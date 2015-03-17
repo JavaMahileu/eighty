@@ -36,15 +36,6 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic getFullTopicById(final Long id) {
-        final Topic topic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
-        topic.getTopics().forEach(template::fetch);
-        topic.getQuestions().forEach(template::fetch);
-
-        return topic;
-    }
-
-    @Override
     public Topic getTopicById(final Long id) {
         final Topic topic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
         topic.getTopics().forEach(template::fetch);
@@ -77,8 +68,4 @@ public class TopicServiceImpl implements TopicService {
         return topic;
     }
 
-    @Override
-    public List<Topic> getRootTopicsForTopic(final Long id) {
-        return topicRepo.getParentTopics(id);
-    }
 }

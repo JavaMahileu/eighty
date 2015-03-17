@@ -141,14 +141,6 @@ describe('service', function () {
             expectResponseArray();
         });
 
-        it('get tag by title', function () {
-            $httpBackend.expectGET('tags/tag/tag1').respond(fakeResponse);
-            service.tag().get({title: 'tag1'}).$promise.then(function (responseTag) {
-                response = responseTag;
-            });
-            expectResponse();
-        });
-
         it('get all tags', function () {
             $httpBackend.expectGET('tags').respond(fakeResponseArray);
             service.tags().get().$promise.then(function (responseTags) {

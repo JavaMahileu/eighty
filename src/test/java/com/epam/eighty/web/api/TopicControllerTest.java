@@ -55,12 +55,6 @@ public class TopicControllerTest {
     }
 
     @Test
-    public void test_getFullTopic_successful_case_with_existing_topic() {
-        when(topicService.getFullTopicById(TEST_LONG)).thenReturn(topic);
-        assertTrue(topicController.getFullTopic(TEST_LONG).equals(topic));
-    }
-
-    @Test
     public void test_getRootTopic_successful_case_with_existing_root() throws IOException {
         Optional <Topic> optionalTopic = Optional.ofNullable(topic);
         when(topicService.getRoot()).thenReturn(optionalTopic);
@@ -104,9 +98,4 @@ public class TopicControllerTest {
         verify(response, Mockito.times(1)).setStatus(HttpServletResponse.SC_OK);
     }
 
-    @Test
-    public void test_getPath() {
-        when(topicService.getRootTopicsForTopic(5L)).thenReturn(list);
-        assertTrue(topicController.getPath(5L).equals(list));
-    }
 }
