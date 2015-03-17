@@ -86,7 +86,7 @@ public class CustomerServiceTest {
     @Test
     public void test_getSortedSetOfCustomersByName() {
         Mockito.when(
-                customerRepository.getSortedCustomersMatchingName(Mockito.anyString()))
+                customerRepository.getCustomersMatchingName(Mockito.anyString()))
                 .thenReturn(list);
 
         List<Customer> customers = customerService.getSortedSetOfCustomersByName(EMPTY_STRING);

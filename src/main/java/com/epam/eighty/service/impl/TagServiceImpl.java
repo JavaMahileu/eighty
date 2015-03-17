@@ -48,7 +48,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getSortedSetOfTagsByName(final String tagName) {
-        return tagRepo.getSortedListOfTagsByName(ANY_SYMBOL + tagName + ANY_SYMBOL);
+        return tagRepo.getTagsMatchingName(ANY_SYMBOL + tagName + ANY_SYMBOL);
     }
 
 }

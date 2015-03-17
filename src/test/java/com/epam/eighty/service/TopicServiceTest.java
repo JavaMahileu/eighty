@@ -138,7 +138,7 @@ public class TopicServiceTest {
 
     @Test
     public void test_getRootTopicsForTopic() {
-        when(topicRepo.getRootTopicsForTopic(5L)).thenReturn(list);
+        when(topicRepo.getParentTopics(5L)).thenReturn(list);
         List<Topic> topics = topicService.getRootTopicsForTopic(5L);
         assertNotNull(topics);
         assertEquals(topics, list);

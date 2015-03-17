@@ -92,7 +92,7 @@ public class TagRepossitoryTest {
 
     @Test
     public void test_getSortedSetOfTagsByName() {
-        List<Tag> tags = tagRepo.getSortedListOfTagsByName("o");
+        List<Tag> tags = tagRepo.getTagsMatchingName("o");
         assertEquals(4, tags.size());
         
         assertEquals("double", tags.get(0).getTag());
@@ -100,7 +100,7 @@ public class TagRepossitoryTest {
         assertEquals("object", tags.get(2).getTag());
         assertEquals("singleton", tags.get(3).getTag());
         
-        tags = tagRepo.getSortedListOfTagsByName("fake tag");
+        tags = tagRepo.getTagsMatchingName("fake tag");
         assertEquals(0, tags.size());
     }
 

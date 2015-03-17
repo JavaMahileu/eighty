@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getSortedSetOfCustomersByName(final String customerName) {
-        return customerRepository.getSortedCustomersMatchingName(ANY_SYMBOL + customerName + ANY_SYMBOL);
+        return customerRepository.getCustomersMatchingName(ANY_SYMBOL + customerName + ANY_SYMBOL);
     }
 
     @Override

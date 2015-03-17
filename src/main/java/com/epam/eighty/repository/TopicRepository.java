@@ -13,7 +13,7 @@ import com.epam.eighty.domain.Topic;
 @Repository("topicRepo")
 public interface TopicRepository extends BaseRepository<Topic, Long> {
     
-    @Query(value = "MATCH (root:`Topic`)-[:`contains`*]->(topic:`Topic`) WHERE ID(topic) = {0} RETURN root", elementClass = Topic.class)
-    List<Topic> getRootTopicsForTopic(Long id);
+    @Query(value = "MATCH (parent:`Topic`)-[:`contains`*]->(topic:`Topic`) WHERE ID(topic) = {0} RETURN parent", elementClass = Topic.class)
+    List<Topic> getParentTopics(Long id);
 
 }

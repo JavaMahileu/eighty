@@ -15,7 +15,7 @@ import com.epam.eighty.domain.Customer;
 public interface CustomerRepository extends BaseRepository<Customer, Long> {
 
     @Query(value = "MATCH (customer:`Customer`) WHERE customer.name =~ ('.*' + {0} + '.*') RETURN customer ORDER BY customer.name", elementClass = Customer.class)
-    List<Customer> getSortedCustomersMatchingName(String customerName);
+    List<Customer> getCustomersMatchingName(String customerName);
 
     @Query(value = "MATCH (customer:`Customer`)<-[:`has`*]-(question:`Question`)<-[:`contains`*]-(topic) WHERE ID(topic) = {0} RETURN DISTINCT customer", elementClass = Customer.class)
     List<Customer> getCustomersByTopicId(Long id);
