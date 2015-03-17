@@ -87,10 +87,10 @@ public class TopicServiceTest {
     public void test_getAllTopics() {
         when(topicRepo.findAll()).thenReturn(results);
 
-        Set<Topic> set = topicService.getAllTopics();
+        List<Topic> topics = topicService.getAllTopics();
 
-        assertNotNull(set);
-        assertEquals(set, fakes);
+        assertNotNull(topics);
+        assertEquals(topics, fakes);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class TopicServiceTest {
     @Test
     public void test_getTopicById() {
         when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
-        Topic topic = topicService.getTopicById(fake.get().getId()).get();
+        Topic topic = topicService.getTopicById(fake.get().getId());
         assertNotNull(topic);
         assertEquals(topic, fake.get());
     }
@@ -123,7 +123,7 @@ public class TopicServiceTest {
    @Test
     public void test_getFullTopicById() {
         when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
-        Topic topic = topicService.getFullTopicById(fake.get().getId()).get();
+        Topic topic = topicService.getFullTopicById(fake.get().getId());
         assertNotNull(topic);
         assertEquals(topic, fake.get());
     }

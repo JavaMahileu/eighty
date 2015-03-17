@@ -20,26 +20,24 @@ import java.util.stream.Collectors;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
-    private static final String ANY_SYMBOL = ".*";
-
     @Autowired
     private CustomerRepository customerRepository;
 
     @SuppressWarnings("unchecked")
     @Override
     public List<Customer> getAllCustomers() {
-        Collection<Customer> customers = customerRepository.findAll().as(Collection.class);
+        final Collection<Customer> customers = customerRepository.findAll().as(Collection.class);
         return customers.stream().filter(customer -> customer.getCount() != null).collect(Collectors.toList());
     }
 
     @Override
-    public List<Customer> getSortedSetOfCustomersByName(final String customerName) {
-        return customerRepository.getSortedCustomersMatchingName(ANY_SYMBOL + customerName + ANY_SYMBOL);
+    public List<Customer> getSortedCustomersMatchingName(final String customerName) {
+        return customerRepository.getSortedCustomersMatchingName(customerName);
     }
 
     @Override
     public List<Customer> getCustomersByTopicId(final Long topicId) {
-        List<Customer> customerList  = customerRepository.getCustomersByTopicId(topicId);
+        final List<Customer> customerList  = customerRepository.getCustomersByTopicId(topicId);
 
         customerList
             .forEach(customer -> customer.setCountInTopic(customerRepository.getQuestionsNumberInTopicByCustomer(customer.getName(),

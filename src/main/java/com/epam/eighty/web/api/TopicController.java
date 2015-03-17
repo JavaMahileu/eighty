@@ -52,7 +52,7 @@ public class TopicController {
     @ResponseBody
     @Cacheable(value = "topic", key = "#id")
     public Topic getTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
+        return topicService.getTopicById(id);
     }
 
     @ApiOperation(value = "Find topic by id with questions", notes = "Get topic by id with questions", httpMethod = "GET", response = Topic.class, produces = "application/json")
@@ -65,7 +65,7 @@ public class TopicController {
     @ResponseBody
     @Cacheable(value = "topic", key = "'full.' + #id")
     public Topic getFullTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getFullTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
+        return topicService.getFullTopicById(id);
     }
 
     @ApiOperation(value = "Find root topic", notes = "Get root topic", httpMethod = "GET", response = Topic.class, produces = "application/json")

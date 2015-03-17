@@ -89,7 +89,7 @@ public class CustomerServiceTest {
                 customerRepository.getSortedCustomersMatchingName(Mockito.anyString()))
                 .thenReturn(list);
 
-        List<Customer> customers = customerService.getSortedSetOfCustomersByName(EMPTY_STRING);
+        List<Customer> customers = customerService.getSortedCustomersMatchingName(EMPTY_STRING);
         
         assertNotNull(customers);
         assertFalse(customers.isEmpty());

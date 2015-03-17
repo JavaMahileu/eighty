@@ -102,10 +102,10 @@ public class QuestionServiceTest {
     public void test_getAllQuestions() {
         when(questionRepo.findAll()).thenReturn(results);
 
-        Set<Question> set = questionService.getAllQuestions();
+        List<Question> questions = questionService.getAllQuestions();
 
-        assertNotNull(set);
-        assertEquals(set, fakes);
+        assertNotNull(questions);
+        assertEquals(questions, fakes);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class QuestionServiceTest {
     public void test_getQuestionById() {
         when(questionRepo.findOne(fake.get().getId())).thenReturn(fake);
 
-        Question question = questionService.getQuestionById(1L).get();
+        Question question = questionService.getQuestionById(1L);
 
         assertNotNull(question);
         assertEquals(question, fake.get());
@@ -141,7 +141,7 @@ public class QuestionServiceTest {
     public void test_getQuestionsPage() {
         when(questionRepo.getQuestionsByTopicId(root.get().getId(), null)).thenReturn(slice);
 
-        List<Question> questions = questionService.getQuestionsPage(root.get().getId(), null);
+        List<Question> questions = questionService.getQuestionsByTopicId(root.get().getId(), null);
 
         assertNotNull(questions);
         assertEquals(questions, list);
@@ -152,7 +152,7 @@ public class QuestionServiceTest {
     public void test_getQuestionsByTopicAndTag() {
         when(questionRepo.getQuestionsByTopicIdAndTag(root.get().getId(), tag.getTag())).thenReturn(list);
 
-        List<Question> questions = questionService.getQuestionsByTopicAndTag(root.get().getId(), tag.getTag());
+        List<Question> questions = questionService.getQuestionsByTopicIdAndTag(root.get().getId(), tag.getTag());
 
         assertNotNull(questions);
         assertEquals(questions, list);
@@ -172,7 +172,7 @@ public class QuestionServiceTest {
     public void test_getQuestionsByCustomer() {
         when(questionRepo.getQuestionsByCustomerName(customer.getName())).thenReturn(list);
 
-        List<Question> questions = questionService.getQuestionsByCustomer(customer.getName());
+        List<Question> questions = questionService.getQuestionsByCustomerName(customer.getName());
 
         assertNotNull(questions);
         assertEquals(questions, list);

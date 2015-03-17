@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +17,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
 
 import com.epam.eighty.domain.Question;
-import com.epam.eighty.exception.QuestionNotFoundException;
 import com.epam.eighty.service.QuestionService;
 
 /**
@@ -67,16 +65,16 @@ public class QuestionControllerTest {
 
     @Test
     public void test_getAllQuestionsForTopic() {
-        when(questionService.getQuestionsPage(TEST_LONG, pageable)).thenReturn(Collections.<Question> emptyList());
+        when(questionService.getQuestionsByTopicId(TEST_LONG, pageable)).thenReturn(Collections.<Question> emptyList());
         questionController.getAllQuestionsForTopic(TEST_LONG, pageable);
-        verify(questionService, Mockito.times(1)).getQuestionsPage(1l, pageable);
+        verify(questionService, Mockito.times(1)).getQuestionsByTopicId(1l, pageable);
     }
 
     @Test
     public void test_getAllQuestionsForTopicWithTag() {
-        when(questionService.getQuestionsByTopicAndTag(TEST_LONG, TEST_STRING)).thenReturn(Collections.<Question> emptyList());
+        when(questionService.getQuestionsByTopicIdAndTag(TEST_LONG, TEST_STRING)).thenReturn(Collections.<Question> emptyList());
         questionController.getAllQuestionsForTopicWithTag(TEST_LONG, TEST_STRING);
-        verify(questionService, Mockito.times(1)).getQuestionsByTopicAndTag(1L, "fake");
+        verify(questionService, Mockito.times(1)).getQuestionsByTopicIdAndTag(1L, "fake");
     }
 
     @Test
@@ -94,23 +92,15 @@ public class QuestionControllerTest {
 
     @Test
     public void test_getAllQuestionsByCustomer() {
-        when(questionService.getQuestionsByCustomer("fake.fake")).thenReturn(Collections.<Question> emptyList());
+        when(questionService.getQuestionsByCustomerName("fake.fake")).thenReturn(Collections.<Question> emptyList());
         questionController.getAllQuestionsByCustomer("fake|fake");
-        verify(questionService, Mockito.times(1)).getQuestionsByCustomer("fake.fake");
+        verify(questionService, Mockito.times(1)).getQuestionsByCustomerName("fake.fake");
     }
 
     @Test
     public void test_getQuestion_successful_case_with_existing_questuion() {
-        Optional <Question> optionalQuestion = Optional.ofNullable(question);
-        when(questionService.getQuestionById(TEST_LONG)).thenReturn(optionalQuestion);
+        when(questionService.getQuestionById(TEST_LONG)).thenReturn(question);
         assertTrue(questionController.getQuestion(TEST_LONG).equals(question));
-    }
-
-    @Test(expected = QuestionNotFoundException.class)
-    public void test_getQuestion_successful_case_with_not_existing_questuion() {
-        Optional <Question> optionalQuestion = Optional.empty();
-        when(questionService.getQuestionById(TEST_LONG)).thenReturn(optionalQuestion);
-        questionController.getQuestion(TEST_LONG);
     }
 
     @Test

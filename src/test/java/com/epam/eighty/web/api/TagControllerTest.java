@@ -72,7 +72,7 @@ public class TagControllerTest {
 
     @Test
     public void test_getSortedSetOfTagsByName() {
-        when(tagService.getSortedSetOfTagsByName(TEST_STRING)).thenReturn(tagSet);
+        when(tagService.getSortedTagsMatchingName(TEST_STRING)).thenReturn(tagSet);
         assertTrue(tagController.getSortedSetOfTagsByName(TEST_STRING).equals(tagSet));
     }
 

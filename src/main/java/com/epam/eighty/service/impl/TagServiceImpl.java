@@ -17,14 +17,12 @@ import java.util.List;
 @Transactional
 public class TagServiceImpl implements TagService {
 
-    private static final String ANY_SYMBOL = ".*";
-
     @Autowired
     private TagRepository tagRepo;
 
     @Override
     public List<Tag> getTagsByTopicId(final Long topicId) {
-        List<Tag> tagsList  = tagRepo.getTagsByTopicId(topicId);
+        final List<Tag> tagsList  = tagRepo.getTagsByTopicId(topicId);
         tagsList
             .forEach(tag -> tag.setCountInTopic(tagRepo.getQuestionsNumberInTopicByTag(tag.getTag(), topicId)));
         return tagsList;
@@ -47,8 +45,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getSortedSetOfTagsByName(final String tagName) {
-        return tagRepo.getSortedListOfTagsByName(ANY_SYMBOL + tagName + ANY_SYMBOL);
+    public List<Tag> getSortedTagsMatchingName(final String tagName) {
+        return tagRepo.getSortedTagsMatchingName(tagName);
     }
 
 }

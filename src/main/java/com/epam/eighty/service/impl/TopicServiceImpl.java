@@ -1,6 +1,7 @@
 package com.epam.eighty.service.impl;
 
 import com.epam.eighty.domain.Topic;
+import com.epam.eighty.exception.TopicNotFoundException;
 import com.epam.eighty.repository.TopicRepository;
 import com.epam.eighty.service.TopicService;
 
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author Aliaksandr_Padalka
@@ -28,7 +28,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Optional<Topic> getRoot() {
-        Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
+        final Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
         root.ifPresent(someRoot ->
             someRoot.getTopics().forEach(template::fetch)
         );
@@ -36,28 +36,26 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Optional <Topic> getFullTopicById(final Long id) {
-        Optional<Topic> topic = topicRepo.findOne(id);
-        topic.ifPresent(t -> {
-            t.getTopics().forEach(template::fetch);
-            t.getQuestions().forEach(template::fetch);
-        });
+    public Topic getFullTopicById(final Long id) {
+        final Topic topic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
+        topic.getTopics().forEach(template::fetch);
+        topic.getQuestions().forEach(template::fetch);
+
         return topic;
     }
 
     @Override
-    public Optional <Topic> getTopicById(final Long id) {
-        Optional<Topic> topic = topicRepo.findOne(id);
-        topic.ifPresent(t ->
-            t.getTopics().forEach(template::fetch)
-        );
+    public Topic getTopicById(final Long id) {
+        final Topic topic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
+        topic.getTopics().forEach(template::fetch);
+
         return topic;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Set<Topic> getAllTopics() {
-        return topicRepo.findAll().as(Set.class);
+    public List<Topic> getAllTopics() {
+        return topicRepo.findAll().as(List.class);
     }
 
     @Override
@@ -72,11 +70,9 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Topic createTopic(final Topic topic, final Long id) {
-        Optional<Topic> parentTopic = topicRepo.findOne(id);
-        parentTopic.ifPresent(t -> {
-            t.getTopics().add(topic);
-            topicRepo.save(t);
-        });
+        final Topic parentTopic = topicRepo.findOne(id).orElseThrow(() -> new TopicNotFoundException(id));
+        parentTopic.getTopics().add(topic);
+        topicRepo.save(parentTopic);
 
         return topic;
     }

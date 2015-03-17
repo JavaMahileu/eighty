@@ -13,6 +13,6 @@ public interface TagService {
     Tag getTagByTag(String title);
     List<Tag> getAllTags();
     List<Tag> getTopNFromAllTags(Long limit);
-    List<Tag> getSortedSetOfTagsByName(String tagName);
+    List<Tag> getSortedTagsMatchingName(String tagName);
 
 }

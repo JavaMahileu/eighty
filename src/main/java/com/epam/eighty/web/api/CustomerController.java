@@ -40,7 +40,7 @@ public class CustomerController {
     @ResponseBody
     @Cacheable(value = "customer", key = "#customerName")
     public List<Customer> getSortedSetOfCustomersByName(@ApiParam(name = "customerName", required = true, value = "sorted set of customers by part of customer name") @PathVariable("customerName") final String customerName) {
-        return customerService.getSortedSetOfCustomersByName(customerName);
+        return customerService.getSortedCustomersMatchingName(customerName);
     }
 
     @ApiOperation(value = "Find all customers", notes = "Get all customers", httpMethod = "GET", response = Customer.class, produces = "application/json")
