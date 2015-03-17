@@ -262,6 +262,16 @@
                 <version>${frontend.maven.plugin}</version>
                 <executions>
                     <execution>
+                        <id>clean</id>
+                        <goals>
+                            <goal>grunt</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <arguments>clean</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>install node and npm</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
