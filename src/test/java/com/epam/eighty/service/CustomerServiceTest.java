@@ -18,8 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
 
@@ -44,8 +42,6 @@ public class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
-
-    private Slice<Customer> slice;
 
     private Set<Customer> customers;
 
@@ -84,15 +80,14 @@ public class CustomerServiceTest {
         fakeList.add(fake2);
         fakeList.add(fake3);
 
-        slice = new SliceImpl<>(list);
         fakeResult = new QueryResultBuilder<>(fakeList);
     }
 
     @Test
     public void test_getSortedSetOfCustomersByName() {
         Mockito.when(
-                customerRepository.getSortedSetOfCustomersByName(Mockito.anyString()))
-                .thenReturn(slice);
+                customerRepository.getCustomersMatchingName(Mockito.anyString()))
+                .thenReturn(list);
 
         List<Customer> customers = customerService.getSortedSetOfCustomersByName(EMPTY_STRING);
         
@@ -102,7 +97,7 @@ public class CustomerServiceTest {
 
     @Test
     public void test_getCustomersByTopicId() {
-        when(customerRepository.getCustomersByTopicId(root.getId())).thenReturn(slice);
+        when(customerRepository.getCustomersByTopicId(root.getId())).thenReturn(list);
 
         List<Customer> tagList = customerService.getCustomersByTopicId(root.getId());
 

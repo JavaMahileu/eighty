@@ -12,8 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
 
@@ -39,7 +37,6 @@ public class TagServiceTest {
     private Result<Tag> results;
     private List<Tag> tags;
     private Topic root;
-    private Slice<Tag> slice;
     private List<Tag> list;
 
     @Mock
@@ -77,7 +74,6 @@ public class TagServiceTest {
         list.add(fake3);
 
         results = new QueryResultBuilder<>(tags);
-        slice = new SliceImpl<>(list);
 
     }
 
@@ -112,7 +108,7 @@ public class TagServiceTest {
 
     @Test
     public void test_getTagsByTopicId() {
-        when(tagRepo.getTagsByTopicId(root.getId())).thenReturn(slice);
+        when(tagRepo.getTagsByTopicId(root.getId())).thenReturn(list);
 
         List<Tag> tagList = tagService.getTagsByTopicId(root.getId());
 
@@ -122,7 +118,7 @@ public class TagServiceTest {
 
     @Test
     public void test_getTopNFromAllTags() {
-        when(tagRepo.getTopNFromAllTags(LIMIT)).thenReturn(slice);
+        when(tagRepo.getTopNFromAllTags(LIMIT)).thenReturn(list);
 
         List<Tag> tagList = tagService.getTopNFromAllTags(LIMIT);
 
@@ -132,7 +128,7 @@ public class TagServiceTest {
 
     @Test
     public void test_getSortedSetOfTagsByName() {
-        when(tagRepo.getSortedSetOfTagsByName(ANY_SYMBOL + fake.get().getTag()+ ANY_SYMBOL)).thenReturn(slice);
+        when(tagRepo.getTagsMatchingName(ANY_SYMBOL + fake.get().getTag()+ ANY_SYMBOL)).thenReturn(list);
 
         List<Tag> set = tagService.getSortedSetOfTagsByName(fake.get().getTag());
 

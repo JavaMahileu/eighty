@@ -1,6 +1,7 @@
 package com.epam.eighty.repository;
 
-import org.springframework.data.domain.Slice;
+import java.util.List;
+
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.stereotype.Repository;
 
@@ -13,11 +14,11 @@ import com.epam.eighty.domain.Customer;
 @Repository("customerRepository")
 public interface CustomerRepository extends BaseRepository<Customer, Long> {
 
-    @Query(value = "MATCH (customer:`Customer`) WHERE customer.name =~{0} RETURN customer", elementClass = Customer.class)
-    Slice<Customer> getSortedSetOfCustomersByName(String customerName);
+    @Query(value = "MATCH (customer:`Customer`) WHERE customer.name =~ ('.*' + {0} + '.*') RETURN customer ORDER BY customer.name", elementClass = Customer.class)
+    List<Customer> getCustomersMatchingName(String customerName);
 
     @Query(value = "MATCH (customer:`Customer`)<-[:`has`*]-(question:`Question`)<-[:`contains`*]-(topic) WHERE ID(topic) = {0} RETURN DISTINCT customer", elementClass = Customer.class)
-    Slice<Customer> getCustomersByTopicId(Long id);
+    List<Customer> getCustomersByTopicId(Long id);
 
     /**
      * Retrieves a count of questions marked by tag in topic.
@@ -27,5 +28,6 @@ public interface CustomerRepository extends BaseRepository<Customer, Long> {
      * @return count of questions
      */
     @Query(value = "MATCH (customer:`Customer`)<-[r:`has`*]-(question:`Question`)<-[:`contains`*]-(topic:`Topic`) WHERE  customer.name = {0} AND Id(topic) = {1} RETURN count(r)", elementClass = Long.class)
-    Long getQuestionsInTopicByCustomer(String name, Long topicId);
+    Long getQuestionsNumberInTopicByCustomer(String name, Long topicId);
+
 }
