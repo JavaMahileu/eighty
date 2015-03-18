@@ -1,17 +1,16 @@
 package com.epam.eighty.service.impl;
 
-import com.epam.eighty.domain.Topic;
-import com.epam.eighty.repository.TopicRepository;
-import com.epam.eighty.service.TopicService;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import com.epam.eighty.domain.Topic;
+import com.epam.eighty.repository.TopicRepository;
+import com.epam.eighty.service.TopicService;
 
 /**
  * @author Aliaksandr_Padalka
@@ -33,16 +32,6 @@ public class TopicServiceImpl implements TopicService {
             someRoot.getTopics().forEach(template::fetch)
         );
         return root;
-    }
-
-    @Override
-    public Optional <Topic> getFullTopicById(final Long id) {
-        Optional<Topic> topic = topicRepo.findOne(id);
-        topic.ifPresent(t -> {
-            t.getTopics().forEach(template::fetch);
-            t.getQuestions().forEach(template::fetch);
-        });
-        return topic;
     }
 
     @Override
@@ -81,8 +70,4 @@ public class TopicServiceImpl implements TopicService {
         return topic;
     }
 
-    @Override
-    public List<Topic> getRootTopicsForTopic(final Long id) {
-        return topicRepo.getParentTopics(id);
-    }
 }

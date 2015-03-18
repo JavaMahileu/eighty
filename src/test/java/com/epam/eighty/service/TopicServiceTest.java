@@ -120,14 +120,6 @@ public class TopicServiceTest {
         assertEquals(topic, fake.get());
     }
 
-   @Test
-    public void test_getFullTopicById() {
-        when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
-        Topic topic = topicService.getFullTopicById(fake.get().getId()).get();
-        assertNotNull(topic);
-        assertEquals(topic, fake.get());
-    }
-
     @Test
     public void test_getRoot() {
         when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(root);
@@ -136,11 +128,4 @@ public class TopicServiceTest {
         assertEquals(topic, root.get());
     }
 
-    @Test
-    public void test_getRootTopicsForTopic() {
-        when(topicRepo.getParentTopics(5L)).thenReturn(list);
-        List<Topic> topics = topicService.getRootTopicsForTopic(5L);
-        assertNotNull(topics);
-        assertEquals(topics, list);
-    }
 }
