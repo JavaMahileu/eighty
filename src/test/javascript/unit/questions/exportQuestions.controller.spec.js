@@ -29,7 +29,7 @@ describe('exportCtrl', function() {
     }));
 
     it("check export", function () {
-      exportCtrl = controller('exportCtrl', {$document: document});
+        exportCtrl = controller('exportCtrl', {$document: document});
         expect(exportCtrl.checkExport(key)).toBe(true);
         expect(exportCtrl.exportLen).toBe(2);
         serviceUtility.eraseSet(key);

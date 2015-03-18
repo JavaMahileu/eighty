@@ -45,13 +45,13 @@ describe('service', function () {
             expectResponse();
         });
 
-        it('get full topic by id', function () {
+        /*it('get full topic by id', function () {
             $httpBackend.expectGET('topics/full/1').respond(fakeResponse);
             service.topic().getFull({id: '1'}).$promise.then(function (responseTopic) {
                 response = responseTopic;
             });
             expectResponse();
-        });
+        });*/
 
         it('update topic with id', function () {
             $httpBackend.expectPUT('topics').respond(fakeResponse);

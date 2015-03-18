@@ -99,10 +99,10 @@ describe('service', function () {
 
         it('rateUp GET response with error', function () {
             $httpBackend.expectGET('questions/1').respond(404, '');
-            spyOn(console, 'log');
-            service.rateUp({id: 1});
+            spyOn(window, 'errorAlert');
+            service.rateUp({id: 1}, scope);
             $httpBackend.flush();
-            expect(console.log).toHaveBeenCalled();
+            expect(errorAlert).toHaveBeenCalled();
         });
 
         it('rateUp PUT response with error', function () {

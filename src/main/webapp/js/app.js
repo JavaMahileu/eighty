@@ -103,18 +103,18 @@ angular.module('eightyControllers', ['ui.router', 'ui.bootstrap']);
         return customersFactory.getCustomers();
     }
 
-    getAllQuestionsWithTag.$inject = ['$stateParams', 'crudFactory'];
-    function getAllQuestionsWithTag($stateParams, crudFactory) {
-        var questions = crudFactory.questions().allQuestionsWithTag({tagName: replaceDOT($stateParams.tagName)}).$promise;
+    getAllQuestionsWithTag.$inject = ['$stateParams', 'questionsFactory'];
+    function getAllQuestionsWithTag($stateParams, questionsFactory) {
+        var questions = questionsFactory.getAllQuestionsWithTag($stateParams);
         questions.then(undefined, function (error) {
             printLog(error);
         });
         return questions;
     }
 
-    getAllQuestionsFromCustomer.$inject = ['$stateParams', 'crudFactory'];
-    function getAllQuestionsFromCustomer($stateParams, crudFactory) {
-        var questions = crudFactory.questions().allQuestionsFromCustomer({customerName: replaceDOT($stateParams.customerName)}).$promise;
+    getAllQuestionsFromCustomer.$inject = ['$stateParams', 'questionsFactory'];
+    function getAllQuestionsFromCustomer($stateParams, questionsFactory) {
+        var questions = questionsFactory.getAllQuestionsFromCustomer($stateParams);
         questions.then(undefined, function (error) {
             printLog(error);
         });
