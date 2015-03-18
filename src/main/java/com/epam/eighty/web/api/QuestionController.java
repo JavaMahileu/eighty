@@ -1,14 +1,8 @@
 package com.epam.eighty.web.api;
 
-import com.codahale.metrics.annotation.Timed;
-import com.epam.eighty.domain.Question;
-import com.epam.eighty.exception.QuestionNotFoundException;
-import com.epam.eighty.service.QuestionService;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiResponse;
-import com.wordnik.swagger.annotations.ApiResponses;
-import com.wordnik.swagger.annotations.ApiParam;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -17,16 +11,20 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletResponse;
+import com.codahale.metrics.annotation.Timed;
+import com.epam.eighty.domain.Question;
+import com.epam.eighty.service.QuestionService;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 
 /**
  * @author Aliaksandr_Padalka
@@ -71,7 +69,7 @@ public class QuestionController {
     @ResponseBody
     @Cacheable(value = "question", key = "#id")
     public Question getQuestion(@ApiParam(name = "questionId", required = true, value = "question id") @PathVariable("id") final Long id) {
-        return questionService.getQuestionById(id).orElseThrow(() -> new QuestionNotFoundException(id));
+        return questionService.getQuestionById(id);
     }
 
     @ApiOperation(value = "Create new question", notes = "Create new question", httpMethod = "POST", response = Question.class, produces = "application/json")
@@ -117,7 +115,7 @@ public class QuestionController {
     public List<Question> getAllQuestionsForTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable final Long id,
             @ApiParam(name = "page", required = false, value = "page (@PageableDefault, Pageable)")
                 @PageableDefault(page = 0, size = DEFAULT_PAGE_SIZE, sort = DEFAULT_SORTING) final Pageable p) {
-        return questionService.getQuestionsPage(id, p);
+        return questionService.getQuestionsByTopicId(id, p);
     }
 
     @ApiOperation(value = "Find questions for topic and tag", notes = "Get all questions from topic and tag", httpMethod = "GET", produces = "application/json")
@@ -128,7 +126,7 @@ public class QuestionController {
     @Cacheable(value = "question", key = "'topic.' + #id +'.tag.' + #tag")
     public List<Question> getAllQuestionsForTopicWithTag(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable final Long id,
                                                          @ApiParam(name = "tag", required = true, value = "tag's value") @PathVariable final String tag) {
-        return questionService.getQuestionsByTopicAndTag(id, findDOT(tag));
+        return questionService.getQuestionsByTopicIdAndTag(id, findDOT(tag));
     }
 
     @ApiOperation(value = "Find all questions", notes = "Get all questions", httpMethod = "GET", produces = "application/json")
@@ -137,7 +135,7 @@ public class QuestionController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @Cacheable(value = "question", key = "'all'")
-    public Set<Question> getAllQuestions() {
+    public List<Question> getAllQuestions() {
         return questionService.getAllQuestions();
     }
 
@@ -158,7 +156,7 @@ public class QuestionController {
     @ResponseBody
     @Cacheable(value = "question", key = "'all.customer.' + #customer")
     public List<Question> getAllQuestionsByCustomer(@ApiParam(name = "customer", required = true, value = "customer's value") @PathVariable final String customer) {
-        return questionService.getQuestionsByCustomer(findDOT(customer));
+        return questionService.getQuestionsByCustomerName(findDOT(customer));
     }
 
     private String findDOT(final String string) {

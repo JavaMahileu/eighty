@@ -63,7 +63,7 @@ public class TagController {
     @ResponseBody
     @Cacheable(value = "tag", key = "'topic.' + #tagName")
     public List<Tag> getSortedSetOfTagsByName(@ApiParam(name = "tag", required = true, value = "sorted set of tags by part of tag name") @PathVariable("tagName") final String tagName) {
-        return tagService.getSortedSetOfTagsByName(tagName);
+        return tagService.getTagsMatchingName(tagName);
     }
 
     @ApiOperation(value = "Find top tags", notes = "get top tags", httpMethod = "GET", response = Tag.class, produces = "application/json")

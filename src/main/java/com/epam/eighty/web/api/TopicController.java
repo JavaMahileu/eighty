@@ -1,21 +1,5 @@
 package com.epam.eighty.web.api;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.codahale.metrics.annotation.Timed;
 import com.epam.eighty.domain.Topic;
 import com.epam.eighty.exception.TopicNotFoundException;
@@ -23,9 +7,26 @@ import com.epam.eighty.service.DBPopulatorService;
 import com.epam.eighty.service.TopicService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import com.wordnik.swagger.annotations.ApiParam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Aliaksandr_Padalka
@@ -51,7 +52,7 @@ public class TopicController {
     @ResponseBody
     @Cacheable(value = "topic", key = "#id")
     public Topic getTopic(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getTopicById(id).orElseThrow(() -> new TopicNotFoundException(id));
+        return topicService.getTopicById(id);
     }
 
     @ApiOperation(value = "Find root topic", notes = "Get root topic", httpMethod = "GET", response = Topic.class, produces = "application/json")

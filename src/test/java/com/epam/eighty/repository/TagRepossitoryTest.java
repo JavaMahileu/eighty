@@ -37,13 +37,13 @@ public class TagRepossitoryTest {
     private ExecutionEngine engine;
     
     @Autowired
-    private String createCypherScript;
+    private String creatCypherScript;
     
     private String deleteScript = "START n=node(*) OPTIONAL MATCH (n)-[r]-() delete n,r;";
 
     @Before
     public void prepareTestDatabase() throws IOException {
-        engine.execute(createCypherScript);
+        engine.execute(creatCypherScript);
     }
 
     @After

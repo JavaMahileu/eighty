@@ -1,50 +1,48 @@
 package com.epam.eighty.service;
 
-import com.epam.eighty.domain.Customer;
-import com.epam.eighty.domain.Question;
-import com.epam.eighty.domain.Tag;
-import com.epam.eighty.domain.Topic;
-import com.epam.eighty.repository.QuestionRepository;
-import com.epam.eighty.repository.TopicRepository;
-import com.epam.eighty.service.impl.QuestionServiceImpl;
+import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
 
+import com.epam.eighty.domain.Customer;
+import com.epam.eighty.domain.Question;
+import com.epam.eighty.domain.Tag;
+import com.epam.eighty.domain.Topic;
+import com.epam.eighty.exception.TopicNotFoundException;
+import com.epam.eighty.repository.QuestionRepository;
+import com.epam.eighty.repository.TopicRepository;
+import com.epam.eighty.service.impl.QuestionServiceImpl;
+
 /**
  * @author Aliaksandr_Padalka
  */
 @RunWith(MockitoJUnitRunner.class)
 public class QuestionServiceTest {
+    
+    private static final long TOPIC_ID = 5L;
+    private static final String TAG_NAME = "tag name";
 
-    private Optional<Question> fake;
-    private Optional<Topic> root;
-    private Tag tag;
-    private Customer customer;
+    private Question question;
+    private Topic root;
 
-    private Set<Question> fakes;
     private Result<Question> results;
-    List<Question> list;
+    private List<Question> questions;
     private Slice<Question> slice;
 
     @Mock
@@ -56,126 +54,116 @@ public class QuestionServiceTest {
 
     @Before
     public void setUp() {
-        root = Optional.of(new Topic());
-        root.get().setId(0L);
+        root = new Topic();
+        root.setId(0L);
 
-        tag = new Tag();
+        Tag tag = new Tag();
         tag.setId(100L);
         tag.setTag("tag");
 
-        customer = new Customer();
+        Customer customer = new Customer();
         customer.setId(200L);
         customer.setName("customer");
 
-        fake = Optional.of(new Question());
-        fake.get().setId(1L);
-        fake.get().setQuestion("fake question");
+        question = new Question();
+        question.setId(1L);
+        question.setQuestion("fake question");
 
-        Question fake0 = new Question();
-        fake0.setId(10L);
-        fake0.setQuestion("fake question 0");
+        Question question0 = new Question();
+        question0.setId(10L);
+        question0.setQuestion("fake question 0");
 
-        Question fake1 = new Question();
-        fake1.setId(11L);
-        fake1.setQuestion("fake question 1");
+        Question question1 = new Question();
+        question1.setId(11L);
+        question1.setQuestion("fake question 1");
 
-        Question fake2 = new Question();
-        fake2.setId(12L);
-        fake2.setQuestion("fake question 2");
+        Question question2 = new Question();
+        question2.setId(12L);
+        question2.setQuestion("fake question 2");
 
-        fakes = new HashSet<>();
+        questions = new ArrayList<>();
+        questions.add(question0);
+        questions.add(question1);
+        questions.add(question2);
 
-        fakes.add(fake0);
-        fakes.add(fake1);
-        fakes.add(fake2);
-
-        list = new ArrayList<>();
-        list.add(fake0);
-        list.add(fake1);
-        list.add(fake2);
-
-        results = new QueryResultBuilder<>(fakes);
-        slice = new SliceImpl<>(list);
+        results = new QueryResultBuilder<>(questions);
+        slice = new SliceImpl<>(questions);
     }
 
     @Test
     public void test_getAllQuestions() {
         when(questionRepo.findAll()).thenReturn(results);
 
-        Set<Question> set = questionService.getAllQuestions();
+        List<Question> actualQuestions = questionService.getAllQuestions();
 
-        assertNotNull(set);
-        assertEquals(set, fakes);
+        assertThat(actualQuestions, contains(questions.toArray()));
     }
 
     @Test
     public void test_addQuestion() {
-        when(topicRepo.findOne(root.get().getId())).thenReturn(root);
-        questionService.addQuestion(fake.get(), root.get().getId());
-        verify(questionRepo).save(fake.get());
+        when(topicRepo.findOne(root.getId())).thenReturn(Optional.of(root));
+        
+        questionService.addQuestion(question, root.getId());
+
+        verify(questionRepo).save(question);
+        verify(topicRepo).save(root);
+        assertThat(root.getQuestions(), contains(question));
+    }
+
+    @Test(expected = TopicNotFoundException.class)
+    public void test_addQuestionNegative() {
+        when(topicRepo.findOne(root.getId())).thenReturn(Optional.empty());
+        
+        questionService.addQuestion(question, root.getId());
     }
 
     @Test
     public void test_updateQuestion() {
-        questionService.updateQuestion(fake.get());
-        verify(questionRepo).save(fake.get());
+        questionService.updateQuestion(question);
+        verify(questionRepo).save(question);
     }
 
     @Test
     public void test_deleteQuestion() {
-        questionService.deleteQuestion(fake.get().getId());
-        verify(questionRepo).delete(fake.get().getId());
+        questionService.deleteQuestion(question.getId());
+        
+        verify(questionRepo).delete(question.getId());
     }
 
     @Test
-    public void test_getQuestionById() {
-        when(questionRepo.findOne(fake.get().getId())).thenReturn(fake);
+    public void test_getQuestionsByTopicId() {
+        when(questionRepo.getQuestionsByTopicId(TOPIC_ID, null)).thenReturn(slice);
 
-        Question question = questionService.getQuestionById(1L).get();
+        List<Question> actualQuestions = questionService.getQuestionsByTopicId(TOPIC_ID, null);
 
-        assertNotNull(question);
-        assertEquals(question, fake.get());
+        assertThat(actualQuestions, contains(questions.toArray()));
     }
 
     @Test
-    public void test_getQuestionsPage() {
-        when(questionRepo.getQuestionsByTopicId(root.get().getId(), null)).thenReturn(slice);
+    public void test_getQuestionsByTopicIdAndTag() {
+        when(questionRepo.getQuestionsByTopicIdAndTag(TOPIC_ID, TAG_NAME)).thenReturn(questions);
 
-        List<Question> questions = questionService.getQuestionsPage(root.get().getId(), null);
+        List<Question> actualQuestions = questionService.getQuestionsByTopicIdAndTag(TOPIC_ID, TAG_NAME);
 
-        assertNotNull(questions);
-        assertEquals(questions, list);
-    }
-
-
-    @Test
-    public void test_getQuestionsByTopicAndTag() {
-        when(questionRepo.getQuestionsByTopicIdAndTag(root.get().getId(), tag.getTag())).thenReturn(list);
-
-        List<Question> questions = questionService.getQuestionsByTopicAndTag(root.get().getId(), tag.getTag());
-
-        assertNotNull(questions);
-        assertEquals(questions, list);
+        assertThat(actualQuestions, contains(questions.toArray()));
     }
 
     @Test
     public void test_getQuestionsByTag() {
-        when(questionRepo.getQuestionsByTag(tag.getTag())).thenReturn(list);
+        when(questionRepo.getQuestionsByTag(TAG_NAME)).thenReturn(questions);
 
-        List<Question> questions = questionService.getQuestionsByTag(tag.getTag());
+        List<Question> actualQuestions = questionService.getQuestionsByTag(TAG_NAME);
 
-        assertNotNull(questions);
-        assertEquals(questions, list);
+        assertThat(actualQuestions, contains(questions.toArray()));
     }
 
     @Test
     public void test_getQuestionsByCustomer() {
-        when(questionRepo.getQuestionsByCustomerName(customer.getName())).thenReturn(list);
+        when(questionRepo.getQuestionsByCustomerName(TAG_NAME)).thenReturn(questions);
 
-        List<Question> questions = questionService.getQuestionsByCustomer(customer.getName());
+        List<Question> actualQuestions = questionService.getQuestionsByCustomerName(TAG_NAME);
 
-        assertNotNull(questions);
-        assertEquals(questions, list);
+        assertThat(actualQuestions, contains(questions.toArray()));
     }
 
 }

@@ -59,7 +59,7 @@ public class CustomerControllerTest {
 
     @Test
     public void test_getSortedSetOfCustomersByName() {
-        when(customerService.getSortedSetOfCustomersByName(TEST_STRING)).thenReturn(customerSet);
+        when(customerService.getCustomersMatchingName(TEST_STRING)).thenReturn(customerSet);
 
         assertTrue(customerController.getSortedSetOfCustomersByName(TEST_STRING).equals(customerSet));
     }

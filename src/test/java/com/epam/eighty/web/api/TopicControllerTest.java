@@ -50,16 +50,8 @@ public class TopicControllerTest {
 
     @Test
     public void test_getTopic_successful_case_with_existing_topic() {
-        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
-        when(topicService.getTopicById(TEST_LONG)).thenReturn(optionalTopic);
+        when(topicService.getTopicById(TEST_LONG)).thenReturn(topic);
         assertTrue(topicController.getTopic(TEST_LONG).equals(topic));
-}
-
-    @Test(expected = TopicNotFoundException.class)
-    public void test_getTopic_successful_case_with_not_existing_topic() {
-        Optional <Topic> optionalTopic = Optional.empty();
-        when(topicService.getTopicById(TEST_LONG)).thenReturn(optionalTopic);
-        topicController.getTopic(TEST_LONG);
     }
 
     @Test
