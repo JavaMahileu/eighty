@@ -1,14 +1,10 @@
 package com.epam.eighty.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,14 +24,12 @@ import com.epam.eighty.service.impl.CustomerServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest {
+    
+    private static final long QUESTIONS_NUMBER = 9999L;
 
-    private static final String EMPTY_STRING = "";
-
-    private Customer fake;
     private Topic root;
-    private List<Customer> list;
-    private List<Customer> fakeList;
-    private Result<Customer> fakeResult;
+    private List<Customer> customers;
+    private Result<Customer> results;
 
     @InjectMocks
     private CustomerServiceImpl customerService;
@@ -43,73 +37,63 @@ public class CustomerServiceTest {
     @Mock
     private CustomerRepository customerRepository;
 
-    private Set<Customer> customers;
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        fake = new Customer();
-        fake.setId(10L);
-        fake.setName("fake");
 
-        Customer fake1 = new Customer();
-        fake1.setId(1001L);
-        fake1.setName("fake1");
-        fake1.setCount(1L);
-        Customer fake2 = new Customer();
-        fake2.setId(1002L);
-        fake2.setName("fake2");
-        fake2.setCount(1L);
-        Customer fake3 = new Customer();
-        fake3.setId(1003L);
-        fake3.setName("fake3");
-
-        customers = new HashSet<>();
-        customers.add(fake1);
-        customers.add(fake2);
+        Customer customer1 = new Customer();
+        customer1.setId(1001L);
+        customer1.setName("fake1");
+        customer1.setCount(1L);
+        Customer customer2 = new Customer();
+        customer2.setId(1002L);
+        customer2.setName("fake2");
+        customer2.setCount(1L);
+        Customer customer3 = new Customer();
+        customer3.setId(1003L);
+        customer3.setName("fake3");
 
         root = new Topic();
         root.setId(0L);
 
-        list = new ArrayList<>();
-        list.add(fake1);
-        list.add(fake2);
+        customers = new ArrayList<>();
+        customers.add(customer1);
+        customers.add(customer2);
 
-        fakeList = new ArrayList<>();
-        fakeList.add(fake1);
-        fakeList.add(fake2);
-        fakeList.add(fake3);
+        List<Customer> fakeCustomers = new ArrayList<>();
+        fakeCustomers.add(customer1);
+        fakeCustomers.add(customer2);
+        fakeCustomers.add(customer3);
 
-        fakeResult = new QueryResultBuilder<>(fakeList);
+        results = new QueryResultBuilder<>(fakeCustomers);
     }
 
     @Test
-    public void test_getSortedSetOfCustomersByName() {
-        Mockito.when(customerRepository.getCustomersMatchingName(Mockito.anyString())).thenReturn(list);
+    public void test_getCustomersMatchingName() {
+        Mockito.when(customerRepository.getCustomersMatchingName(Mockito.anyString())).thenReturn(customers);
 
-        List<Customer> customers = customerService.getCustomersMatchingName(EMPTY_STRING);
+        List<Customer> actualCustomers = customerService.getCustomersMatchingName(Mockito.anyString());
 
-        assertNotNull(customers);
-        assertFalse(customers.isEmpty());
+        assertEquals(actualCustomers, customers);
     }
 
     @Test
     public void test_getCustomersByTopicId() {
-        when(customerRepository.getCustomersByTopicId(root.getId())).thenReturn(list);
+        when(customerRepository.getCustomersByTopicId(root.getId())).thenReturn(customers);
+        when(customerRepository.getQuestionsNumberInTopicByCustomer(Mockito.anyString(), Mockito.anyLong())).thenReturn(QUESTIONS_NUMBER);
 
-        List<Customer> tagList = customerService.getCustomersByTopicId(root.getId());
+        List<Customer> actualCustomers = customerService.getCustomersByTopicId(root.getId());
 
-        assertNotNull(tagList);
-        assertEquals(tagList, list);
+        assertEquals(actualCustomers, customers);
+        actualCustomers.forEach(customer -> assertEquals(QUESTIONS_NUMBER, customer.getCountInTopic().longValue()));
     }
 
     @Test
     public void test_getAllCustomers() {
-        when(customerRepository.findAll()).thenReturn(fakeResult);
+        when(customerRepository.findAll()).thenReturn(results);
 
-        List<Customer> customersList = customerService.getAllCustomers();
+        List<Customer> actualCustomers = customerService.getAllCustomers();
 
-        assertNotNull(customersList);
-        assertEquals(customersList, list);
+        assertEquals(actualCustomers, customers);
     }
 }

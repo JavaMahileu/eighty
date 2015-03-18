@@ -1,8 +1,14 @@
 package com.epam.eighty.service;
 
-import com.epam.eighty.domain.Topic;
-import com.epam.eighty.repository.TopicRepository;
-import com.epam.eighty.service.impl.TopicServiceImpl;
+import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,12 +20,10 @@ import org.springframework.data.neo4j.conversion.QueryResultBuilder;
 import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.data.neo4j.template.Neo4jOperations;
 
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.epam.eighty.domain.Topic;
+import com.epam.eighty.exception.TopicNotFoundException;
+import com.epam.eighty.repository.TopicRepository;
+import com.epam.eighty.service.impl.TopicServiceImpl;
 
 /**
  * @author Aliaksandr_Padalka
@@ -27,11 +31,10 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TopicServiceTest {
 
-    private Optional<Topic> fake;
-    private Optional<Topic> root;
+    private Topic topic;
+    private Topic root;
     private Result<Topic> results;
-    private Set<Topic> fakes;
-    private List<Topic> list;
+    private List<Topic> topics;
 
     @Mock
     private TopicRepository topicRepo;
@@ -44,88 +47,97 @@ public class TopicServiceTest {
 
     @Before
     public void setUp() {
-        root = Optional.of(new Topic());
-        root.get().setTitle("root");
-        root.get().setId(0L);
+        root = new Topic();
+        root.setTitle("root");
+        root.setId(0L);
 
-        fake = Optional.of(new Topic());
-        fake.get().setTitle("fake title");
-        fake.get().setId(1000L);
+        topic = new Topic();
+        topic.setTitle("fake title");
+        topic.setId(1000L);
 
-        Topic fake0 = new Topic();
-        fake0.setTitle("fake title 0");
-        fake0.setId(10L);
+        Topic topic0 = new Topic();
+        topic0.setTitle("fake title 0");
+        topic0.setId(10L);
 
-        Topic fake1 = new Topic();
-        fake1.setTitle("fake title 1");
-        fake1.setId(11L);
+        Topic topic1 = new Topic();
+        topic1.setTitle("fake title 1");
+        topic1.setId(11L);
 
-        Topic fake2 = new Topic();
-        fake2.setTitle("fake title 2");
-        fake2.setId(12L);
+        Topic topic2 = new Topic();
+        topic2.setTitle("fake title 2");
+        topic2.setId(12L);
 
-        fakes = new HashSet<>();
+        topics = new ArrayList<>();
+        topics.add(topic0);
+        topics.add(topic1);
+        topics.add(topic2);
 
-        Set<Topic> set = new HashSet<>();
-        set.add(fake1);
-        set.add(fake2);
-        fake0.setTopics(set);
-
-        fakes.add(fake0);
-        fakes.add(fake1);
-        fakes.add(fake2);
-
-        results = new QueryResultBuilder<>(fakes);
-
-        list = new ArrayList<>();
-        list.add(fake0);
-        list.add(fake1);
-        list.add(fake2);
+        results = new QueryResultBuilder<>(topics);
     }
 
     @Test
     public void test_getAllTopics() {
         when(topicRepo.findAll()).thenReturn(results);
 
-        List<Topic> topics = topicService.getAllTopics();
+        List<Topic> actualTopics = topicService.getAllTopics();
 
-        assertNotNull(topics);
-        assertEquals(topics, fakes);
+        assertThat(actualTopics, contains(topics.toArray()));
     }
 
     @Test
     public void test_updateTopic() {
-        topicService.updateTopic(fake.get());
-        verify(topicRepo).save(fake.get());
+        topicService.updateTopic(root);
+        
+        verify(topicRepo).save(root);
     }
 
     @Test
     public void test_deleteTopic() {
-        topicService.deleteTopic(fake.get().getId());
-        verify(topicRepo).delete(fake.get().getId());
+        topicService.deleteTopic(topic.getId());
+        
+        verify(topicRepo).delete(topic.getId());
     }
 
     @Test
     public void test_createTopic() {
-        when(topicRepo.findOne(root.get().getId())).thenReturn(root);
-        topicService.createTopic(fake.get(), root.get().getId());
-        verify(topicRepo).save(root.get());
+        when(topicRepo.findOne(root.getId())).thenReturn(Optional.of(root));
+
+        topicService.createTopic(topic, root.getId());
+
+        verify(topicRepo).save(root);
+        assertThat(root.getTopics(), contains(topic));
+    }
+
+    @Test(expected = TopicNotFoundException.class)
+    public void test_createTopicNegative() {
+        when(topicRepo.findOne(root.getId())).thenReturn(Optional.empty());
+
+        topicService.createTopic(topic, root.getId());
     }
 
     @Test
     public void test_getTopicById() {
-        when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
-        Topic topic = topicService.getTopicById(fake.get().getId());
-        assertNotNull(topic);
-        assertEquals(topic, fake.get());
+        when(topicRepo.findOne(topic.getId())).thenReturn(Optional.of(topic));
+
+        Topic actualTopic = topicService.getTopicById(topic.getId());
+
+        assertEquals(actualTopic, topic);
+    }
+
+    @Test(expected = TopicNotFoundException.class)
+    public void test_getTopicByIdNegative() {
+        when(topicRepo.findOne(topic.getId())).thenReturn(Optional.empty());
+
+        topicService.getTopicById(topic.getId());
     }
 
     @Test
     public void test_getRoot() {
-        when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(root);
-        Topic topic = topicService.getRoot().get();
-        assertNotNull(topic);
-        assertEquals(topic, root.get());
+        when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(Optional.of(root));
+        
+        Optional<Topic> actualTopic = topicService.getRoot();
+        
+        assertEquals(actualTopic.get(), root);
     }
 
 }
