@@ -11,16 +11,22 @@ import java.util.List;
 public interface CustomerService {
 
     /**
-     * Retrieves a set of all Customer {@link com.epam.eighty.domain.Customer} entities from the datastore.
+     * Retrieves a list of all Customer {@link com.epam.eighty.domain.Customer} entities from the datastore.
      *
-     * @return the result set
+     * @return the result list
      */
     List<Customer> getAllCustomers();
 
+    /**
+     * Retrieves a list of customer {@link com.epam.eighty.domain.Customer} entities whose names match the given customerName.
+     * 
+     * @param customerName 
+     * @return a list of customers
+     */
     List<Customer> getCustomersMatchingName(String customerName);
 
     /**
-     * Retrieves a list of customer {@link com.epam.eighty.domain.Customer} entities  whose questions present in topic with given id .
+     * Retrieves a list of customer {@link com.epam.eighty.domain.Customer} entities  whose questions present in topic with given id.
      *
      * @param id topic id
      * @return a list of customers
