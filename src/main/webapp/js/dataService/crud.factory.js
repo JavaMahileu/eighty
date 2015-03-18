@@ -41,10 +41,8 @@
         function topic () {
             return $resource('topics/:id', {}, {
                 get: {method: 'GET', params: {id: '@id'}},
-                getFull: { method: 'GET', url: 'topics/full/:id', params: {id: '@id'} },
                 update: { method: 'PUT', url: 'topics' },
-                create: { method: 'POST', params: {id: '@id'}},
-                getPath: { method: 'GET', url: 'topics/path/:id', params: {id: '@id'} }
+                create: { method: 'POST', params: {id: '@id'}}
             });
         }
 
