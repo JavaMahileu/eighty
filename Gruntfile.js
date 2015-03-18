@@ -190,6 +190,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('minify', ['clean:jsmin', 'removelogging', 'uglify', 'clean:cssmin', 'cssmin']);
     grunt.registerTask('p:test', ['clean:e2etests','processhtml:e2eTests', 'connect', 'protractor', 'processhtml:production']);
-    grunt.registerTask('k:test', ['karma', 'copy:lcov']);
+    grunt.registerTask('k:test', ['processhtml:development', 'karma', 'copy:lcov']);
 
 };
