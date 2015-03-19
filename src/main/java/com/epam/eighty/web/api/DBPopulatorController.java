@@ -27,7 +27,7 @@ public class DBPopulatorController {
     private DBPopulatorService dbPopulatorService;
 
     @ApiOperation(value = "Reload database", notes = "Reload database", httpMethod = "GET")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 400, message = "Invalid ID") })
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 500, message = "Request processing failed") })
     @Timed
     @RequestMapping(value = "/reload", method = RequestMethod.GET)
     public void reloadDataBase(final HttpServletResponse response) throws IOException {
