@@ -30,6 +30,7 @@
     "grunt-processhtml": "^0.3.3",
     "grunt-open": "0.2.3",
     "grunt-remove-logging": "latest",
-    "grunt-protractor-runner": "~1.2.1"
+    "grunt-protractor-runner": "~1.2.1",
+    "request": "~2.53.0"
   }
 }

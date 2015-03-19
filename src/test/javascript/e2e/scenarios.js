@@ -3,8 +3,14 @@
 /* https://docs.angularjs.org/guide/e2e-testing */
 
 describe('Eighty App', function() {
+    
+    var CONTEXT_PATH = '/eightytest';
+    
+    var DB_RELOAD_PATH = browser.baseUrl + '/eightytest/db/reload';
 
     var driver = browser.driver;
+    
+    var request = require('request');
 
     var hasClass = function (element, cls) {
         return element.getAttribute('class').then(function (classes) {
@@ -18,7 +24,7 @@ describe('Eighty App', function() {
 
     it('should redirect \ to \#\home', function() {
         driver.manage().window().maximize()
-        browser.get('/');
+        browser.get(CONTEXT_PATH);
         browser.getLocationAbsUrl().then(function(url) {
             expect(url.split('#')[1]).toBe('/home');
         });
@@ -27,7 +33,8 @@ describe('Eighty App', function() {
     describe('Epic A, Topics', function() {
 
         beforeEach(function() {
-            browser.get('/');
+            request.get(DB_RELOAD_PATH);
+            browser.get(CONTEXT_PATH);
         });
 
         it('User views real topics list', function() {
@@ -163,7 +170,8 @@ describe('Eighty App', function() {
     describe('Epic B, Questions', function() {
 
         beforeEach(function() {
-            browser.get('/');
+            request.get(DB_RELOAD_PATH);
+            browser.get(CONTEXT_PATH);
         });
 
         it('View main page', function() {
@@ -279,7 +287,8 @@ describe('Eighty App', function() {
     describe('Epic C, Export', function() {
 
         beforeEach(function() {
-            browser.get('/');
+            request.get(DB_RELOAD_PATH);
+            browser.get(CONTEXT_PATH);
         });
 
         it('User can add question to export list', function() {
@@ -362,7 +371,8 @@ describe('Eighty App', function() {
     describe('Epic D, Tags', function() {
 
         beforeEach(function() {
-            browser.get('/');
+            request.get(DB_RELOAD_PATH);
+            browser.get(CONTEXT_PATH);
         });
 
         it('Topic tags displaying', function() {
