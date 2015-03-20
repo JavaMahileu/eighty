@@ -4,6 +4,6 @@
 # "deploy: no deploy"
 # "intent of using: production"
 # "minification: yes"
-# "we can modify server port for protractor e2e tests by passing argument "-Dprotractor.port=_port_number_"
+# "we can modify port for embedded tomcat 7 server by passing argument "-Dtomcat.port=_port_number_"
 # "this can be useful to suppress port conflict during executing 2 synchronous Jenkins jobs"
-mvn clean verify -Pprod $1
+mvn clean verify -Pprod -Dspring.profiles.active=test $1

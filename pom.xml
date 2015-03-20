@@ -31,7 +31,7 @@
         <sonar.javascript.lcov.reportPath>target/lcov.info</sonar.javascript.lcov.reportPath>
         <sonar.exclusions>src/main/webapp/js/min/**/*</sonar.exclusions>
         <sonar.cobertura.reportPath>target/site/cobertura/coverage.xml</sonar.cobertura.reportPath>
-        <protractor.port>8282</protractor.port>
+        <tomcat.port>8282</tomcat.port>
     </properties>
 
     <dependencies>
@@ -240,15 +240,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <server>tomcat</server>
-                    <url>http://localhost:8080/manager/text</url>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
@@ -357,6 +348,16 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <hostName>localhost</hostName>
+                        <port>${tomcat.port}</port>
+                        <path>/eighty</path>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -429,7 +430,7 @@
                                 <phase>integration-test</phase>
                                 <configuration>
                                     <arguments>--no-color</arguments>
-                                    <arguments>p:test --p:port=${protractor.port}</arguments>
+                                    <arguments>p:test --p:port=${tomcat.port}</arguments>
                                 </configuration>
                             </execution>
                             <execution>
@@ -444,7 +445,24 @@
                             </execution>
                         </executions>
                     </plugin>
-                     <plugin>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <configuration>
+                            <path>/eightytest</path>
+                            <fork>true</fork>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>tomcat-run-war-only</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run-war-only</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
                         <version>${maven.checkstyle.plugin}</version>

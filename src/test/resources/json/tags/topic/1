@@ -1,7 +1,0 @@
-[
-    {"id":31,"tag":"tag1","count":2,"countInTopic":2},
-    {"id":32,"tag":"tag2","count":2,"countInTopic":1},
-    {"id":33,"tag":"tag3","count":0,"countInTopic":0},
-    {"id":41,"name":"customer1","count":2,"countInTopic":2},
-    {"id":42,"name":"customer2","count":2,"countInTopic":1}
-]
