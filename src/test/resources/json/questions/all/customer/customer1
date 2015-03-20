@@ -1,4 +1,0 @@
-[
-    {"id":33,"question":"q1","answer":"a1","like":0,"tags":[],"customers":[{"id":41,"name":"customer1"}]},
-    {"id":34,"question":"q2","answer":"a2","like":0,"tags":[],"customers":[{"id":42,"name":"customer2"}]}
-]
