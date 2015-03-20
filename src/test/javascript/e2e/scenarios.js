@@ -4,7 +4,7 @@
 
 describe('Eighty App', function() {
     
-    var CONTEXT_PATH = '/eighty';
+    var CONTEXT_PATH = '/eightytest';
     
     var DB_RELOAD_PATH = browser.baseUrl + CONTEXT_PATH + '/db/reload';
 
@@ -20,6 +20,16 @@ describe('Eighty App', function() {
 
     var hover = function (element) {
         browser.actions().mouseMove(element).perform();
+    };
+    
+    var clickWhenVisible = function(elem) {
+        browser.driver.wait(function() {
+            return elem.isDisplayed().then(function(isVisible) {
+                return isVisible ? 1 : 0;
+            });
+        }, 3000);
+        
+        elem.click();
     };
 
     it('should redirect \ to \#\home', function() {
@@ -157,7 +167,8 @@ describe('Eighty App', function() {
             $('.edit-toggle').click();
             var firstTopic = element(by.cssContainingText('.abn-tree .tree-label', 'Programming Languages'));
             hover(firstTopic);
-            firstTopic.element(by.xpath('parent::div/span/i[contains(@class,"editFolder")]')).click();
+            clickWhenVisible(firstTopic.element(by.xpath('parent::div/span/i[contains(@class,"editFolder")]')));
+ 
             driver.switchTo().activeElement();
             firstTopic.getText().then(function(text) {
                 var initialTopicTitle = text;
@@ -229,10 +240,9 @@ describe('Eighty App', function() {
             var setQ = element.all(by.repeater('quest in questionsCtrl.questions| questionFilter : questionsCtrl.criteria | tagFilter : questionsCtrl.selectedTags track by $index'));
             setQ.first().getText().then(function(initialQuestion) {
                 hover(setQ.first());
-                element.all(by.css('.edit-question')).first().click();
+                clickWhenVisible(element.all(by.css('.edit-question')).first());
                 element(by.model('editQuestion.question.question')).sendKeys('fakeQuestion');
                 element(by.css('.save-question')).click();
-                browser.sleep(10);
                 expect(setQ.first().getText()).toBe(initialQuestion + 'fakeQuestion');
             });
         });
@@ -245,7 +255,6 @@ describe('Eighty App', function() {
                 element.all(by.css('.edit-question')).first().click();
                 element(by.model('editQuestion.question.question')).sendKeys('fakeQuestion');
                 element(by.css('.cancel-save-question')).click();
-                browser.sleep(10);
                 expect(setQ.first().getText()).toBe(initialQuestion);
             });
         });
