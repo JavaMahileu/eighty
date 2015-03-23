@@ -35,6 +35,7 @@
         "getLength": true,
         "getExport": true,
         "isPrintLog": true,
+        "getUrlPath": true,
         "editQuestionInstanceCtrl": true
     }
 }

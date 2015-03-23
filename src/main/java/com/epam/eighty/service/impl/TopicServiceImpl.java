@@ -45,6 +45,7 @@ public class TopicServiceImpl implements TopicService {
         return topic;
     }
 
+
     @Override
     public Optional <Topic> getTopicById(final Long id) {
         Optional<Topic> topic = topicRepo.findOne(id);
@@ -82,7 +83,32 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Topic> getRootTopicsForTopic(final Long id) {
-        return topicRepo.getRootTopicsForTopic(id).getContent();
+    public Long getIdOfLastNotDeletedTopic(List<Long> topicIds) {
+        for(Long id: topicIds) {
+            Optional<Topic> topic = topicRepo.findOne(id);
+            if(topic.isPresent()) {
+                return id;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Optional<Topic> getTopicWithChildsTillTopicWithId(Long id) {
+        Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
+        List<Topic> path = topicRepo.getRootTopicsForTopic(id).getContent();
+        root.ifPresent(r -> {
+            topicsFetchIfNeeded(r, path);
+        });
+        return root;
+    }
+
+    private void topicsFetchIfNeeded(Topic topic, List<Topic> path) {
+        topic.getTopics().forEach(t -> {
+            template.fetch(t);
+            if(path.contains(t)) {
+                topicsFetchIfNeeded(t, path);
+            }
+        });
     }
 }

@@ -39,13 +39,14 @@
          * - `{object}` `get({Number} id)` — Request for topic with given id.
          * - `{object}` `update({object} topic)` — Request for update the given topic.
          */
-        function topic () {
+        function topic() {
             return $resource('topics/:id', {}, {
                 get: {method: 'GET', params: {id: '@id'}},
                 getFull: { method: 'GET', url: 'topics/full/:id', params: {id: '@id'} },
+                getLastNotRemoved: { method: 'POST', url: 'topics/notRemoved' },
                 update: { method: 'PUT', url: 'topics' },
                 create: { method: 'POST', params: {id: '@id'}},
-                getPath: { method: 'GET', url: 'topics/path/:id', params: {id: '@id'} }
+                getPath: { method: 'GET', url: 'topics/path/:id', params: {id: '@id'}}
             });
         }
 

@@ -115,7 +115,7 @@
                             vm.questionsForExport.splice(i, 1);
                             utility.removeFromSet('exportSet', question);
                         } else {
-                            if(allQuestions[getIndex(allQuestions, question)] != question) {
+                            if(allQuestions[getIndex(allQuestions, question)] !== question) {
                                 vm.questionsForExport[i] = allQuestions[getIndex(allQuestions, question)];
                                 utility.updateInSet('exportSet', question);
                             }

@@ -158,8 +158,9 @@ public class TopicRepositoryTest {
         List<Topic> result = topicRepo.getRootTopicsForTopic(topic.getId()).getContent();
 
         assertNotNull(result);
-        assertEquals(result.size(), 2);
+        assertEquals(result.size(), 3);
 
+        topicRepo.delete(topic);
         topicRepo.delete(root3);
         topicRepo.delete(root2);
         topicRepo.delete(root1);

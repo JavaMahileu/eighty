@@ -20,33 +20,72 @@
             getTreeTopics: getTreeTopics,
             editTopic: editTopic,
             addTopic: addTopic,
-            deleteTopic: deleteTopic
+            deleteTopic: deleteTopic,
+            reloadTopics: reloadTopics
         };
         return publicMethods;
 
-        function getTreeTopics(topic) {
-            var result = [];
-            var firstSubtopics = topic.topics;
-            firstSubtopics.forEach(function(entry) {
-                var firstTreeTopic = {};
-                firstTreeTopic.title = entry.title;
-                firstTreeTopic.data = {};
-                firstTreeTopic.data.id = entry.id;
-                firstTreeTopic.topics = [];
-                var secondSubtopics = entry.topics;
-                secondSubtopics.forEach(function(subEntry) {
-                    var secondTreeTopic = {};
-                    secondTreeTopic.title = subEntry.title;
-                    secondTreeTopic.data = {};
-                    secondTreeTopic.data.id = subEntry.id;
-                    firstTreeTopic.topics.push(secondTreeTopic);
-                });
-                result.push(firstTreeTopic);
-            });
-            return result;
+       function getTreeTopics(topic) {
+           return getTopicWithTopics(topic).topics;
         }
 
-        function editTopic(node) {
+       function getTopicWithTopics(topic) {
+           for(var i = 0; i < topic.topics.length; i++) {
+               topic.topics[i].data = {};
+               topic.topics[i].data.id = topic.topics[i].id;
+               delete topic.topics[i].id;
+               delete topic.topics[i].questions;
+               getTopicWithTopics(topic.topics[i]);
+               if(topic.topics[i].topics.length === 0) {
+                   delete topic.topics[i].topics;
+               }
+           }
+           return topic;
+        }
+
+       function reloadTopics(treeNode, vm) {
+           errorAlert('Topic is not found!', $modal);
+           var treeNodesToTheRoot = getPathOfNodes(treeNode, vm);
+           crudFactory.topic().getLastNotRemoved(treeNodesToTheRoot).$promise.then(function(topicIdResource) {
+               var topicId = parseInt(topicIdResource[0]);
+               crudFactory.topic().getPath({id: topicId}).$promise.then(function(topic) {
+                   vm.treedata = getTreeTopics(topic);
+                   var node;
+                   for(var i = treeNodesToTheRoot.length - 1; i >= treeNodesToTheRoot.indexOf(topicId); i--) {
+                       if(node === undefined) {
+                           node = getChildNode(vm.treedata, treeNodesToTheRoot[i]);
+                       } else {
+                           var childrenNodes = vm.treeControl.get_children(node);
+                           node = getChildNode(childrenNodes, treeNodesToTheRoot[i]);
+                       }
+                       vm.treeControl.expand_branch(node);
+                   }
+                }, function(error) {
+                    printLog(error);
+                });
+           });
+       }
+
+       function getPathOfNodes(treeNode, vm) {
+           var nodeIds = [];
+           while(vm.treeControl.get_parent_branch(treeNode) !== null && vm.treeControl.get_parent_branch(treeNode) !== undefined) {
+               nodeIds.push(vm.treeControl.get_parent_branch(treeNode).data.id);
+               treeNode = vm.treeControl.get_parent_branch(treeNode);
+           }
+           return nodeIds;
+       }
+
+       function getChildNode(treeNode, id) {
+           var node;
+           for(var i = 0; i < treeNode.length; i++) {
+               if(treeNode[i].data.id === id) {
+                   node = treeNode[i];
+               }
+           }
+           return node;
+       }
+
+        function editTopic(node, vm) {
             var modalInstance = $modal
                     .open({
                         templateUrl: 'pages/edittopic.html',
@@ -67,7 +106,9 @@
                         errorAlert('Cannot edit topic!', $modal);
                     });
                 }, function(error) {
-                    printLog(error);
+                    if (error.status === 404) {
+                        reloadTopics(node, vm);
+                    }
                 });
             });
 

@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("topicRepo")
 public interface TopicRepository extends BaseRepository<Topic, Long> {
-    @Query(value = "MATCH (root:`Topic`)-[:`contains`*]->(topic:`Topic`) WHERE ID(topic) = {0} RETURN root", elementClass = Topic.class)
+    @Query(value = "MATCH (root:`Topic`)-[:`contains`*]->(topic:`Topic`) WHERE ID(topic) = {0} RETURN root UNION ALL MATCH (root:`Topic`) WHERE ID(root) = {0} return root", elementClass = Topic.class)
     Slice<Topic> getRootTopicsForTopic(Long id);
 }

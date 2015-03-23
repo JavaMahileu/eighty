@@ -95,14 +95,6 @@ describe('service', function () {
             expect(scope.treedata[0].topics[0].title).toEqualData(topic6.title);
         });
 
-        it('edit topic with error while getting topic', function () {
-            $httpBackend.expectGET('topics/6').respond(404, '');
-            spyOn(console, 'log');
-            service.editTopic(scope.treedata[0].topics[0]);
-            $httpBackend.flush();
-            expect(console.log).toHaveBeenCalled();
-        });
-
         it('edit topic with error while updating topic', function () {
             $httpBackend.expectGET('topics/6').respond(topic6);
             $httpBackend.expectPUT('topics').respond(404, '');
