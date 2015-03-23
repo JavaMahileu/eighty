@@ -30,7 +30,6 @@
         }
 
         function onTopicClick(node) {
-            console.log(vm.initialSelection);
             $state.go('topics', {id: node.data.id});
         }
 
