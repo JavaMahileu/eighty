@@ -115,9 +115,10 @@
                             vm.questionsForExport.splice(i, 1);
                             utility.removeFromSet('exportSet', question);
                         } else {
-                            if(allQuestions[getIndex(allQuestions, question)] !== question) {
+                            var questionFromAllQuestions = allQuestions[getIndex(allQuestions, question)];
+                            if(questionFromAllQuestions !== question) {
                                 vm.questionsForExport[i] = allQuestions[getIndex(allQuestions, question)];
-                                utility.updateInSet('exportSet', question);
+                                utility.updateInSet('exportSet', questionFromAllQuestions);
                             }
                         }
                       }

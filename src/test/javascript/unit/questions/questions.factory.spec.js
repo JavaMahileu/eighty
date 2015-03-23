@@ -13,7 +13,7 @@ describe('service', function () {
     }));
 
     describe('questionsFactory', function () {
-        var $httpBackend, stateParams, rootScope;
+        var $httpBackend, stateParams, rootScope, $document, documentMock = [];
         var service, eightyStoreFactory, scope, modalInstanceMock;
 
         beforeEach(function() {
@@ -31,8 +31,13 @@ describe('service', function () {
             spyOn(modalInstanceMock, "open")
                 .andReturn({ result: modalResult });
 
+            documentMock[0] = {
+                URL: '/#/topics/2'
+            };
+
             module(function($provide) {
                 $provide.value('$modal', modalInstanceMock);
+                $provide.value('$document', documentMock);
               });
 
         });
@@ -100,9 +105,35 @@ describe('service', function () {
         it('rateUp GET response with error', function () {
             $httpBackend.expectGET('questions/1').respond(404, '');
             spyOn(window, 'errorAlert');
+            var questionsSet = [
+                {id: 1, question: "q1"},
+                {id: 2},
+                {id: 3}
+            ];
+            $httpBackend.expectGET('questions/all/2?page=0&size=100&sort=a.question').respond(questionsSet);
+            spyOn(rootScope, '$broadcast');
+            var exportSet = [
+                             {id: 1, question: "q2"},
+                             {id: 2},
+                             {id: 5}
+                         ];
+            eightyStoreFactory.set('exportSet', exportSet);
+            scope.questionsForExport = exportSet;
+            $httpBackend.expectGET('questions').respond(questionsSet);
+
             service.rateUp({id: 1}, scope);
             $httpBackend.flush();
+
             expect(errorAlert).toHaveBeenCalled();
+            expect(rootScope.$broadcast).toHaveBeenCalledWith('topicTags-update');
+            expect(scope.questions.length).toBe(3);
+            expect(scope.questionsForExport.length).toBe(2);
+            expect(scope.questionsForExport[0].question).toBe("q1");
+            expect(scope.questionsForExport[0].id).toBe(1);
+            expect(scope.questionsForExport[1].id).toBe(2);
+            expect(eightyStoreFactory.get('exportSet')[0].question).toBe("q1");
+            expect(eightyStoreFactory.get('exportSet')[0].id).toBe(1);
+            expect(eightyStoreFactory.get('exportSet')[1].id).toBe(2);
         });
 
         it('rateUp PUT response with error', function () {
@@ -158,12 +189,10 @@ describe('service', function () {
                 {id: 1},
                 {id: 2}
             ];
-            var $stateParams = {
-                 tagName: "fakeTag"
-            };
+            stateParams.tagName = "fakeTag";
             var responseArray = [];
             $httpBackend.expectGET('questions/all/tag/fakeTag').respond(questionsSet);
-            service.getAllQuestionsWithTag($stateParams).then(function (responseQuestions) {
+            service.getAllQuestionsWithTag(stateParams).then(function (responseQuestions) {
                 responseArray = responseQuestions;
             });
             $httpBackend.flush();
@@ -177,12 +206,10 @@ describe('service', function () {
                 {id: 1},
                 {id: 2}
             ];
-            var $stateParams = {
-                 customerName: "fakeCustomer"
-            };
+            stateParams.customerName = "fakeCustomer";
             var responseArray = [];
             $httpBackend.expectGET('questions/all/customer/fakeCustomer').respond(questionsSet);
-            service.getAllQuestionsFromCustomer($stateParams).then(function (responseQuestions) {
+            service.getAllQuestionsFromCustomer(stateParams).then(function (responseQuestions) {
                 responseArray = responseQuestions;
             });
             $httpBackend.flush();
