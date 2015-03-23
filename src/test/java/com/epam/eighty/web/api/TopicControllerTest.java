@@ -17,6 +17,7 @@ import com.epam.eighty.service.TopicService;
 import com.epam.eighty.exception.TopicNotFoundException;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,6 +119,19 @@ public class TopicControllerTest {
         topicController.createTopic(topic, TEST_LONG, response);
         verify(topicService, Mockito.times(1)).createTopic(topic, TEST_LONG);
         verify(response, Mockito.times(1)).setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Test
+    public void test_getIdOfLastNotDeletedTopic() throws IOException {
+        List <Long> topics = Arrays.asList(1L, 2L, 3L);
+        when(topicService.getIdOfLastNotDeletedTopic(topics)).thenReturn(TEST_LONG);
+        assertTrue(topicController.getIdOfLastNotDeletedTopic(topics, response).equals(TEST_LONG));
+    }
+
+    @Test
+    public void test_getPath() throws IOException {
+        when(topicService.getTopicWithChildsTillTopicWithId(TEST_LONG)).thenReturn(topic);
+        assertTrue(topicController.getPath(TEST_LONG).equals(topic));
     }
 
 }

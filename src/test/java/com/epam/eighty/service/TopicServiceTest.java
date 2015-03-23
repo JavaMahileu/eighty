@@ -83,7 +83,6 @@ public class TopicServiceTest {
         list = new ArrayList<>();
         list.add(fake0);
         list.add(fake1);
-        list.add(fake2);
         path = new SliceImpl<>(list);
     }
 
@@ -136,6 +135,25 @@ public class TopicServiceTest {
     public void test_getRoot() {
         when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(root);
         Topic topic = topicService.getRoot().get();
+        assertNotNull(topic);
+        assertEquals(topic, root.get());
+    }
+
+    @Test
+    public void test_getIdOfLastNotDeletedTopic() {
+        when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
+        when(topicRepo.findOne(100L)).thenReturn(Optional.empty());
+        List<Long> topicIds = Arrays.asList(100L, fake.get().getId());
+        Long id = topicService.getIdOfLastNotDeletedTopic(topicIds);
+        assertNotNull(id);
+        assertEquals(id, fake.get().getId());
+    }
+
+    @Test
+    public void test_getTopicWithChildsTillTopicWithId() {
+        when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(root);
+        when(topicRepo.getRootTopicsForTopic(10L)).thenReturn(path);
+        Topic topic  = topicService.getTopicWithChildsTillTopicWithId(10L);
         assertNotNull(topic);
         assertEquals(topic, root.get());
     }

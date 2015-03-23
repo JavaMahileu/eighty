@@ -94,13 +94,13 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Optional<Topic> getTopicWithChildsTillTopicWithId(Long id) {
+    public Topic getTopicWithChildsTillTopicWithId(Long id) {
         Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
         List<Topic> path = topicRepo.getRootTopicsForTopic(id).getContent();
         root.ifPresent(r -> {
             topicsFetchIfNeeded(r, path);
         });
-        return root;
+        return root.get();
     }
 
     private void topicsFetchIfNeeded(Topic topic, List<Topic> path) {

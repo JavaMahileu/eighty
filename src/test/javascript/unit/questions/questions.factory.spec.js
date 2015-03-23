@@ -153,6 +153,44 @@ describe('service', function () {
             expect(eightyStoreFactory.get('exportSet')[0].like).toBe(1);
         });
 
+        it('get all questions with tag', function () {
+            var questionsSet = [
+                {id: 1},
+                {id: 2}
+            ];
+            var $stateParams = {
+                 tagName: "fakeTag"
+            };
+            var responseArray = [];
+            $httpBackend.expectGET('questions/all/tag/fakeTag').respond(questionsSet);
+            service.getAllQuestionsWithTag($stateParams).then(function (responseQuestions) {
+                responseArray = responseQuestions;
+            });
+            $httpBackend.flush();
+            expect(responseArray.length).toBe(2);
+            expect(responseArray[0].id).toBe(1);
+            expect(responseArray[1].id).toEqual(2);
+        });
+
+        it('get all questions from customer', function () {
+            var questionsSet = [
+                {id: 1},
+                {id: 2}
+            ];
+            var $stateParams = {
+                 customerName: "fakeCustomer"
+            };
+            var responseArray = [];
+            $httpBackend.expectGET('questions/all/customer/fakeCustomer').respond(questionsSet);
+            service.getAllQuestionsFromCustomer($stateParams).then(function (responseQuestions) {
+                responseArray = responseQuestions;
+            });
+            $httpBackend.flush();
+            expect(responseArray.length).toBe(2);
+            expect(responseArray[0].id).toBe(1);
+            expect(responseArray[1].id).toEqual(2);
+        });
+
         it('exportQuestion should add question to the exportSet', function () {
             var question = {id: 3};
             var exportSet = [

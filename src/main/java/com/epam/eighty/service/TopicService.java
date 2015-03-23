@@ -19,5 +19,5 @@ public interface TopicService {
     Optional<Topic> getFullTopicById(Long id);
     Topic createTopic(Topic topic, Long id);
     Long getIdOfLastNotDeletedTopic(List<Long> topicIds);
-    Optional<Topic> getTopicWithChildsTillTopicWithId(Long id);
+    Topic getTopicWithChildsTillTopicWithId(Long id);
 }

@@ -152,6 +152,6 @@ public class TopicController {
     @ResponseBody
     @Cacheable(value = "topic", key = "'path.' + #id")
     public Topic getPath(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
-        return topicService.getTopicWithChildsTillTopicWithId(id).orElseThrow(() -> new TopicNotFoundException(id));
+        return topicService.getTopicWithChildsTillTopicWithId(id);
     }
 }
