@@ -24,7 +24,7 @@
         <neo4j.spring.version>3.1.0.RELEASE</neo4j.spring.version>
         <neo4j.version>2.0.4</neo4j.version>
         <frontend.maven.plugin>0.0.15</frontend.maven.plugin>
-        <cobertura.version>2.6</cobertura.version>
+        <cobertura.version>2.7</cobertura.version>
         <equalsverifier.version>1.7</equalsverifier.version>
         <!-- Sonar Parameters -->
         <sonar.sources>src/main/webapp/js,src/main/java</sonar.sources>
@@ -261,6 +261,16 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${frontend.maven.plugin}</version>
                 <executions>
+                    <execution>
+                        <id>clean</id>
+                        <goals>
+                            <goal>grunt</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <arguments>clean</arguments>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>install node and npm</id>
                         <goals>

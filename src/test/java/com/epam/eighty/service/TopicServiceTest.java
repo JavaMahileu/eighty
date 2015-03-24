@@ -123,14 +123,6 @@ public class TopicServiceTest {
         assertEquals(topic, fake.get());
     }
 
-   @Test
-    public void test_getFullTopicById() {
-        when(topicRepo.findOne(fake.get().getId())).thenReturn(fake);
-        Topic topic = topicService.getFullTopicById(fake.get().getId()).get();
-        assertNotNull(topic);
-        assertEquals(topic, fake.get());
-    }
-
     @Test
     public void test_getRoot() {
         when(topicRepo.findBySchemaPropertyValue("title", "root")).thenReturn(root);

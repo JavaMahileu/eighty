@@ -24,15 +24,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getTagsByTopicId(final Long topicId) {
-        List<Tag> tagsList  = tagRepo.getTagsByTopicId(topicId).getContent();
+        List<Tag> tagsList  = tagRepo.getTagsByTopicId(topicId);
         tagsList
-            .forEach(tag -> tag.setCountInTopic(tagRepo.getQuestionsInTopicByTag(tag.getTag(), topicId)));
+            .forEach(tag -> tag.setCountInTopic(tagRepo.getQuestionsNumberInTopicByTag(tag.getTag(), topicId)));
         return tagsList;
-    }
-
-    @Override
-    public Tag getTagByTag(final String title) {
-        return tagRepo.findBySchemaPropertyValue("tag", title).orElse(tagRepo.save(new Tag(title))); //TODO should we create new tag if it's absent?
     }
 
     @SuppressWarnings("unchecked")
@@ -43,12 +38,12 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getTopNFromAllTags(final Long limit) {
-        return tagRepo.getTopNFromAllTags(limit).getContent();
+        return tagRepo.getTopNFromAllTags(limit);
     }
 
     @Override
     public List<Tag> getSortedSetOfTagsByName(final String tagName) {
-        return tagRepo.getSortedSetOfTagsByName(ANY_SYMBOL + tagName + ANY_SYMBOL).getContent();
+        return tagRepo.getTagsMatchingName(ANY_SYMBOL + tagName + ANY_SYMBOL);
     }
 
 }

@@ -64,20 +64,6 @@ public class TopicControllerTest {
     }
 
     @Test
-    public void test_getFullTopic_successful_case_with_existing_topic() {
-        Optional <Topic> optionalTopic = Optional.ofNullable(topic);
-        when(topicService.getFullTopicById(TEST_LONG)).thenReturn(optionalTopic);
-        assertTrue(topicController.getFullTopic(TEST_LONG).equals(topic));
-    }
-
-    @Test(expected = TopicNotFoundException.class)
-    public void test_getFullTopic_successful_case_with_not_existing_topic() {
-        Optional <Topic> optionalTopic = Optional.empty();
-        when(topicService.getFullTopicById(TEST_LONG)).thenReturn(optionalTopic);
-        topicController.getFullTopic(TEST_LONG);
-    }
-
-    @Test
     public void test_getRootTopic_successful_case_with_existing_root() throws IOException {
         Optional <Topic> optionalTopic = Optional.ofNullable(topic);
         when(topicService.getRoot()).thenReturn(optionalTopic);
@@ -133,5 +119,4 @@ public class TopicControllerTest {
         when(topicService.getTopicWithChildsTillTopicWithId(TEST_LONG)).thenReturn(topic);
         assertTrue(topicController.getPath(TEST_LONG).equals(topic));
     }
-
 }

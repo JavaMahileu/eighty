@@ -63,22 +63,22 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> getQuestionsPage(final Long topicId, final Pageable pageable) {
-        return questionRepo.getQuestions(topicId, pageable).getContent();
+        return questionRepo.getQuestionsByTopicId(topicId, pageable).getContent();
     }
 
     @Override
     public List<Question> getQuestionsByTopicAndTag(final Long topicId, final String tag) {
-        return questionRepo.getQuestionsByTopicAndTag(topicId, tag).getContent();
+        return questionRepo.getQuestionsByTopicIdAndTag(topicId, tag);
     }
 
     @Override
     public List<Question> getQuestionsByTag(final String tag) {
-        return questionRepo.getQuestionsByTag(tag).getContent();
+        return questionRepo.getQuestionsByTag(tag);
     }
 
     @Override
     public List<Question> getQuestionsByCustomer(final String customer) {
-        return questionRepo.getQuestionsByCustomer(customer).getContent();
+        return questionRepo.getQuestionsByCustomerName(customer);
     }
 
 }

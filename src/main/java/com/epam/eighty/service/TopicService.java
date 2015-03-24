@@ -1,10 +1,10 @@
 package com.epam.eighty.service;
 
-import com.epam.eighty.domain.Topic;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import com.epam.eighty.domain.Topic;
 
 /**
  * @author Aliaksandr_Padalka
@@ -16,7 +16,6 @@ public interface TopicService {
     Set<Topic> getAllTopics();
     void updateTopic(Topic topic);
     void deleteTopic(Long id);
-    Optional<Topic> getFullTopicById(Long id);
     Topic createTopic(Topic topic, Long id);
     Long getIdOfLastNotDeletedTopic(List<Long> topicIds);
     Topic getTopicWithChildsTillTopicWithId(Long id);

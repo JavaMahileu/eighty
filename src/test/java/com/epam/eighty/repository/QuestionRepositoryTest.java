@@ -1,27 +1,22 @@
 package com.epam.eighty.repository;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.io.IOException;
+import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.epam.eighty.domain.Customer;
 import com.epam.eighty.domain.Question;
-import com.epam.eighty.domain.Tag;
-import com.epam.eighty.domain.Topic;
 import com.epam.eighty.resources.TestNeo4jConfig;
 
 /**
@@ -36,203 +31,68 @@ public class QuestionRepositoryTest {
     private QuestionRepository questionRepo;
     @Autowired
     private TopicRepository topicRepo;
+    
+    @Autowired
+    private ExecutionEngine engine;
+    
+    @Autowired
+    private String createCypherScript;
+    
+    private String deleteScript = "START n=node(*) OPTIONAL MATCH (n)-[r]-() delete n,r;";
 
-    @Test
-    public void test_addQuestion() {
-        Question fake = new Question();
-        fake.setQuestion("fake question");
-        questionRepo.save(fake);
+    @Before
+    public void prepareTestDatabase() throws IOException {
+        engine.execute(createCypherScript);
+    }
 
-        Optional<Question> q = questionRepo.findOne(fake.getId());
-
-        assertTrue(q.isPresent());
-        assertEquals(q.get(), fake);
-
-        questionRepo.delete(q.get());
+    @After
+    public void cleanTestDatabase() {
+        engine.execute(deleteScript);
     }
 
     @Test
-    public void test_updateQuestion() {
-        Question fake = new Question();
-        fake.setQuestion("fake question");
-        questionRepo.save(fake);
-
-        fake.setQuestion("new fake question");
-        questionRepo.save(fake);
-
-        Optional<Question> q = questionRepo.findOne(fake.getId());
-
-        assertTrue(q.isPresent());
-        assertEquals(q.get(), fake);
-
-        questionRepo.delete(q.get());
+    public void test_getQuestionsByTopicId() {
+        Long rootTopicId = topicRepo.findBySchemaPropertyValue("title", "root").get().getId();
+        Slice<Question> questions = questionRepo.getQuestionsByTopicId(rootTopicId, null);
+        assertEquals(6, questions.getContent().size());
+        
+        Long subTopicId = topicRepo.findBySchemaPropertyValue("title", "Annotations").get().getId();
+        questions = questionRepo.getQuestionsByTopicId(subTopicId, null);
+        assertEquals(0, questions.getContent().size());
+        
+        questions = questionRepo.getQuestionsByTopicId(9999L, null);
+        assertEquals(0, questions.getContent().size());
     }
 
     @Test
-    public void test_deleteQuestion() {
-        Question fake = new Question();
-        fake.setQuestion("fake question");
-        questionRepo.save(fake);
-
-        Long id = fake.getId();
-
-        questionRepo.delete(id);
-
-        Optional<Question> q = questionRepo.findBySchemaPropertyValue("question",
-                fake.getQuestion());
-
-        assertFalse(q.isPresent());
-    }
-
-    @Test
-    public void test_getQuestionById() {
-        Question fake1 = new Question();
-        fake1.setQuestion("fake question 1");
-        Question fake2 = new Question();
-        fake2.setQuestion("fake question 2");
-        Question fake3 = new Question();
-        fake3.setQuestion("fake question 3");
-        questionRepo.save(fake1);
-        questionRepo.save(fake2);
-        questionRepo.save(fake3);
-
-        Optional<Question> question;
-
-        question = questionRepo.findOne(fake1.getId());
-        assertTrue(question.isPresent());
-        assertEquals(question.get(), fake1);
-        question = questionRepo.findOne(fake2.getId());
-        assertTrue(question.isPresent());
-        assertEquals(question.get(), fake2);
-        question = questionRepo.findOne(fake3.getId());
-        assertTrue(question.isPresent());
-        assertEquals(question.get(), fake3);
-
-        questionRepo.delete(fake1.getId());
-        questionRepo.delete(fake2.getId());
-        questionRepo.delete(fake3.getId());
-    }
-
-    @Test
-    public void test_getAllQuestions() {
-        Question fake1 = new Question();
-        fake1.setQuestion("fake question 1");
-        Question fake2 = new Question();
-        fake2.setQuestion("fake question 2");
-        Question fake3 = new Question();
-        fake3.setQuestion("fake question 3");
-        questionRepo.save(fake1);
-        questionRepo.save(fake2);
-        questionRepo.save(fake3);
-
-        Result<Question> questions = questionRepo.findAll();
-        assertNotNull(questions);
-        @SuppressWarnings("unchecked")
-        Set<Question> set = questions.as(Set.class);
-        assertNotNull(set);
-
-        questionRepo.delete(fake1.getId());
-        questionRepo.delete(fake2.getId());
-        questionRepo.delete(fake3.getId());
-    }
-
-    @Test
-    public void test_getQuestions() {
-        Topic root = new Topic();
-        root.setTitle("root");
-        Question q1 = new Question();
-        q1.setQuestion("q1");
-        Question q2 = new Question();
-        q2.setQuestion("q2");
-        Set<Question> set = new HashSet<>();
-        set.add(q1);
-        set.add(q2);
-        root.setQuestions(set);
-        topicRepo.save(root);
-
-        Slice<Question> slice = questionRepo.getQuestions(root.getId(), null);
-        assertNotNull(slice);
-
-        questionRepo.delete(q1.getId());
-        questionRepo.delete(q2.getId());
-        topicRepo.delete(root.getId());
-    }
-
-    @Test
-    public void test_getQuestionsByTopicAndTag() {
-        Topic root = new Topic();
-        root.setTitle("root");
-        Question q1 = new Question();
-        q1.setQuestion("q1");
-        Question q2 = new Question();
-        q2.setQuestion("q2");
-        Tag tag = new Tag();
-        tag.setTag("test");
-        Set<Tag> tags = new HashSet<>();
-        tags.add(tag);
-        q1.setTags(tags);
-        q2.setTags(tags);
-        Set<Question> set = new HashSet<>();
-        set.add(q1);
-        set.add(q2);
-        root.setQuestions(set);
-        topicRepo.save(root);
-
-        Slice<Question> slice = questionRepo.getQuestionsByTopicAndTag(root.getId(), tag.getTag());
-        assertNotNull(slice);
-        assertEquals(slice.getContent().size(), 2);
-
-        topicRepo.delete(tag.getId());
-        questionRepo.delete(q1.getId());
-        questionRepo.delete(q2.getId());
-        topicRepo.delete(root.getId());
+    public void test_getQuestionsByTopicIdAndTag() {
+        Long rootTopicId = topicRepo.findBySchemaPropertyValue("title", "root").get().getId();
+        List<Question> questions = questionRepo.getQuestionsByTopicIdAndTag(rootTopicId, "object");
+        assertEquals(2, questions.size());
+        
+        questions = questionRepo.getQuestionsByTopicIdAndTag(rootTopicId, "fakeTag");
+        assertEquals(0, questions.size());
+        
+        Long subTopicId = topicRepo.findBySchemaPropertyValue("title", "Annotations").get().getId();
+        questions = questionRepo.getQuestionsByTopicIdAndTag(subTopicId, "object");
+        assertEquals(0, questions.size());
     }
 
     @Test
     public void test_getQuestionsByTag() {
-        Question q1 = new Question();
-        q1.setQuestion("q1");
-        Question q2 = new Question();
-        q2.setQuestion("q2");
-        Tag tag = new Tag();
-        tag.setTag("test");
-        Set<Tag> tags = new HashSet<>();
-        tags.add(tag);
-        q1.setTags(tags);
-        q2.setTags(tags);
-        questionRepo.save(q1);
-        questionRepo.save(q2);
-
-        Slice<Question> slice = questionRepo.getQuestionsByTag(tag.getTag());
-        assertNotNull(slice);
-        assertEquals(slice.getContent().size(), 2);
-
-        topicRepo.delete(tag.getId());
-        questionRepo.delete(q1.getId());
-        questionRepo.delete(q2.getId());
+        List<Question> questions = questionRepo.getQuestionsByTag("variable");
+        assertEquals(3, questions.size());
+        
+        questions = questionRepo.getQuestionsByTag("fakeTag");
+        assertEquals(0, questions.size());
     }
 
     @Test
-    public void test_getQuestionsByCustomer() {
-        Question q1 = new Question();
-        q1.setQuestion("q1");
-        Question q2 = new Question();
-        q2.setQuestion("q2");
-        Customer customer = new Customer();
-        customer.setName("fake customer");
-        Set<Customer> customers = new HashSet<>();
-        customers.add(customer);
-        q1.setCustomers(customers);
-        q2.setCustomers(customers);
-        questionRepo.save(q1);
-        questionRepo.save(q2);
-
-        Slice<Question> slice = questionRepo.getQuestionsByCustomer(customer.getName());
-        assertNotNull(slice);
-        assertEquals(slice.getContent().size(), 2);
-
-        topicRepo.delete(customer.getId());
-        questionRepo.delete(q1.getId());
-        questionRepo.delete(q2.getId());
+    public void test_getQuestionsByCustomerName() {
+        List<Question> questions = questionRepo.getQuestionsByCustomerName("Customer1");
+        assertEquals(3, questions.size());
+        
+        questions = questionRepo.getQuestionsByCustomerName("FakeCustomer");
+        assertEquals(0, questions.size());
     }
 }

@@ -53,6 +53,7 @@ describe('service', function () {
             expectResponse();
         });
 
+
         it('update topic with id', function () {
             $httpBackend.expectPUT('topics').respond(fakeResponse);
             service.topic().update(response).$promise.then(function (responseTopic) {
@@ -68,7 +69,7 @@ describe('service', function () {
             });
             expectResponse();
         });
-
+ 
         it('get path', function() {
             $httpBackend.expectGET('topics/path/5').respond(fakeResponse);
             service.topic().getPath({id: '5'}).$promise.then(function (responseTopic) {
@@ -139,14 +140,6 @@ describe('service', function () {
                 responseArray = responseQuestions;
             });
             expectResponseArray();
-        });
-
-        it('get tag by title', function () {
-            $httpBackend.expectGET('tags/tag/tag1').respond(fakeResponse);
-            service.tag().get({title: 'tag1'}).$promise.then(function (responseTag) {
-                response = responseTag;
-            });
-            expectResponse();
         });
 
         it('get all tags', function () {

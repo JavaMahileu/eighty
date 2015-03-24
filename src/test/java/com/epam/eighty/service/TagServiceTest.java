@@ -1,30 +1,26 @@
 package com.epam.eighty.service;
 
-import com.epam.eighty.domain.Tag;
-import com.epam.eighty.domain.Topic;
-import com.epam.eighty.repository.TagRepository;
-import com.epam.eighty.service.impl.TagServiceImpl;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.neo4j.conversion.QueryResultBuilder;
-import org.springframework.data.neo4j.conversion.Result;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.neo4j.conversion.QueryResultBuilder;
+import org.springframework.data.neo4j.conversion.Result;
+
+import com.epam.eighty.domain.Tag;
+import com.epam.eighty.domain.Topic;
+import com.epam.eighty.repository.TagRepository;
+import com.epam.eighty.service.impl.TagServiceImpl;
 
 /**
  * Created by Aliaksandr_Padalka on 23/07/2014.
@@ -39,7 +35,6 @@ public class TagServiceTest {
     private Result<Tag> results;
     private List<Tag> tags;
     private Topic root;
-    private Slice<Tag> slice;
     private List<Tag> list;
 
     @Mock
@@ -77,27 +72,7 @@ public class TagServiceTest {
         list.add(fake3);
 
         results = new QueryResultBuilder<>(tags);
-        slice = new SliceImpl<>(list);
 
-    }
-
-    @Test
-    public void test_getTagByTag() {
-        when(tagRepo.findBySchemaPropertyValue("tag", fake.get().getTag())).thenReturn(fake);
-        Tag tag = tagService.getTagByTag(fake.get().getTag());
-
-        assertNotNull(tag);
-        assertEquals(tag, fake.get());
-    }
-
-    @Test
-    @Ignore
-    public void test_getTagByTagIfTagIsNull() {
-        when(tagRepo.findBySchemaPropertyValue("tag", fake.get().getTag())).thenReturn(Optional.empty());
-        Tag tag = tagService.getTagByTag(fake.get().getTag());
-
-        assertNotNull(tag);
-        assertNull(tag.getTag());
     }
 
     @Test
@@ -112,7 +87,7 @@ public class TagServiceTest {
 
     @Test
     public void test_getTagsByTopicId() {
-        when(tagRepo.getTagsByTopicId(root.getId())).thenReturn(slice);
+        when(tagRepo.getTagsByTopicId(root.getId())).thenReturn(list);
 
         List<Tag> tagList = tagService.getTagsByTopicId(root.getId());
 
@@ -122,7 +97,7 @@ public class TagServiceTest {
 
     @Test
     public void test_getTopNFromAllTags() {
-        when(tagRepo.getTopNFromAllTags(LIMIT)).thenReturn(slice);
+        when(tagRepo.getTopNFromAllTags(LIMIT)).thenReturn(list);
 
         List<Tag> tagList = tagService.getTopNFromAllTags(LIMIT);
 
@@ -132,7 +107,7 @@ public class TagServiceTest {
 
     @Test
     public void test_getSortedSetOfTagsByName() {
-        when(tagRepo.getSortedSetOfTagsByName(ANY_SYMBOL + fake.get().getTag()+ ANY_SYMBOL)).thenReturn(slice);
+        when(tagRepo.getTagsMatchingName(ANY_SYMBOL + fake.get().getTag()+ ANY_SYMBOL)).thenReturn(list);
 
         List<Tag> set = tagService.getSortedSetOfTagsByName(fake.get().getTag());
 
