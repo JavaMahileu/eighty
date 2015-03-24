@@ -23,7 +23,7 @@
 
         function activate() {
             crudFactory.topic().get({id: ''}).$promise.then(function(topic) {
-                vm.treedata = treeNavigationFactory.getTreeTopics(topic);
+               vm.treedata = treeNavigationFactory.getTreeTopics(topic);
             }, function(error) {
                 printLog(error);
             });
@@ -39,13 +39,15 @@
                 treeNode.topics = treeNavigationFactory.getTreeTopics(topic);
                 vm.treeControl.expand_branch(treeNode);
             }, function(error) {
-                printLog(error);
+                if (error.status === 404) {
+                    treeNavigationFactory.reloadTopics(treeNode, vm);
+                }
             });
         }
 
         function editTopic(node) {
             modalData.setShouldBeOpen(true);
-            treeNavigationFactory.editTopic(node);
+            treeNavigationFactory.editTopic(node, vm);
         }
 
         function addTopic(node) {

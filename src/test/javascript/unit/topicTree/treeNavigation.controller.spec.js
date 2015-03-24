@@ -3,7 +3,7 @@
 describe('treeNavigationCtrl', function () {
     var ctrl, $httpBackend, modalControllerMock, stateMock, treeNavigationFactoryMock;
 
-    var rootTopic = {"id": 0, "title": "root", "topics": [{"id": 1, "title": "Programming Languages", "topics": [{"id": 6, "title": "Java", "topics": [{"id": 7, "title": null, "topics": [], "questions": []}], "questions": []}], "questions": []},{"id": 2, "title": "Persistence", "topics": [{"id": 3, "title": "Query Lanquages", "topics": [{"id": 4, "title": null, "topics": [], "questions": []},{"id": 5, "title": null, "topics": [], "questions": []}], "questions": []}], "questions": []}], "questions": []};
+    var rootTopic = {"id": 0, "title": "root", "topics": [{"id": 1, "title": "Programming Languages", "topics": [{"id": 6, "title": "Java", "topics": [], "questions": []}], "questions": []},{"id": 2, "title": "Persistence", "topics": [{"id": 3, "title": "Query Lanquages", "topics": [], "questions": []}], "questions": []}], "questions": []};
     var topic1 = {"id": 1, "title": "Programming Languages", "topics": [{"id": 6, "title": "Java", "topics": [{"id": 7, "title": null, "topics": [], "questions": []}], "questions": []}], "questions": []};
     var rootTree = [{"title": "Programming Languages", "data": {"id": 1}, "topics": [{"title": "Java", "data": {"id": 6}}]},{"title": "Persistence", "data": {"id": 2}, "topics": [{"title": "Query Lanquages", "data": {"id": 3}}]}];
     var tree1 = [{"title": "Programming Languages", "data": {"id": 1}, "topics": [{"title": "Java", "data": {"id": 6}, "topics": [{"title": null, "data": {"id": 7}}]}]},{"title": "Persistence", "data": {"id": 2}, "topics": [{"title": "Query Lanquages", "data": {"id": 3}}]}];
@@ -38,6 +38,8 @@ describe('treeNavigationCtrl', function () {
         ctrl.treeControl = {
             expand_branch: function () {
             },
+            get_parent_branch: function () {
+            },
         };
     }));
 
@@ -61,10 +63,12 @@ describe('treeNavigationCtrl', function () {
         expect(ctrl.treedata).toEqualData([]);
         $httpBackend.flush();
         $httpBackend.expectGET('topics/1').respond(404, '');
-        spyOn(console, 'log');
+        treeNavigationFactoryMock.addTopic = function(vm, node) {
+        };
+        spyOn(treeNavigationFactoryMock, "reloadTopics");
         ctrl.onFolderHeadClick(ctrl.treedata[0]);
         $httpBackend.flush();
-        expect(console.log).toHaveBeenCalled();
+        expect(treeNavigationFactoryMock.reloadTopics).toHaveBeenCalledWith(ctrl.treedata[0], ctrl);
     });
 
     it('click on topic', function () {
@@ -87,8 +91,8 @@ describe('treeNavigationCtrl', function () {
         treeNavigationFactoryMock.editTopic = function(node) {
         };
         spyOn(treeNavigationFactoryMock, "editTopic");
-        ctrl.editTopic(ctrl.treedata[0]);
-        expect(treeNavigationFactoryMock.editTopic).toHaveBeenCalledWith(ctrl.treedata[0]);
+        ctrl.editTopic(ctrl.treedata[0], ctrl);
+        expect(treeNavigationFactoryMock.editTopic).toHaveBeenCalledWith(ctrl.treedata[0], ctrl);
     });
 
     it('delete topic', function () {

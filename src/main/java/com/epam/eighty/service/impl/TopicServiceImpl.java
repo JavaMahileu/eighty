@@ -1,5 +1,6 @@
 package com.epam.eighty.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -70,4 +71,33 @@ public class TopicServiceImpl implements TopicService {
         return topic;
     }
 
+    @Override
+    public Long getIdOfLastNotDeletedTopic(List<Long> topicIds) {
+        for(Long id: topicIds) {
+            Optional<Topic> topic = topicRepo.findOne(id);
+            if(topic.isPresent()) {
+                return id;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Topic getTopicWithChildsTillTopicWithId(Long id) {
+        Optional<Topic> root = topicRepo.findBySchemaPropertyValue("title", "root");
+        List<Topic> path = topicRepo.getRootTopicsForTopic(id).getContent();
+        root.ifPresent(r -> {
+            topicsFetchIfNeeded(r, path);
+        });
+        return root.get();
+    }
+
+    private void topicsFetchIfNeeded(Topic topic, List<Topic> path) {
+        topic.getTopics().forEach(t -> {
+            template.fetch(t);
+            if(path.contains(t)) {
+                topicsFetchIfNeeded(t, path);
+            }
+        });
+    }
 }

@@ -1,6 +1,7 @@
 package com.epam.eighty.web.api;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -101,6 +102,19 @@ public class TopicController {
         return topicService.createTopic(topic, id);
     }
 
+    @ApiOperation(value = "Create topic", notes = "Create topic", httpMethod = "POST", response = Topic.class, consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "application/json question"),
+            @ApiResponse(code = 400, message = "Bad request"), })
+    @Timed
+    @RequestMapping(value = "/notRemoved", method = RequestMethod.POST)
+    @ResponseBody
+    @CacheEvict(value = "topic", allEntries = true)
+    public Long getIdOfLastNotDeletedTopic(@ApiParam(name = "topicIds", required = true, value = "topicIds") @RequestBody final List<Long> topicIds,
+            final HttpServletResponse response) {
+        return topicService.getIdOfLastNotDeletedTopic(topicIds);
+    }
+
     @ApiOperation(value = "Update topic", notes = "Update topic", httpMethod = "PUT", response = Topic.class, consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "application/json question"),
@@ -115,4 +129,16 @@ public class TopicController {
         return topic;
     }
 
+    @ApiOperation(value = "Find path for topic by id", notes = "Get path for topic by id", httpMethod = "GET", response = Topic.class, produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "application/json topic"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 404, message = "Not found") })
+    @Timed
+    @RequestMapping(value = "/path/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    @Cacheable(value = "topic", key = "'path.' + #id")
+    public Topic getPath(@ApiParam(name = "topicId", required = true, value = "topic id") @PathVariable("id") final Long id) {
+        return topicService.getTopicWithChildsTillTopicWithId(id);
+    }
 }

@@ -46,4 +46,9 @@ describe('utility', function() {
         errorAlert('Bla-bla-bla', $modal);
         expect(errorAlert).toHaveBeenCalled();
     });
+
+    it('get path of url', function() {
+        var id = getUrlPath('/topics/2', '/topics/');
+        expect(id).toBe('2');
+    });
 });

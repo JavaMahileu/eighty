@@ -1,5 +1,6 @@
 package com.epam.eighty.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,4 +17,6 @@ public interface TopicService {
     void updateTopic(Topic topic);
     void deleteTopic(Long id);
     Topic createTopic(Topic topic, Long id);
+    Long getIdOfLastNotDeletedTopic(List<Long> topicIds);
+    Topic getTopicWithChildsTillTopicWithId(Long id);
 }

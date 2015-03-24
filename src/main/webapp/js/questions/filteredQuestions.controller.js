@@ -37,7 +37,7 @@
         }
 
         function rateUp(questionUI) {
-            questionsFactory.rateUp(questionUI);
+            questionsFactory.rateUp(questionUI, vm);
         }
 
         function editQuestion(question) {

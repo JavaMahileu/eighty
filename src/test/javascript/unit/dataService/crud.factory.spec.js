@@ -45,6 +45,15 @@ describe('service', function () {
             expectResponse();
         });
 
+        it('get id of the last not removed topic', function () {
+            $httpBackend.expectPOST('topics/notRemoved').respond(fakeResponse);
+            service.topic().getLastNotRemoved([1, 2]).$promise.then(function (responseTopic) {
+                response = responseTopic;
+            });
+            expectResponse();
+        });
+
+
         it('update topic with id', function () {
             $httpBackend.expectPUT('topics').respond(fakeResponse);
             service.topic().update(response).$promise.then(function (responseTopic) {
@@ -56,6 +65,14 @@ describe('service', function () {
         it('create topic', function () {
             $httpBackend.expectPOST('topics/15', fakeResponse).respond(200);
             service.topic().create({id: '15'}, fakeResponse).$promise.then(function (responseTopic) {
+                response = responseTopic;
+            });
+            expectResponse();
+        });
+ 
+        it('get path', function() {
+            $httpBackend.expectGET('topics/path/5').respond(fakeResponse);
+            service.topic().getPath({id: '5'}).$promise.then(function (responseTopic) {
                 response = responseTopic;
             });
             expectResponse();

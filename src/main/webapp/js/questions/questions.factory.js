@@ -12,10 +12,9 @@
         .module('eightyFactories')
         .factory('questionsFactory', questionsFactory);
 
-        questionsFactory.$inject = ['$modal', '$stateParams', '$rootScope', 'crudFactory', 'modalData', 'utility'];
+        questionsFactory.$inject = ['$document', '$modal', '$stateParams', '$rootScope', 'crudFactory', 'modalData', 'utility'];
 
-        function questionsFactory($modal, $stateParams, $rootScope, crudFactory, modalData, utility) {
-
+        function questionsFactory($document, $modal, $stateParams, $rootScope, crudFactory, modalData, utility) {
             var publicMethods = {
                 checkCollapsed: checkCollapsed,
                 checkInSet: checkInSet,
@@ -32,7 +31,9 @@
                 loadTagsAndCustomersByTopic: loadTagsAndCustomersByTopic,
                 getTopic: getTopic,
                 saveQuestionChanges: saveQuestionChanges,
-                deleteQuestion: deleteQuestion
+                deleteQuestion: deleteQuestion,
+                getAllQuestionsWithTag: getAllQuestionsWithTag,
+                getAllQuestionsFromCustomer: getAllQuestionsFromCustomer
             };
             return publicMethods;
 
@@ -47,7 +48,7 @@
             function checkInSet(key, obj) {
                 return utility.containsInSet(key, obj);
             }
-            function rateUp(questionUI) {
+            function rateUp(questionUI, vm) {
                 if (questionUI.like === null) {
                     questionUI.like = 0;
                 }
@@ -62,9 +63,74 @@
                         utility.updateInSet('exportSet', question);
                     }
                 }, function(error) {
-                    printLog(error);
+                    if (error.status === 404) {
+                        errorAlert('Question is not found!', $modal);
+                        reloadPageAfterQuestionWasRemoved(vm);
+                    }
                 });
             }
+
+            function reloadPageAfterQuestionWasRemoved(vm) {
+                $rootScope.$broadcast('topTags-update');
+                var str_url = $document[0].URL;
+                var topics_url = '#/topics/';
+                var tags_url = '#/questionsWithTag/';
+                var customers_url = '#/questionsFromCustomer/';
+                if(str_url.search(topics_url) !== -1) {
+                    reloadQuestionsAndTopicTagsOnTopicsPage(vm, getUrlPath(str_url, topics_url));
+                }
+                if(str_url.search(tags_url) !== -1) {
+                    reloadQuestionsOnQuestionsWithTagPage(vm, getUrlPath(str_url, tags_url));
+                }
+                if(str_url.search(customers_url) !== -1) {
+                    reloadQuestionsOnQuestionsFromCustomerPage(vm, getUrlPath(str_url, customers_url));
+                }
+                if(vm.questionsForExport) {
+                    reloadQuestionsForExport(vm);
+                }
+            }
+
+            function reloadQuestionsAndTopicTagsOnTopicsPage(vm, topicId) {
+                $rootScope.$broadcast('topicTags-update');
+                $stateParams.id = topicId;
+                loadQuestions(vm, 0);
+            }
+            function reloadQuestionsOnQuestionsWithTagPage(vm, tagName) {
+                $stateParams.tagName = tagName;
+                getAllQuestionsWithTag($stateParams).then(function(set) {
+                    vm.questions = set;
+                });
+            }
+            function reloadQuestionsOnQuestionsFromCustomerPage(vm, customer) {
+                $stateParams.customerName = customer;
+                getAllQuestionsFromCustomer($stateParams).then(function(set) {
+                    vm.questions = set;
+                });
+            }
+            function reloadQuestionsForExport(vm) {
+                crudFactory.questions().query().$promise.then(function(allQuestions) {
+                    for(var i = vm.questionsForExport.length - 1; i >= 0; i--) {
+                        var question = vm.questionsForExport[i];
+                        if(!containsInSet(allQuestions, question)) {
+                            vm.questionsForExport.splice(i, 1);
+                            utility.removeFromSet('exportSet', question);
+                        } else {
+                            var questionFromAllQuestions = allQuestions[getIndex(allQuestions, question)];
+                            if(questionFromAllQuestions !== question) {
+                                vm.questionsForExport[i] = allQuestions[getIndex(allQuestions, question)];
+                                utility.updateInSet('exportSet', questionFromAllQuestions);
+                            }
+                        }
+                      }
+                });
+            }
+            function getAllQuestionsWithTag($stateParams) {
+                return crudFactory.questions().allQuestionsWithTag({tagName: replaceDOT($stateParams.tagName)}).$promise;
+            }
+            function getAllQuestionsFromCustomer($stateParams) {
+                return  crudFactory.questions().allQuestionsFromCustomer({customerName: replaceDOT($stateParams.customerName)}).$promise;
+            }
+
             function editQuestion(question, vm) {
                 modalData.setShouldBeOpen(true);
 
@@ -140,6 +206,7 @@
                 if ($stateParams.id) {
                     crudFactory.questions().allQuestions({id: $stateParams.id, page: page, size: scrollAddOption.count, sort: scrollAddOption.sort})
                         .$promise.then(function (set) {
+                            scope.questions = [];
                             if ((page === 0) && (set.length === 0)) {
                                 page = -1;
                                 scope.message = 'No questions';

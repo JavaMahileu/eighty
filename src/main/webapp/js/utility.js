@@ -1,5 +1,5 @@
 'use strict';
-/*exported isPrintLog, getIndex, containsInSet, replaceDOT, printLog, errorAlert */
+/*exported isPrintLog, getIndex, containsInSet, replaceDOT, printLog, errorAlert, getUrlPath */
 /**
  * Created by Aliaksandr_Padalka on 25/08/2014.
  */
@@ -45,4 +45,8 @@ function errorAlert(msg, $modal) {
         },
         size: 'sm'
     });
+}
+
+function getUrlPath(str_url, path) {
+    return str_url.substring(str_url.indexOf(path) + path.length);
 }
